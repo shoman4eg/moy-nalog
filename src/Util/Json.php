@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Shoman4eg\Nalog\Utils;
+namespace Shoman4eg\Nalog\Util;
 
 use JsonException;
 use function json_decode;

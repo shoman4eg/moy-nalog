@@ -1,6 +1,6 @@
 <?php
 
-namespace Shoman4eg\Nalog\Utils;
+namespace Shoman4eg\Nalog\Util;
 
 use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\Exception\HydrationException;
