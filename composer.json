@@ -19,7 +19,7 @@
         "ext-mbstring": "*",
         "brick/math": "^0.9",
         "php-http/client-common": "^2.0",
-        "php-http/discovery": "^1.7",
+        "php-http/discovery": "^1.11",
         "psr/http-client": "^1.0",
         "psr/http-factory": "^1.0",
         "webmozart/assert": "^1.4"
