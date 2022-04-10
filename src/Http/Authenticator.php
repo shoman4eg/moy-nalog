@@ -5,9 +5,9 @@ namespace Shoman4eg\Nalog\Http;
 
 use Http\Client\HttpClient;
 use Psr\Http\Client\ClientExceptionInterface;
-use Shoman4eg\Nalog\Model\Request\DeviceInfo;
+use Shoman4eg\Nalog\DTO\DeviceInfo;
 use Shoman4eg\Nalog\RequestBuilder;
-use Shoman4eg\Nalog\Utils\Json;
+use Shoman4eg\Nalog\Util\JSON;
 
 /**
  * Helper class to get access tokens.
@@ -39,7 +39,7 @@ final class Authenticator
         $request = $this->requestBuilder->create('POST', '/auth/lkfl', [
             'Referrer' => 'https://lknpd.nalog.ru/',
             'Referrer-Policy' => 'strict-origin-when-cross-origin',
-        ], Json::encode([
+        ], \json_encode([
             'username' => $username,
             'password' => $password,
             'deviceInfo' => new DeviceInfo($this->deviceId),
@@ -65,7 +65,7 @@ final class Authenticator
         $request = $this->requestBuilder->create('POST', '/auth/token', [
             'Referrer' => 'https://lknpd.nalog.ru/sales',
             'Referrer-Policy' => 'strict-origin-when-cross-origin',
-        ], Json::encode([
+        ], JSON::encode([
             'deviceInfo' => new DeviceInfo($this->deviceId),
             'refreshToken' => $refreshToken,
         ]));
@@ -78,6 +78,11 @@ final class Authenticator
         $this->accessToken = (string)$response->getBody();
 
         return $this->accessToken;
+    }
+
+    public function setAccessToken(string $accessToken): void
+    {
+        $this->accessToken = $accessToken;
     }
 
     public function getAccessToken(): ?string

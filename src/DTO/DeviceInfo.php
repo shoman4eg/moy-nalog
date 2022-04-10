@@ -1,8 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Shoman4eg\Nalog\Model\Request;
+namespace Shoman4eg\Nalog\DTO;
 
+/**
+ * @author Artem Dubinin <artem@dubinin.me>
+ */
 final class DeviceInfo implements \JsonSerializable
 {
     public const SOURCE_TYPE_WEB = 'WEB';

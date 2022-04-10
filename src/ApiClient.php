@@ -7,12 +7,13 @@ namespace Shoman4eg\Nalog;
 use Http\Client\HttpClient;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
 use Shoman4eg\Nalog\Http\AuthenticationPlugin;
 use Shoman4eg\Nalog\Http\Authenticator;
 use Shoman4eg\Nalog\Http\ClientConfigurator;
 use Shoman4eg\Nalog\Model\User\UserType;
 use Shoman4eg\Nalog\Service\Generator\DeviceIdGenerator;
-use Shoman4eg\Nalog\Utils\Json;
+use Shoman4eg\Nalog\Util\JSON;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
@@ -58,6 +59,11 @@ class ApiClient
         return new self($clientConfigurator);
     }
 
+    public static function createWithCustomClient(ClientInterface $client): self
+    {
+        return new self(new ClientConfigurator($client));
+    }
+
     /**
      * Warning, this will remove the current access token.
      *
@@ -79,14 +85,17 @@ class ApiClient
      *   $accessToken = $client->createNewAccessToken('inn', 'password');
      *   $client->authenticate($accessToken);
      *```
+     *
+     * @throws JsonException
      */
     public function authenticate(string $accessToken): void
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
         $this->clientConfigurator->appendPlugin(new AuthenticationPlugin($this->authenticator, $accessToken));
-        if (($token = Json::decode($accessToken)) && array_key_exists('profile', $token)) {
+        if (($token = JSON::decode($accessToken)) && array_key_exists('profile', $token)) {
             $this->profile = UserType::createFromArray($token['profile']);
         }
+        $this->authenticator->setAccessToken($accessToken);
     }
 
     /**
@@ -105,16 +114,22 @@ class ApiClient
 
     public function receipt(): Api\Receipt
     {
-        if ($this->profile === null) {
-            $this->profile = $this->user()->get();
-        }
-
-        return new Api\Receipt($this->getHttpClient(), $this->requestBuilder, $this->profile);
+        return new Api\Receipt(
+            $this->getHttpClient(),
+            $this->requestBuilder,
+            $this->profile ?? $this->user()->get(),
+            $this->clientConfigurator->getEndpoint()
+        );
     }
 
     public function user(): Api\User
     {
         return new Api\User($this->getHttpClient(), $this->requestBuilder);
+    }
+
+    public function paymentType(): Api\PaymentType
+    {
+        return new Api\PaymentType($this->getHttpClient(), $this->requestBuilder);
     }
 
     private function getHttpClient(): HttpClient

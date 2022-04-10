@@ -9,8 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\Exception\Domain as DomainExceptions;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\RequestBuilder;
-use Shoman4eg\Nalog\Utils\Json;
-use Shoman4eg\Nalog\Utils\ModelHydrator;
+use Shoman4eg\Nalog\Util\JSON;
+use Shoman4eg\Nalog\Util\ModelHydrator;
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
@@ -56,6 +56,7 @@ abstract class BaseHttpApi
      * @param array  $requestHeaders Request headers
      *
      * @throws ClientExceptionInterface
+     * @throws \JsonException
      */
     protected function httpPost(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
@@ -86,6 +87,7 @@ abstract class BaseHttpApi
      * @param array  $requestHeaders Request headers
      *
      * @throws ClientExceptionInterface
+     * @throws \JsonException
      */
     protected function httpPut(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
@@ -102,6 +104,7 @@ abstract class BaseHttpApi
      * @param array  $requestHeaders Request headers
      *
      * @throws ClientExceptionInterface
+     * @throws \JsonException
      */
     protected function httpPatch(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
@@ -118,6 +121,7 @@ abstract class BaseHttpApi
      * @param array  $requestHeaders Request headers
      *
      * @throws ClientExceptionInterface
+     * @throws \JsonException
      */
     protected function httpDelete(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
@@ -165,6 +169,6 @@ abstract class BaseHttpApi
     {
         $options = empty($params) ? \JSON_FORCE_OBJECT : 0;
 
-        return (\count($params) === 0) ? null : Json::encode($params, $options);
+        return (\count($params) === 0) ? null : JSON::encode($params, $options);
     }
 }

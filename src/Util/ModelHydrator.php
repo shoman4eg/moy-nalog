@@ -1,11 +1,14 @@
 <?php
 
-namespace Shoman4eg\Nalog\Utils;
+namespace Shoman4eg\Nalog\Util;
 
 use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\Exception\HydrationException;
 use Shoman4eg\Nalog\Model\CreatableFromArray;
 
+/**
+ * @author Artem Dubinin <artem@dubinin.me>
+ */
 final class ModelHydrator
 {
     public function hydrate(ResponseInterface $response, string $class)
@@ -16,7 +19,7 @@ final class ModelHydrator
         }
 
         try {
-            $data = Json::decode($body);
+            $data = JSON::decode($body);
         } catch (\JsonException $e) {
             throw new HydrationException(\sprintf('Error (%d) when trying to json_decode response', $e->getCode()));
         }

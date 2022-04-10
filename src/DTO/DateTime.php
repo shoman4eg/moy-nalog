@@ -1,8 +1,12 @@
 <?php
+declare(strict_types=1);
 
-namespace Shoman4eg\Nalog\Model\Request;
+namespace Shoman4eg\Nalog\DTO;
 
-class DateTime implements \JsonSerializable
+/**
+ * @author Artem Dubinin <artem@dubinin.me>
+ */
+final class DateTime implements \JsonSerializable
 {
     private \DateTimeInterface $dateTime;
 

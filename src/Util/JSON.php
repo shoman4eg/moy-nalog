@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Shoman4eg\Nalog\Utils;
+namespace Shoman4eg\Nalog\Util;
 
 use JsonException;
 use function json_decode;
@@ -10,7 +10,7 @@ use function json_encode;
 /**
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class Json
+class JSON
 {
     /**
      * Generic JSON encode method with error handling support.
@@ -24,8 +24,6 @@ class Json
      *                          JSON_PRESERVE_ZERO_FRACTION, JSON_UNESCAPED_UNICODE, JSON_PARTIAL_OUTPUT_ON_ERROR.
      *                          The behaviour of these constants is described on the JSON constants page.
      * @param null|int $depth   Set the maximum depth. Must be greater than zero.
-     *
-     * @phpstan-param int<1, max>|null $depth
      *
      * @throws JsonException
      */
@@ -48,8 +46,6 @@ class Json
      * @param null|int  $depth   user specified recursion depth
      * @param null|int  $options Bitmask of JSON decode options. Currently only JSON_BIGINT_AS_STRING is supported
      *                           (default is to cast large integers as floats)
-     *
-     * @phpstan-param int<1, max>|null $depth
      *
      * @throws JsonException
      */

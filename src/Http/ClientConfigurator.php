@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Http;
@@ -10,7 +9,7 @@ use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\UriFactoryInterface;
-use Shoman4eg\Nalog\Model\Request\DeviceInfo;
+use Shoman4eg\Nalog\DTO\DeviceInfo;
 
 /**
  * Configure an HTTP client.
@@ -123,5 +122,10 @@ final class ClientConfigurator
                 $this->configurationModified = true;
             }
         }
+    }
+
+    public function getEndpoint(): string
+    {
+        return $this->endpoint;
     }
 }

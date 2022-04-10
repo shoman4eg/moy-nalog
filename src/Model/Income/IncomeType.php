@@ -1,21 +1,23 @@
 <?php
+declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Model\Income;
 
 use Shoman4eg\Nalog\Model\CreatableFromArray;
 
-class IncomeType implements CreatableFromArray
+/**
+ * @author Artem Dubinin <artem@dubinin.me>
+ */
+final class IncomeType implements CreatableFromArray
 {
     private string $approvedReceiptUuid;
 
-    private function __construct($approvedReceiptUuid)
-    {
-        $this->approvedReceiptUuid = $approvedReceiptUuid;
-    }
-
     public static function createFromArray(array $data): self
     {
-        return new self($data['approvedReceiptUuid']);
+        $model = new self();
+        $model->approvedReceiptUuid = $data['approvedReceiptUuid'];
+
+        return $model;
     }
 
     public function getApprovedReceiptUuid(): string
