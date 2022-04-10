@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [0.2.1](https://github.com/shoman4eg/moy-nalog/compare/v0.2.0...v0.2.1) (2022-04-11)
+
+### Documentation
+* Fix cancel income method docs
+
+* Ошибка в документации #9
+
+### Fix
+* Type email can be nullable #10
+* Fix Receipt print url #11
+
+---
+
 ## [0.2.0](https://github.com/shoman4eg/moy-nalog/compare/v0.1.0...v0.2.0) (2022-04-09)
 ### Features
 * Add Payment type methods
