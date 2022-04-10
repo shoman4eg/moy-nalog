@@ -7,7 +7,7 @@ use Http\Client\Common\Plugin;
 use Http\Promise\Promise;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Shoman4eg\Nalog\Util\Json;
+use Shoman4eg\Nalog\Util\JSON;
 
 /**
  * This will automatically refresh expired access token.
@@ -25,7 +25,7 @@ final class AuthenticationPlugin implements Plugin
     public function __construct(Authenticator $authenticator, string $accessToken)
     {
         $this->authenticator = $authenticator;
-        $this->accessToken = Json::decode($accessToken);
+        $this->accessToken = JSON::decode($accessToken);
     }
 
     public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
@@ -56,7 +56,7 @@ final class AuthenticationPlugin implements Plugin
                 }
 
                 // Save new token
-                $this->accessToken = Json::decode($accessToken);
+                $this->accessToken = JSON::decode($accessToken);
 
                 // Add new token to request
                 $header = \sprintf('Bearer %s', $this->accessToken['token']);

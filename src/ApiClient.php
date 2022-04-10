@@ -13,7 +13,7 @@ use Shoman4eg\Nalog\Http\Authenticator;
 use Shoman4eg\Nalog\Http\ClientConfigurator;
 use Shoman4eg\Nalog\Model\User\UserType;
 use Shoman4eg\Nalog\Service\Generator\DeviceIdGenerator;
-use Shoman4eg\Nalog\Util\Json;
+use Shoman4eg\Nalog\Util\JSON;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
@@ -92,7 +92,7 @@ class ApiClient
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
         $this->clientConfigurator->appendPlugin(new AuthenticationPlugin($this->authenticator, $accessToken));
-        if (($token = Json::decode($accessToken)) && array_key_exists('profile', $token)) {
+        if (($token = JSON::decode($accessToken)) && array_key_exists('profile', $token)) {
             $this->profile = UserType::createFromArray($token['profile']);
         }
         $this->authenticator->setAccessToken($accessToken);

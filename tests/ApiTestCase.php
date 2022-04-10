@@ -8,7 +8,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Shoman4eg\Nalog\ApiClient;
-use Shoman4eg\Nalog\Util\Json;
+use Shoman4eg\Nalog\Util\JSON;
 
 /**
  * @internal
@@ -28,7 +28,7 @@ class ApiTestCase extends TestCase
 
     public static function getAccessToken(): string
     {
-        return Json::encode([
+        return JSON::encode([
             'refreshToken' => 'dasdasdas',
             'refreshTokenExpiresIn' => null,
             'token' => 'randomString',
@@ -59,6 +59,6 @@ class ApiTestCase extends TestCase
 
     protected function appendSuccessJson(array $data): void
     {
-        $this->mock->append(new Response(200, ['Content-Type' => 'application/json'], Json::encode($data)));
+        $this->mock->append(new Response(200, ['Content-Type' => 'application/json'], JSON::encode($data)));
     }
 }

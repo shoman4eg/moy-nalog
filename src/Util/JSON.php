@@ -10,7 +10,7 @@ use function json_encode;
 /**
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class Json
+class JSON
 {
     /**
      * Generic JSON encode method with error handling support.

@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\Exception\Domain as DomainExceptions;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\RequestBuilder;
-use Shoman4eg\Nalog\Util\Json;
+use Shoman4eg\Nalog\Util\JSON;
 use Shoman4eg\Nalog\Util\ModelHydrator;
 
 /**
@@ -169,6 +169,6 @@ abstract class BaseHttpApi
     {
         $options = empty($params) ? \JSON_FORCE_OBJECT : 0;
 
-        return (\count($params) === 0) ? null : Json::encode($params, $options);
+        return (\count($params) === 0) ? null : JSON::encode($params, $options);
     }
 }

@@ -19,7 +19,7 @@ final class ModelHydrator
         }
 
         try {
-            $data = Json::decode($body);
+            $data = JSON::decode($body);
         } catch (\JsonException $e) {
             throw new HydrationException(\sprintf('Error (%d) when trying to json_decode response', $e->getCode()));
         }
