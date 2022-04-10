@@ -69,7 +69,7 @@ $comment = \Shoman4eg\Nalog\Enum\CancelCommentType::CANCEL;
 $partnerCode = null; // Default null
 $operationTime = new DateTimeImmutable('now'); //Default 'now'
 $requestTime = new DateTimeImmutable('now'); //Default 'now'
-$incomeInfo = $apiClient->income()->cancel($receiptUuid, $comment, $partnerCode, $operationTime, $requestTime);
+$incomeInfo = $apiClient->income()->cancel($receiptUuid, $comment, $operationTime, $requestTime, $partnerCode);
 ```
 
 ### Create Invoice
