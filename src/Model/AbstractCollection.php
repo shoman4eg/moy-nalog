@@ -64,7 +64,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
         throw new \RuntimeException('Cannot unset value on READ ONLY collection');
     }
 
-    public function count()
+    public function count(): int
     {
         return $this->count;
     }
