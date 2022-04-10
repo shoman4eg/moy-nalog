@@ -1,12 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Shoman4eg\Nalog\Model\Request;
+namespace Shoman4eg\Nalog\DTO;
 
-final class Client implements \JsonSerializable
+use Shoman4eg\Nalog\Enum\IncomeType;
+
+/**
+ * @author Artem Dubinin <artem@dubinin.me>
+ */
+final class InvoiceClient implements \JsonSerializable
 {
-    private const INCOME_TYPE_INDIVIDUAL = 'FROM_INDIVIDUAL';
-
     private ?string $contactPhone;
     private ?string $displayName;
     private string $incomeType;
@@ -15,7 +18,7 @@ final class Client implements \JsonSerializable
     public function __construct(
         ?string $contactPhone = null,
         ?string $displayName = null,
-        string $incomeType = self::INCOME_TYPE_INDIVIDUAL,
+        string $incomeType = IncomeType::INDIVIDUAL,
         ?string $inn = null
     ) {
         $this->contactPhone = $contactPhone;

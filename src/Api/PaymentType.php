@@ -1,7 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shoman4eg\Nalog\Api;
 
+use Psr\Http\Client\ClientExceptionInterface;
+use Shoman4eg\Nalog\Exception;
+use Shoman4eg\Nalog\Model\PaymentType\PaymentType as PaymentTypeModel;
 use Shoman4eg\Nalog\Model\PaymentType\PaymentTypeCollection;
 
 /**
@@ -10,12 +15,35 @@ use Shoman4eg\Nalog\Model\PaymentType\PaymentTypeCollection;
 class PaymentType extends BaseHttpApi
 {
     /**
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws Exception\DomainException
      */
     public function table(): PaymentTypeCollection
     {
         $response = $this->httpGet('/payment-type/table');
 
+        if ($response->getStatusCode() >= 400) {
+            $this->handleErrors($response);
+        }
+
         return $this->hydrator->hydrate($response, PaymentTypeCollection::class);
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     * @throws Exception\DomainException
+     */
+    public function favorite(): ?PaymentTypeModel
+    {
+        $paymentTypes = $this->table();
+
+        foreach ($paymentTypes as $paymentType) {
+            /** @var PaymentTypeModel $paymentType */
+            if ($paymentType->isFavorite()) {
+                return $paymentType;
+            }
+        }
+
+        return null;
     }
 }

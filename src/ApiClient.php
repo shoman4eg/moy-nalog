@@ -85,6 +85,8 @@ class ApiClient
      *   $accessToken = $client->createNewAccessToken('inn', 'password');
      *   $client->authenticate($accessToken);
      *```
+     *
+     * @throws JsonException
      */
     public function authenticate(string $accessToken): void
     {
@@ -112,11 +114,12 @@ class ApiClient
 
     public function receipt(): Api\Receipt
     {
-        if ($this->profile === null) {
-            $this->profile = $this->user()->get();
-        }
-
-        return new Api\Receipt($this->getHttpClient(), $this->requestBuilder, $this->profile);
+        return new Api\Receipt(
+            $this->getHttpClient(),
+            $this->requestBuilder,
+            $this->profile ?? $this->user()->get(),
+            $this->clientConfigurator->getEndpoint()
+        );
     }
 
     public function user(): Api\User

@@ -17,16 +17,6 @@ use Shoman4eg\Nalog\ApiClient;
  */
 class ApiClientTest extends ApiTestCase
 {
-    public function testIncome(): void
-    {
-        self::markTestIncomplete();
-    }
-
-    public function testConstruct(): void
-    {
-        self::markTestIncomplete();
-    }
-
     /**
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \JsonException
@@ -48,15 +38,5 @@ class ApiClientTest extends ApiTestCase
         $client = ApiClient::create();
         $client->authenticate(self::getAccessToken());
         self::assertJson($client->getAccessToken());
-    }
-
-    public function testAuthenticate(): void
-    {
-        self::markTestIncomplete();
-    }
-
-    public function testReceipt(): void
-    {
-        self::markTestIncomplete();
     }
 }

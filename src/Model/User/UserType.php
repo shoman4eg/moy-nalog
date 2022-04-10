@@ -4,6 +4,9 @@ namespace Shoman4eg\Nalog\Model\User;
 
 use Shoman4eg\Nalog\Model\CreatableFromArray;
 
+/**
+ * @author Artem Dubinin <artem@dubinin.me>
+ */
 class UserType implements CreatableFromArray
 {
     private ?string $lastName;
@@ -21,43 +24,43 @@ class UserType implements CreatableFromArray
     private ?\DateTimeInterface $firstReceiptCancelTime;
     private bool $hideCancelledReceipt;
     private $registerAvailable;
-    private $status;
+    private ?string $status;
     private bool $restrictedMode;
-    private string $pfrUrl;
+    private ?string $pfrUrl;
     private ?string $login;
 
     public static function createFromArray(array $data): self
     {
-        $self = new self();
-        $self->id = $data['id'];
-        $self->lastName = $data['lastName'];
-        $self->displayName = $data['displayName'];
-        $self->middleName = $data['middleName'];
-        $self->email = $data['email'];
-        $self->phone = $data['phone'];
-        $self->inn = $data['inn'];
-        $self->snils = $data['snils'];
-        $self->avatarExists = $data['avatarExists'];
-        $self->initialRegistrationDate = $data['initialRegistrationDate'] !== null
+        $model = new self();
+        $model->id = $data['id'];
+        $model->lastName = $data['lastName'];
+        $model->displayName = $data['displayName'];
+        $model->middleName = $data['middleName'];
+        $model->email = $data['email'];
+        $model->phone = $data['phone'];
+        $model->inn = $data['inn'];
+        $model->snils = $data['snils'];
+        $model->avatarExists = $data['avatarExists'];
+        $model->initialRegistrationDate = $data['initialRegistrationDate'] !== null
             ? new \DateTimeImmutable($data['initialRegistrationDate'])
             : null;
-        $self->registrationDate = $data['registrationDate'] !== null
+        $model->registrationDate = $data['registrationDate'] !== null
             ? new \DateTimeImmutable($data['registrationDate'])
             : null;
-        $self->firstReceiptRegisterTime = $data['firstReceiptRegisterTime'] !== null
+        $model->firstReceiptRegisterTime = $data['firstReceiptRegisterTime'] !== null
             ? new \DateTimeImmutable($data['firstReceiptRegisterTime'])
             : null;
-        $self->firstReceiptCancelTime = $data['firstReceiptCancelTime'] !== null
+        $model->firstReceiptCancelTime = $data['firstReceiptCancelTime'] !== null
             ? new \DateTimeImmutable($data['firstReceiptCancelTime'])
             : null;
-        $self->hideCancelledReceipt = $data['hideCancelledReceipt'];
-        $self->registerAvailable = $data['registerAvailable'];
-        $self->status = $data['status'];
-        $self->restrictedMode = $data['restrictedMode'];
-        $self->pfrUrl = $data['pfrUrl'];
-        $self->login = $data['login'];
+        $model->hideCancelledReceipt = $data['hideCancelledReceipt'];
+        $model->registerAvailable = $data['registerAvailable'];
+        $model->status = $data['status'];
+        $model->restrictedMode = $data['restrictedMode'];
+        $model->pfrUrl = $data['pfrUrl'];
+        $model->login = $data['login'];
 
-        return $self;
+        return $model;
     }
 
     public function getId(): int
@@ -143,7 +146,7 @@ class UserType implements CreatableFromArray
         return $this->restrictedMode;
     }
 
-    public function getPfrUrl(): string
+    public function getPfrUrl(): ?string
     {
         return $this->pfrUrl;
     }

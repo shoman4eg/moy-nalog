@@ -23,6 +23,7 @@ class ApiTestCase extends TestCase
     {
         $this->mock = new MockHandler();
         $this->client = ApiClient::createWithCustomClient(new Client(['handler' => new HandlerStack($this->mock)]));
+        $this->client->authenticate(self::getAccessToken());
     }
 
     public static function getAccessToken(): string

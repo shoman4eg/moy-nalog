@@ -7,9 +7,9 @@ namespace Shoman4eg\Nalog\Model;
  */
 abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
 {
-    private $items;
-    private $key;
-    private $count;
+    private array $items = [];
+    private int $key;
+    private int $count;
 
     public function current()
     {
@@ -30,7 +30,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
         return $this->key;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return $this->key < $this->count;
     }
@@ -40,7 +40,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
         $this->key = 0;
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->items[$offset]);
     }
@@ -71,7 +71,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
 
     protected function setItems(array $items): void
     {
-        if ($this->items !== null) {
+        if ($this->items !== []) {
             throw new \LogicException('AbstractCollection::setItems can only be called once.');
         }
 

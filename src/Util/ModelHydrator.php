@@ -6,6 +6,9 @@ use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\Exception\HydrationException;
 use Shoman4eg\Nalog\Model\CreatableFromArray;
 
+/**
+ * @author Artem Dubinin <artem@dubinin.me>
+ */
 final class ModelHydrator
 {
     public function hydrate(ResponseInterface $response, string $class)
