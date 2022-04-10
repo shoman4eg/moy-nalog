@@ -17,13 +17,13 @@ use Webmozart\Assert\Assert;
 class Receipt extends BaseHttpApi
 {
     private UserType $profile;
-    private ?string $endpoint;
+    private string $endpoint;
 
     public function __construct(
         HttpClient $httpClient,
         RequestBuilder $requestBuilder,
         UserType $profile,
-        ?string $endpoint
+        string $endpoint
     ) {
         parent::__construct($httpClient, $requestBuilder);
         $this->profile = $profile;
