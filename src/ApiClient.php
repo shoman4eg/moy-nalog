@@ -118,7 +118,7 @@ class ApiClient
             $this->getHttpClient(),
             $this->requestBuilder,
             $this->profile ?? $this->user()->get(),
-            $this->clientConfigurator->getEndpoint()
+            (string)$this->clientConfigurator->getEndpoint()
         );
     }
 

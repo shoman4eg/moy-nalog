@@ -9,6 +9,7 @@ use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\UriFactoryInterface;
+use Psr\Http\Message\UriInterface;
 use Shoman4eg\Nalog\DTO\DeviceInfo;
 
 /**
@@ -58,9 +59,7 @@ final class ClientConfigurator
         if ($this->configurationModified) {
             $this->configurationModified = false;
             $plugins = $this->prependPlugins;
-            $plugins[] = new Plugin\BaseUriPlugin(
-                $this->uriFactory->createUri(sprintf('%s/%s', $this->endpoint, $this->version))
-            );
+            $plugins[] = new Plugin\BaseUriPlugin($this->getEndpoint());
             $plugins[] = new Plugin\HeaderDefaultsPlugin([
                 'User-Agent' => DeviceInfo::USER_AGENT,
                 'Content-type' => 'application/json',
@@ -124,8 +123,8 @@ final class ClientConfigurator
         }
     }
 
-    public function getEndpoint(): string
+    public function getEndpoint(): UriInterface
     {
-        return $this->endpoint;
+        return $this->uriFactory->createUri(sprintf('%s/%s', $this->endpoint, $this->version));
     }
 }

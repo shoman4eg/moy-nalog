@@ -13,7 +13,6 @@ class ReceiptTest extends ApiTestCase
     public function testPrintUrl(): void
     {
         $receiptId = 'dasdasdasd';
-//        var_dump();
         $response = $this->client->receipt()->printUrl($receiptId);
         $expected = sprintf('/receipt/%s/%s/print', '3000000000000', $receiptId);
         self::assertStringContainsString($expected, $response);
