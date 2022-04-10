@@ -13,7 +13,7 @@ class UserType implements CreatableFromArray
     private int $id;
     private string $displayName;
     private ?string $middleName;
-    private string $email;
+    private ?string $email;
     private string $phone;
     private string $inn;
     private ?string $snils;
@@ -36,7 +36,7 @@ class UserType implements CreatableFromArray
         $model->lastName = $data['lastName'];
         $model->displayName = $data['displayName'];
         $model->middleName = $data['middleName'];
-        $model->email = $data['email'];
+        $model->email = $data['email'] ?? null;
         $model->phone = $data['phone'];
         $model->inn = $data['inn'];
         $model->snils = $data['snils'];
@@ -101,7 +101,7 @@ class UserType implements CreatableFromArray
         return $this->middleName;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
