@@ -2,7 +2,7 @@
     "name": "shoman4eg/moy-nalog",
     "description": "An unofficial wrapper client for lknpd.nalog.ru API",
     "license": "MIT",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "keywords": [
         "api",
         "nalog.ru"

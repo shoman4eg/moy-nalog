@@ -6,11 +6,14 @@ namespace Shoman4eg\Nalog\Api;
 use Brick\Math\BigDecimal;
 use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\DTO;
-use Shoman4eg\Nalog\Enum\PaymentType;
+use Shoman4eg\Nalog\Enum;
 use Shoman4eg\Nalog\Exception;
 use Shoman4eg\Nalog\Model\Income\IncomeType;
 use Webmozart\Assert\Assert;
 
+/**
+ * @author Artem Dubinin <artem@dubinin.me>
+ */
 class Invoice extends BaseHttpApi
 {
     /**
@@ -37,7 +40,7 @@ class Invoice extends BaseHttpApi
         $totalAmount = BigDecimal::of($amount)->multipliedBy($quantity);
 
         $response = $this->httpPost('/invoice', [
-            'paymentType' => PaymentType::ACCOUNT,
+            'paymentType' => Enum\PaymentType::ACCOUNT,
             'ignoreMaxTotalIncomeRestriction' => false,
             'client' => new DTO\IncomeClient(),
             'services' => [new DTO\InvoiceServiceItem($name, $amount, $quantity)],

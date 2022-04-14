@@ -4,11 +4,20 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [0.2.3](https://github.com/shoman4eg/moy-nalog/compare/v0.2.2...v0.2.3) (2022-04-11)
+### Fix
+* Change uses for avoid className conflicts
+* Update README
+
+---
+
 ## [0.2.2](https://github.com/shoman4eg/moy-nalog/compare/v0.2.1...v0.2.2) (2022-04-11)
 ### Fix
 * Remove unused files
 * Fix composer.json version
 * Update .gitattributes
+
+---
 
 ## [0.2.1](https://github.com/shoman4eg/moy-nalog/compare/v0.2.0...v0.2.1) (2022-04-11)
 
