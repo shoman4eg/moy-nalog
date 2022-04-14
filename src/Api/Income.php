@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Api;
@@ -7,9 +6,7 @@ namespace Shoman4eg\Nalog\Api;
 use Brick\Math\BigDecimal;
 use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\DTO;
-use Shoman4eg\Nalog\Enum\CancelCommentType;
-use Shoman4eg\Nalog\Enum\IncomeType as IncomeTypeEnum;
-use Shoman4eg\Nalog\Enum\PaymentType;
+use Shoman4eg\Nalog\Enum;
 use Shoman4eg\Nalog\Exception;
 use Shoman4eg\Nalog\Model\Income\IncomeInfoType;
 use Shoman4eg\Nalog\Model\Income\IncomeType;
@@ -42,7 +39,7 @@ class Income extends BaseHttpApi
         Assert::numeric($quantity, 'Quantity must be int or float');
         Assert::greaterThan($quantity, 0, 'Quantity must be greater than %2$s');
 
-        if ($client !== null && $client->getIncomeType() === IncomeTypeEnum::LEGAL_ENTITY) {
+        if ($client !== null && $client->getIncomeType() === Enum\IncomeType::LEGAL_ENTITY) {
             Assert::notEmpty($client->getInn(), 'Client INN cannot be empty');
             Assert::numeric($client->getInn(), 'Client INN must contain only numbers');
             Assert::lengthBetween($client->getInn(), 10, 12, 'Client INN length must been 10 or 12');
@@ -57,7 +54,7 @@ class Income extends BaseHttpApi
             'services' => [new DTO\IncomeServiceItem($name, $amount, $quantity)],
             'totalAmount' => (string)$totalAmount,
             'client' => $client ?? new DTO\IncomeClient(),
-            'paymentType' => PaymentType::CASH,
+            'paymentType' => Enum\PaymentType::CASH,
             'ignoreMaxTotalIncomeRestriction' => false,
         ]);
 
@@ -81,7 +78,7 @@ class Income extends BaseHttpApi
         ?string $partnerCode = null
     ): IncomeInfoType {
         Assert::notEmpty($receiptUuid, 'ReceiptUuid cannot be empty');
-        Assert::inArray($comment, CancelCommentType::all(), 'Comment is invalid. Must be one of: %2$s');
+        Assert::inArray($comment, Enum\CancelCommentType::all(), 'Comment is invalid. Must be one of: %2$s');
 
         $response = $this->httpPost('/cancel', [
             'operationTime' => new DTO\DateTime($operationTime ?: new \DateTimeImmutable()),
