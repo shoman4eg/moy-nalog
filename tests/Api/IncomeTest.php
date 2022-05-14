@@ -59,15 +59,19 @@ class IncomeTest extends ApiTestCase
 
     public function validationCreateDataProvider(): iterable
     {
-        yield ['', 100, 1, null, 'Name cannot be empty'];
-        yield ['name', '', 1, null, 'Amount must be int or float'];
-        yield ['name', -1, 1, null, 'Amount must be greater than 0'];
-        yield ['name', 1, 0, null, 'Quantity cannot be empty'];
-        yield ['name', 1, 'zero', null, 'Quantity must be int or float'];
-        yield ['name', 1, 1,  new DTO\IncomeClient(null, '', IncomeType::LEGAL_ENTITY, ''), 'Client INN cannot be empty'];
-        yield ['name', 1, 1, new DTO\IncomeClient(null, '', IncomeType::LEGAL_ENTITY, 'aaaa'), 'Client INN must contain only numbers'];
-        yield ['name', 1, 1, new DTO\IncomeClient(null, '', IncomeType::LEGAL_ENTITY, '1234'), 'Client INN length must been 10 or 12'];
-        yield ['name', 1, 1, new DTO\IncomeClient(null, '', IncomeType::LEGAL_ENTITY, '1234567890'), 'Client DisplayName cannot be empty'];
+        $fakeClientWithInn = static fn ($inn) => new DTO\IncomeClient(null, '', IncomeType::LEGAL_ENTITY, $inn);
+
+        yield ['', 100, 1, null, 'Name of item[0] cannot be empty'];
+        yield ['name', '', 1, null, 'Amount of item[0] must be int or float'];
+        yield ['name', -1, 1, null, 'Amount of item[0] must be greater than 0'];
+        yield ['name', 1, 0, null, 'Quantity of item[0] cannot be empty'];
+        yield ['name', 1, 'zero', null, 'Quantity of item[0] must be int or float'];
+        yield ['name', 1, 1, $fakeClientWithInn(''), 'Client INN cannot be empty'];
+        yield ['name', 1, 1, $fakeClientWithInn('aaaa'), 'Client INN must contain only numbers'];
+        yield ['name', 1, 1, $fakeClientWithInn(str_repeat('1', 9)), 'Client INN length must been 10 or 12'];
+        yield ['name', 1, 1, $fakeClientWithInn(str_repeat('1', 11)), 'Client INN length must been 10 or 12'];
+        yield ['name', 1, 1, $fakeClientWithInn(str_repeat('1', 13)), 'Client INN length must been 10 or 12'];
+        yield ['name', 1, 1, $fakeClientWithInn('1234567890'), 'Client DisplayName cannot be empty'];
     }
 
     /**
@@ -80,8 +84,13 @@ class IncomeTest extends ApiTestCase
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \Shoman4eg\Nalog\Exception\DomainException
      */
-    public function testCreateValidation(string $name, $amount, $quantity, ?DTO\IncomeClient $client, string $message): void
-    {
+    public function testValidationCreate(
+        string $name,
+        $amount,
+        $quantity,
+        ?DTO\IncomeClient $client,
+        string $message
+    ): void {
         $this->expectExceptionMessage($message);
         $this->client->income()->create($name, $amount, $quantity, null, $client);
     }
@@ -129,7 +138,11 @@ class IncomeTest extends ApiTestCase
     public function validationCancelDataProvider(): iterable
     {
         yield ['', CancelCommentType::REFUND, 'ReceiptUuid cannot be empty'];
-        yield ['ReceiptUuid', 'InvalidCommentType', 'Comment is invalid. Must be one of: "Чек сформирован ошибочно", "Возврат средств"'];
+        yield [
+            'ReceiptUuid',
+            'InvalidCommentType',
+            'Comment is invalid. Must be one of: "Чек сформирован ошибочно", "Возврат средств"',
+        ];
     }
 
     /**
@@ -139,9 +152,37 @@ class IncomeTest extends ApiTestCase
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \Shoman4eg\Nalog\Exception\DomainException
      */
-    public function testCancelValidation(string $receiptId, string $comment, string $message): void
+    public function testValidationCancel(string $receiptId, string $comment, string $message): void
     {
         $this->expectExceptionMessage($message);
         $this->client->income()->cancel($receiptId, $comment);
+    }
+
+    public function calculationItemsDataProvider(): iterable
+    {
+        $name = 'randomName';
+        yield [[[$name, 100, 1], [$name, 200, 2], [$name, 300, 3]], 1400];
+        yield [[[$name, 30.23, 1], [$name, 12.33, 8], [$name, 32.44, 9]], 420.83];
+        yield [[[$name, '30.23', 1], [$name, '12.33', 8], [$name, '32.44', 9]], '420.83'];
+    }
+
+    /**
+     * @dataProvider calculationItemsDataProvider
+     *
+     * @param float|int $expected
+     *
+     * @throws \JsonException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Shoman4eg\Nalog\Exception\DomainException
+     */
+    public function testCalculateAmount(array $items, $expected): void
+    {
+        $this->appendSuccessJson(['approvedReceiptUuid' => 'randomReceiptId']);
+
+        $serviceItems = array_map(fn ($item) => new DTO\IncomeServiceItem(...$item), $items);
+        $this->client->income()->createMultipleItems($serviceItems);
+        $request = json_decode($this->mock->getLastRequest()->getBody()->getContents(), true);
+
+        self::assertEquals($request['totalAmount'], $expected);
     }
 }

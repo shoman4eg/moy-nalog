@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [0.3.0](https://github.com/shoman4eg/moy-nalog/compare/v0.2.3...v0.3.0) (2022-05-15)
+### Features
+* Add new method for income with multiple items #14
+
+### Documentation
+* Update README with new income method
+
+---
+
 ## [0.2.3](https://github.com/shoman4eg/moy-nalog/compare/v0.2.2...v0.2.3) (2022-04-11)
 ### Fix
 * Change uses for avoid className conflicts
@@ -23,7 +32,6 @@ All notable changes to this project will be documented in this file.
 
 ### Documentation
 * Fix cancel income method docs
-
 * Ошибка в документации #9
 
 ### Fix

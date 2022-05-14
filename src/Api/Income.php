@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Api;
@@ -32,26 +33,54 @@ class Income extends BaseHttpApi
         \DateTimeInterface $operationTime = null,
         DTO\IncomeClient $client = null
     ): IncomeType {
-        Assert::notEmpty($name, 'Name cannot be empty');
-        Assert::numeric($amount, 'Amount must be int or float');
-        Assert::greaterThan($amount, 0, 'Amount must be greater than %2$s');
-        Assert::notEmpty($quantity, 'Quantity cannot be empty');
-        Assert::numeric($quantity, 'Quantity must be int or float');
-        Assert::greaterThan($quantity, 0, 'Quantity must be greater than %2$s');
+        return $this->createMultipleItems(
+            [new DTO\IncomeServiceItem($name, $amount, $quantity)],
+            $operationTime,
+            $client
+        );
+    }
+
+    /**
+     * @param DTO\IncomeServiceItem[] $serviceItems
+     *
+     * @throws ClientExceptionInterface
+     * @throws Exception\DomainException
+     * @throws \JsonException
+     */
+    public function createMultipleItems(
+        array $serviceItems,
+        \DateTimeInterface $operationTime = null,
+        DTO\IncomeClient $client = null
+    ): IncomeType {
+        Assert::minCount($serviceItems, 1, 'Items cannot be empty');
+        Assert::allIsInstanceOf($serviceItems, DTO\IncomeServiceItem::class);
+
+        foreach ($serviceItems as $key => $serviceItem) {
+            Assert::notEmpty($serviceItem->getName(), "Name of item[{$key}] cannot be empty");
+            Assert::numeric($serviceItem->getAmount(), "Amount of item[{$key}] must be int or float");
+            Assert::greaterThan($serviceItem->getAmount(), 0, "Amount of item[{$key}] must be greater than %2\$s");
+            Assert::notEmpty($serviceItem->getQuantity(), "Quantity of item[{$key}] cannot be empty");
+            Assert::numeric($serviceItem->getQuantity(), "Quantity of item[{$key}] must be int or float");
+            Assert::greaterThan($serviceItem->getQuantity(), 0, "Quantity of item[{$key}] must be greater than %2\$s");
+        }
+
+        $totalAmount = array_reduce(
+            $serviceItems,
+            fn ($totalAmount, $serviceItem) => $totalAmount->plus($serviceItem->getTotalAmount()),
+            BigDecimal::of(0)
+        );
 
         if ($client !== null && $client->getIncomeType() === Enum\IncomeType::LEGAL_ENTITY) {
             Assert::notEmpty($client->getInn(), 'Client INN cannot be empty');
             Assert::numeric($client->getInn(), 'Client INN must contain only numbers');
-            Assert::lengthBetween($client->getInn(), 10, 12, 'Client INN length must been 10 or 12');
+            Assert::oneOf(mb_strlen($client->getInn()), [10, 12], 'Client INN length must been 10 or 12');
             Assert::notEmpty($client->getDisplayName(), 'Client DisplayName cannot be empty');
         }
-
-        $totalAmount = BigDecimal::of($amount)->multipliedBy($quantity);
 
         $response = $this->httpPost('/income', [
             'operationTime' => new DTO\DateTime($operationTime ?: new \DateTimeImmutable()),
             'requestTime' => new DTO\DateTime(new \DateTimeImmutable()),
-            'services' => [new DTO\IncomeServiceItem($name, $amount, $quantity)],
+            'services' => $serviceItems,
             'totalAmount' => (string)$totalAmount,
             'client' => $client ?? new DTO\IncomeClient(),
             'paymentType' => Enum\PaymentType::CASH,

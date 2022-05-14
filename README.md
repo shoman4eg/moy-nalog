@@ -42,9 +42,20 @@ $apiClient->authenticate($accessToken);
 $name = 'Предоставление информационных услуг #970/2495';
 $amount = 1800.30;
 $quantity = 1;
-$amount = 1;
 $operationTime = new DateTimeImmutable('2020-12-31 12:12:00');
 $createdIncome = $apiClient->income()->create($name, $amount, $quantity, $operationTime);
+```
+
+### Create income with multiple items
+```php
+$name = 'Предоставление информационных услуг #970/2495';
+$items = [
+    new Shoman4eg\Nalog\DTO\IncomeServiceItem($name, $amount = 1800.30, $quantity = 1),
+    new Shoman4eg\Nalog\DTO\IncomeServiceItem($name, $amount = 900, $quantity = 2),
+    new Shoman4eg\Nalog\DTO\IncomeServiceItem($name, $amount = '1399.99', $quantity = 3),
+];
+$operationTime = new DateTimeImmutable('2020-12-31 12:12:00');
+$createdIncome = $apiClient->income()->createMultipleItems($items, $operationTime);
 ```
 
 ### Create income with custom client
