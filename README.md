@@ -23,10 +23,12 @@ $ composer require shoman4eg/moy-nalog
 // If need set timezone use this
 date_default_timezone_set('Europe/Kaliningrad');
 // or set timezone through new DateTimeZone
-$operationTime = new DateTimeImmutable('now', new DateTimeZone('Europe/Kaliningrad'))
+$operationTime = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Kaliningrad'))
 ```
 ### Authorization
 ```php
+use Shoman4eg\Nalog\ApiClient;
+
 $apiClient = ApiClient::create();
 
 // If known accessToken skip this step
@@ -50,9 +52,9 @@ $createdIncome = $apiClient->income()->create($name, $amount, $quantity, $operat
 ```php
 $name = 'Предоставление информационных услуг #970/2495';
 $items = [
-    new Shoman4eg\Nalog\DTO\IncomeServiceItem($name, $amount = 1800.30, $quantity = 1),
-    new Shoman4eg\Nalog\DTO\IncomeServiceItem($name, $amount = 900, $quantity = 2),
-    new Shoman4eg\Nalog\DTO\IncomeServiceItem($name, $amount = '1399.99', $quantity = 3),
+    new \Shoman4eg\Nalog\DTO\IncomeServiceItem($name, $amount = 1800.30, $quantity = 1),
+    new \Shoman4eg\Nalog\DTO\IncomeServiceItem($name, $amount = 900, $quantity = 2),
+    new \Shoman4eg\Nalog\DTO\IncomeServiceItem($name, $amount = '1399.99', $quantity = 3),
 ];
 $operationTime = new DateTimeImmutable('2020-12-31 12:12:00');
 $createdIncome = $apiClient->income()->createMultipleItems($items, $operationTime);
@@ -63,15 +65,15 @@ $createdIncome = $apiClient->income()->createMultipleItems($items, $operationTim
 $name = 'Предоставление информационных услуг #970/2495';
 $amount = 1800.30;
 $quantity = 1;
-$operationTime = new DateTimeImmutable('2020-12-31 12:12:00');
+$operationTime = new \DateTimeImmutable('2020-12-31 12:12:00');
 
-$client = new Shoman4eg\Nalog\DTO\IncomeClient(); // Default. All fields are empty IncomeType is FROM_INDIVIDUAL
+$client = new \Shoman4eg\Nalog\DTO\IncomeClient(); // Default. All fields are empty IncomeType is FROM_INDIVIDUAL
 // or
-$client = new Shoman4eg\Nalog\DTO\IncomeClient('+79009000000', 'Вася Пупкин', \Shoman4eg\Nalog\Enum\IncomeType::INDIVIDUAL, '390000000000');
+$client = new \Shoman4eg\Nalog\DTO\IncomeClient('+79009000000', 'Вася Пупкин', \Shoman4eg\Nalog\Enum\IncomeType::INDIVIDUAL, '390000000000');
 // or
-$client = new Shoman4eg\Nalog\DTO\IncomeClient(null, 'Facebook Inc.', \Shoman4eg\Nalog\Enum\IncomeType::FOREIGN_AGENCY, '390000000000');
+$client = new \Shoman4eg\Nalog\DTO\IncomeClient(null, 'Facebook Inc.', \Shoman4eg\Nalog\Enum\IncomeType::FOREIGN_AGENCY, '390000000000');
 // or
-$client = new Shoman4eg\Nalog\DTO\IncomeClient(null, 'ИП Вася Пупкин Валерьевич', \Shoman4eg\Nalog\Enum\IncomeType::LEGAL_ENTITY, '7700000000');
+$client = new \Shoman4eg\Nalog\DTO\IncomeClient(null, 'ИП Вася Пупкин Валерьевич', \Shoman4eg\Nalog\Enum\IncomeType::LEGAL_ENTITY, '7700000000');
 $createdIncome = $apiClient->income()->create($name, $amount, $quantity, $operationTime, $client);
 ```
 
@@ -80,8 +82,8 @@ $createdIncome = $apiClient->income()->create($name, $amount, $quantity, $operat
 $receiptUuid = "20hykdxbp8"
 $comment = \Shoman4eg\Nalog\Enum\CancelCommentType::CANCEL;
 $partnerCode = null; // Default null
-$operationTime = new DateTimeImmutable('now'); //Default 'now'
-$requestTime = new DateTimeImmutable('now'); //Default 'now'
+$operationTime = new \DateTimeImmutable('now'); //Default 'now'
+$requestTime = new \DateTimeImmutable('now'); //Default 'now'
 $incomeInfo = $apiClient->income()->cancel($receiptUuid, $comment, $operationTime, $requestTime, $partnerCode);
 ```
 
