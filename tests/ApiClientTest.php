@@ -8,6 +8,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Shoman4eg\Nalog\ApiClient;
+use Shoman4eg\Nalog\Exception\Domain\UnauthorizedException;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
@@ -20,23 +21,23 @@ class ApiClientTest extends ApiTestCase
     /**
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \JsonException
+     * @throws \Shoman4eg\Nalog\Exception\DomainException
      */
     public function testCreateNewAccessToken(): void
     {
-        $mock = new MockHandler([
+        $this->mock->append(
             new Response(200, [], self::getAccessToken()),
-            new Response(400, []),
-        ]);
-        $client = ApiClient::createWithCustomClient(new Client(['handler' => HandlerStack::create($mock)]));
+            new Response(401, [], json_encode(['message' => 'Указанный Вами ИНН некорректен'])),
+        );
 
-        self::assertJson($client->createNewAccessToken('validUserName', 'validPassword'));
-        self::assertNull($client->createNewAccessToken('invalidUserName', 'invalidPassword'));
+        self::assertJson($this->client->createNewAccessToken('validUserName', 'validPassword'));
+        $this->expectException(UnauthorizedException::class);
+        $this->client->createNewAccessToken('invalidUserName', 'invalidPassword');
     }
 
     public function testGetAccessToken(): void
     {
-        $client = ApiClient::create();
-        $client->authenticate(self::getAccessToken());
-        self::assertJson($client->getAccessToken());
+        $this->client->authenticate(self::getAccessToken());
+        self::assertJson($this->client->getAccessToken());
     }
 }
