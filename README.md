@@ -17,6 +17,10 @@ Via Composer
 $ composer require shoman4eg/moy-nalog
 ```
 
+Also you need one of packages suggests `psr/http-client-implementation`
+
+Recommends `symfony/http-client` or `guzzlehttp/guzzle`
+
 ## Usage
 
 ### Settings
