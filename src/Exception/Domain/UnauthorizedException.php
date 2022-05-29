@@ -8,9 +8,9 @@ namespace Shoman4eg\Nalog\Exception\Domain;
  */
 final class UnauthorizedException extends ClientException
 {
-    public function __construct($message)
+    public function __construct($message = '')
     {
         $decodedMessage = json_decode($message, true);
-        parent::__construct($decodedMessage['message']);
+        parent::__construct($decodedMessage['message'] ?? '');
     }
 }

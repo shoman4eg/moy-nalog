@@ -3,11 +3,7 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Shoman4eg\Nalog\ApiClient;
 use Shoman4eg\Nalog\Exception\Domain\UnauthorizedException;
 
 /**
