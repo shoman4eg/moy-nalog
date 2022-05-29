@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [0.3.1](https://github.com/shoman4eg/moy-nalog/compare/v0.3.0...v0.3.1) (2022-05-29)
+### Features
+* Add throw `UnauthorizedException` if server respond 401 status #19
+
+### Documentation
+* Update README with exception
+* Add donation link
+---
+
 ## [0.3.0](https://github.com/shoman4eg/moy-nalog/compare/v0.2.3...v0.3.0) (2022-05-15)
 ### Features
 * Add new method for income with multiple items #14

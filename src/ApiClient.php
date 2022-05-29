@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Shoman4eg\Nalog;
@@ -69,6 +68,7 @@ class ApiClient
      *
      * @throws ClientExceptionInterface
      * @throws JsonException
+     * @throws Exception\DomainException
      */
     public function createNewAccessToken(string $username, string $password): ?string
     {

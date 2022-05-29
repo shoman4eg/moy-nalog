@@ -5,6 +5,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/shoman4eg/moy-nalog.svg?style=flat-square)](https://packagist.org/packages/shoman4eg/moy-nalog)
 [![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/shoman4eg/moy-nalog/master?style=flat-square)](https://scrutinizer-ci.com/g/shoman4eg/moy-nalog/?branch=master)
 [![Packagist License](https://img.shields.io/packagist/l/shoman4eg/moy-nalog?style=flat-square)](LICENSE)
+[![Donate](https://img.shields.io/badge/Donate-Tinkoff-yellow?style=flat-square)](https://www.tinkoff.ru/cf/7rZnC7N4bOO)
 
 An unofficial wrapper client for [lknpd.nalog.ru](https://lknpd.nalog.ru/) API
 
@@ -32,7 +33,11 @@ use Shoman4eg\Nalog\ApiClient;
 $apiClient = ApiClient::create();
 
 // If known accessToken skip this step
-$accessToken = $apiClient->createNewAccessToken($username, $password);
+try {
+    $accessToken = $apiClient->createNewAccessToken($username, $password);
+} catch (\Shoman4eg\Nalog\Exception\Domain\UnauthorizedException $e) {
+    var_dump($e->getMessage());
+}
 
 // Access token MUST contains all json response from method createNewAccessToken()
 $accessToken = '...';
@@ -125,6 +130,11 @@ JS lib [alexstep/moy-nalog](https://github.com/alexstep/moy-nalog)
 
 ## Changelog
 [Changelog](CHANGELOG.md): A complete changelog
+
+## Donation
+If this project help you reduce time to develop, you can give me a cup of coffee :)
+
+[Link to donate](https://www.tinkoff.ru/cf/7rZnC7N4bOO)
 
 ## License
 The MIT License (MIT). Please see [License File](LICENSE) for more information.

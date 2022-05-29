@@ -6,6 +6,8 @@ namespace Shoman4eg\Nalog\Http;
 use Http\Client\HttpClient;
 use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\DTO\DeviceInfo;
+use Shoman4eg\Nalog\ErrorHandler;
+use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\RequestBuilder;
 use Shoman4eg\Nalog\Util\JSON;
 
@@ -33,6 +35,7 @@ final class Authenticator
     /**
      * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @throws DomainException
      */
     public function createAccessToken(string $username, string $password): ?string
     {
@@ -47,8 +50,8 @@ final class Authenticator
 
         $response = $this->httpClient->sendRequest($request);
 
-        if ($response->getStatusCode() !== 200) {
-            return null;
+        if ($response->getStatusCode() >= 400) {
+            (new ErrorHandler())->handleResponse($response);
         }
 
         $this->accessToken = (string)$response->getBody();
