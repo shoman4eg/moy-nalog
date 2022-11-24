@@ -93,6 +93,7 @@ class ApiClient
      * @throws ClientExceptionInterface
      * @throws JsonException
      * @throws Exception\DomainException
+     * @return array{challengeToken: string, expireDate: string, expireIn: int}
      */
     public static function createPhoneChallenge(string $phone): array
     {
