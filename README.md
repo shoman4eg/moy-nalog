@@ -1,4 +1,4 @@
-# Неофициальный API клиент [lknpd.nalog.ru](https://lknpd.nalog.ru/) Мой Налог
+# Unofficial MoyNalog API client
 
 [![Php version](https://img.shields.io/packagist/php-v/shoman4eg/moy-nalog?style=flat-square)](composer.json)
 [![Latest Version](https://img.shields.io/github/release/shoman4eg/moy-nalog.svg?style=flat-square)](https://github.com/shoman4eg/moy-nalog/releases)
@@ -7,36 +7,36 @@
 [![Packagist License](https://img.shields.io/packagist/l/shoman4eg/moy-nalog?style=flat-square)](LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-Tinkoff-yellow?style=flat-square)](https://www.tinkoff.ru/cf/7rZnC7N4bOO)
 
-## Установка
+An unofficial wrapper client for [lknpd.nalog.ru](https://lknpd.nalog.ru/) API
 
-С помощью `composer`
+## Install
+
+Via Composer
 
 ```bash
 $ composer require shoman4eg/moy-nalog
 ```
 
-Так же вам понядобится релизация виртуального пакета [`psr/http-client-implementation`](https://packagist.org/providers/psr/http-client-implementation)
+Also you need one of packages suggests `psr/http-client-implementation`
 
-Рекомендуемые реализации `symfony/http-client` или `guzzlehttp/guzzle`
+Recommends `symfony/http-client` or `guzzlehttp/guzzle`
 
-## Использование
+## Usage
 
-### Настройки
+### Settings
 ```php
-// Необходимо выставить часовой пояс для корректного формирования дат в чеках
-// Можно установить с помощью функции date_default_timezone_set
+// If need set timezone use this
 date_default_timezone_set('Europe/Kaliningrad');
-// или через класс DateTimeImmutable с переданной таймзоной
+// or set timezone through new DateTimeZone
 $operationTime = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Kaliningrad'))
 ```
-### Аутентификация
-#### С помощью ИНН и пароля
+### Authorization by INN & password
 ```php
 use Shoman4eg\Nalog\ApiClient;
 
 $apiClient = ApiClient::create();
 
-// Если у вас есть accessToken то можете пропустить этот шаг
+// If known accessToken skip this step
 try {
     $accessToken = $apiClient->createNewAccessToken($username, $password);
 } catch (\Shoman4eg\Nalog\Exception\Domain\UnauthorizedException $e) {
@@ -46,33 +46,33 @@ try {
 $apiClient->authenticate($accessToken);
 ```
 
-#### По номеру телефона
-Аутентификация по номеру телефона состоит из 2 шагов
-Вам необходимо запросить авторизацию по телефону, временно сохранить возвращенный challengeToken, получить СМС с кодом подтверждения, а затем повторным запросом передать телефон, challengeToken и код подтверждения из СМС.
+### Authorization by phone number
+Authorization by phone number takes place in two steps.
+You need to request authorization by phone, temporarily save the returned challenge token, receive an SMS with a confirmation code, and then pass the phone, the challenge token and the confirmation code from the SMS by a second request.
 
-**Внимание:** имеется ограничение на отправку СМС с кодом подтверждения (одна СМС раз в 1-2 минуты).
+**Please note:** there is a limit for sending SMS with confirmation code (one SMS every 1-2 minutes).
 
-#### 1. Получение СМС с кодом подтвержениея на ваш номер телефона и временного challengeToken'а:
+#### 1. Send an SMS with a confirmation code to your phone number and temporarily save the challenge token:
 ```php
 use Shoman4eg\Nalog\ApiClient;
 
-try {
-    $phoneChallengeResponse = ApiClient::createPhoneChallenge('79999999999');
-    /**
-     * $phoneChallengeResponse = [
-     *  'challengeToken' => '00000000-0000-0000-0000-000000000000',
-     *  'expireDate' => 2022-11-24T00:20:19.135436Z,
-     *  'expireIn' => 120,
-     *  ];
-     */
+$apiClient = ApiClient::create();
 
+try {
+    $response = $apiClient->createPhoneChallenge('79999999999');
+    
+    //$response: Array(
+    //  [challengeToken] => 00000000-0000-0000-0000-000000000000
+    //  [expireDate] => 2022-11-24T00:20:19.135436Z
+    //  [expireIn] => 120
+    //)
 } catch (\Shoman4eg\Nalog\Exception\Domain\UnauthorizedException $e) {
     var_dump($e->getMessage());
 }
-// Сохраните $phoneChallengeResponse['challengeToken']. Он вам потребуется на следующем шаге.
 
+//Save $response['challengeToken'] until you get the confirmation code from the SMS. You need it for the second step.
 ```
-#### 2. Ввод номера телефона, challengeToken'а и СМС:
+#### 2. Exchange your phone number, challenge token and code from SMS for the access token:
 ```php
 use Shoman4eg\Nalog\ApiClient;
 
@@ -80,9 +80,9 @@ $apiClient = ApiClient::create();
 
 try {
     $accessToken = $apiClient->createNewAccessTokenByPhone(
-        '79999999999', // Номер телефона
-        $phoneChallengeResponse['challengeToken'],
-        '111111' // Код из СМС
+    	'79999999999',
+    	'00000000-0000-0000-0000-000000000000',
+    	'111111'
     );
 } catch (\Shoman4eg\Nalog\Exception\Domain\UnauthorizedException $e) {
     var_dump($e->getMessage());
@@ -91,7 +91,7 @@ try {
 $apiClient->authenticate($accessToken);
 ```
 
-### Создать `income` c контрагентом по умолчанию
+### Create income with default client
 ```php
 $name = 'Предоставление информационных услуг #970/2495';
 $amount = 1800.30;
@@ -100,7 +100,7 @@ $operationTime = new DateTimeImmutable('2020-12-31 12:12:00');
 $createdIncome = $apiClient->income()->create($name, $amount, $quantity, $operationTime);
 ```
 
-### Создать `income` с несколькими позициями
+### Create income with multiple items
 ```php
 $name = 'Предоставление информационных услуг #970/2495';
 $items = [
@@ -112,7 +112,7 @@ $operationTime = new DateTimeImmutable('2020-12-31 12:12:00');
 $createdIncome = $apiClient->income()->createMultipleItems($items, $operationTime);
 ```
 
-### Создать `income` различными контрагентами
+### Create income with custom client
 ```php
 $name = 'Предоставление информационных услуг #970/2495';
 $amount = 1800.30;
@@ -129,7 +129,7 @@ $client = new \Shoman4eg\Nalog\DTO\IncomeClient(null, 'ИП Вася Пупки�
 $createdIncome = $apiClient->income()->create($name, $amount, $quantity, $operationTime, $client);
 ```
 
-### Отменить `income`
+### Cancel income
 ```php
 $receiptUuid = "20hykdxbp8"
 $comment = \Shoman4eg\Nalog\Enum\CancelCommentType::CANCEL;
@@ -154,31 +154,31 @@ $incomeInfo = $apiClient->income()->cancel($receiptUuid, $comment, $operationTim
 // todo
 ```
 
-### Получить информацию о текущем пользователе
+### Get user info
 ```php
 $userInfo = $apiClient->user()->get();
 ```
 
-### Получить информацию о чеке
+### Get receipt info
 ```php
 // $receiptUuid = $createdincome->getApprovedReceiptUuid();
 
-// Получить ссылку на который чек для печати
+// Get print url
 $receipt = $apiClient->receipt()->printUrl($receiptUuid);
 
-// Данные по чеку в Json формате
+// Json data
 $receipt = $apiClient->receipt()->json($receiptUuid);
 ```
 
-## Использованные ресурсы
+## References
 [Автоматизация для самозанятых: как интегрировать налог с IT проектом](https://habr.com/ru/post/436656/)
 
 JS lib [alexstep/moy-nalog](https://github.com/alexstep/moy-nalog)
 
-## Лог изменений
+## Changelog
 [Changelog](CHANGELOG.md): A complete changelog
 
-## На кофе
+## Donation
 If this project help you reduce time to develop, you can give me a cup of coffee :)
 
 [Link to donate](https://www.tinkoff.ru/cf/7rZnC7N4bOO)
