@@ -94,12 +94,13 @@ class ApiClient
      * @throws JsonException
      * @throws Exception\DomainException
      */
-    public function createPhoneChallenge(string $phone): array
+    public static function createPhoneChallenge(string $phone): array
     {
-        $this->clientConfigurator->setVersion('v2');
-        $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
+        $client = self::create();
+        $client->clientConfigurator->setVersion('v2');
+        $client->clientConfigurator->removePlugin(AuthenticationPlugin::class);
 
-        return $this->authenticator->createPhoneChallenge($phone);
+        return $client->authenticator->createPhoneChallenge($phone);
     }
 
     /**
