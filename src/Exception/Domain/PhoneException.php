@@ -7,5 +7,4 @@ use Shoman4eg\Nalog\Exception\DomainException;
 
 final class PhoneException extends \Exception implements DomainException
 {
-  
 }
