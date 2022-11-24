@@ -30,7 +30,7 @@ date_default_timezone_set('Europe/Kaliningrad');
 // or set timezone through new DateTimeZone
 $operationTime = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Kaliningrad'))
 ```
-### Authorization
+### Authorization by INN & password
 ```php
 use Shoman4eg\Nalog\ApiClient;
 
@@ -43,8 +43,51 @@ try {
     var_dump($e->getMessage());
 }
 
-// Access token MUST contains all json response from method createNewAccessToken()
-$accessToken = '...';
+$apiClient->authenticate($accessToken);
+```
+
+### Authorization by phone number
+Authorization by phone number takes place in two steps.
+You need to request authorization by phone, temporarily save the returned challenge token, receive an SMS with a confirmation code, and then pass the phone, the challenge token and the confirmation code from the SMS by a second request.
+
+**Please note:** there is a limit for sending SMS with confirmation code (one SMS every 1-2 minutes).
+
+#### 1. Send an SMS with a confirmation code to your phone number and temporarily save the challenge token:
+```php
+use Shoman4eg\Nalog\ApiClient;
+
+$apiClient = ApiClient::create();
+
+try {
+    $response = $apiClient->createPhoneChallenge('79999999999');
+    
+    //$response: Array(
+    //  [challengeToken] => 00000000-0000-0000-0000-000000000000
+    //  [expireDate] => 2022-11-24T00:20:19.135436Z
+    //  [expireIn] => 120
+    //)
+} catch (\Shoman4eg\Nalog\Exception\Domain\UnauthorizedException $e) {
+    var_dump($e->getMessage());
+}
+
+//Save $response['challengeToken'] until you get the confirmation code from the SMS. You need it for the second step.
+```
+#### 2. Exchange your phone number, challenge token and code from SMS for the access token:
+```php
+use Shoman4eg\Nalog\ApiClient;
+
+$apiClient = ApiClient::create();
+
+try {
+    $accessToken = $apiClient->createNewAccessTokenByPhone(
+    	'79999999999',
+    	'00000000-0000-0000-0000-000000000000',
+    	'111111'
+    );
+} catch (\Shoman4eg\Nalog\Exception\Domain\UnauthorizedException $e) {
+    var_dump($e->getMessage());
+}
+
 $apiClient->authenticate($accessToken);
 ```
 
