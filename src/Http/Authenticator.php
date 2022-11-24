@@ -23,7 +23,6 @@ final class Authenticator
     private RequestBuilder $requestBuilder;
     private HttpClient $httpClient;
     private ?string $accessToken;
-    private array $challenge;
     private string $deviceId;
 
     public function __construct(RequestBuilder $requestBuilder, HttpClient $httpClient, string $deviceId)
@@ -90,6 +89,7 @@ final class Authenticator
     /**
      * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @return array{challengeToken: string, expireDate: string, expireIn: int}
      */
     public function createPhoneChallenge(string $phone): array
     {
@@ -108,9 +108,8 @@ final class Authenticator
         }
 
         $response = (string)$response->getBody();
-        $this->challenge = JSON::decode($response);
 
-        return $this->challenge;
+        return JSON::decode($response);
     }
 
     /**
