@@ -63,6 +63,59 @@ final class Authenticator
      * @throws ClientExceptionInterface
      * @throws \JsonException
      */
+    public function createAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
+    {
+        $request = $this->requestBuilder->create('POST', '/auth/challenge/sms/verify', [
+            'Referrer' => 'https://lknpd.nalog.ru/',
+            'Referrer-Policy' => 'strict-origin-when-cross-origin',
+        ], \json_encode([
+            'phone' => $phone,
+            'code' => $verificationCode,
+            'challengeToken' => $challengeToken,
+            'deviceInfo' => new DeviceInfo($this->deviceId),
+        ]));
+
+        $response = $this->httpClient->sendRequest($request);
+
+        if ($response->getStatusCode() >= 400) {
+            (new ErrorHandler())->handleResponse($response);
+        }
+
+        $this->accessToken = (string)$response->getBody();
+
+        return $this->accessToken;
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     * @throws \JsonException
+     * @return array{challengeToken: string, expireDate: string, expireIn: int}
+     */
+    public function createPhoneChallenge(string $phone): array
+    {
+        $request = $this->requestBuilder->create('POST', '/auth/challenge/sms/start', [
+            'Referrer' => 'https://lknpd.nalog.ru/',
+            'Referrer-Policy' => 'strict-origin-when-cross-origin',
+        ], \json_encode([
+            'phone' => $phone,
+            'requireTpToBeActive' => true,
+        ]));
+
+        $response = $this->httpClient->sendRequest($request);
+
+        if ($response->getStatusCode() >= 400) {
+            (new ErrorHandler())->handleResponse($response);
+        }
+
+        $response = (string)$response->getBody();
+
+        return JSON::decode($response);
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     * @throws \JsonException
+     */
     public function refreshAccessToken(string $refreshToken): ?string
     {
         $request = $this->requestBuilder->create('POST', '/auth/token', [

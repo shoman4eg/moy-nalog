@@ -34,6 +34,8 @@ final class ErrorHandler
                 throw new DomainExceptions\NotFoundException();
             case 406:
                 throw new DomainExceptions\ClientException('Wrong Accept headers');
+            case 422:
+                throw new DomainExceptions\PhoneException($body);
             case 500:
                 throw new DomainExceptions\ServerException();
             default:
