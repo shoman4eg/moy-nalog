@@ -4,7 +4,7 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
-## [0.3.1](https://github.com/shoman4eg/moy-nalog/compare/v0.3.1...v0.4.0) (2022-11-27)
+## [0.4.0](https://github.com/shoman4eg/moy-nalog/compare/v0.3.1...v0.4.0) (2022-11-27)
 ### Features
 * Добавлена аутентификация по номеру телефона и СМС
 
