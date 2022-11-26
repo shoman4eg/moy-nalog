@@ -95,11 +95,11 @@ final class Authenticator
     }
 
     /**
-     * @return array{challengeToken: string, expireDate: string, expireIn: int}
      * @throws DomainException
      * @throws \JsonException
-     *
      * @throws ClientExceptionInterface
+     *
+     * @return array{challengeToken: string, expireDate: string, expireIn: int}
      */
     public function createPhoneChallenge(string $phone): array
     {
