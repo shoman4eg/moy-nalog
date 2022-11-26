@@ -24,6 +24,10 @@ final class Authenticator
     private HttpClient $httpClient;
     private ?string $accessToken;
     private string $deviceId;
+    private array $defautlHeaders = [
+        'Referrer' => 'https://lknpd.nalog.ru/',
+        'Referrer-Policy' => 'strict-origin-when-cross-origin',
+    ];
 
     public function __construct(RequestBuilder $requestBuilder, HttpClient $httpClient, string $deviceId)
     {
@@ -39,14 +43,16 @@ final class Authenticator
      */
     public function createAccessToken(string $username, string $password): ?string
     {
-        $request = $this->requestBuilder->create('POST', '/auth/lkfl', [
-            'Referrer' => 'https://lknpd.nalog.ru/',
-            'Referrer-Policy' => 'strict-origin-when-cross-origin',
-        ], \json_encode([
-            'username' => $username,
-            'password' => $password,
-            'deviceInfo' => new DeviceInfo($this->deviceId),
-        ]));
+        $request = $this->requestBuilder->create(
+            'POST',
+            '/auth/lkfl',
+            $this->defautlHeaders,
+            JSON::encode([
+                'username' => $username,
+                'password' => $password,
+                'deviceInfo' => new DeviceInfo($this->deviceId),
+            ])
+        );
 
         $response = $this->httpClient->sendRequest($request);
 
@@ -65,15 +71,17 @@ final class Authenticator
      */
     public function createAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
     {
-        $request = $this->requestBuilder->create('POST', '/auth/challenge/sms/verify', [
-            'Referrer' => 'https://lknpd.nalog.ru/',
-            'Referrer-Policy' => 'strict-origin-when-cross-origin',
-        ], \json_encode([
-            'phone' => $phone,
-            'code' => $verificationCode,
-            'challengeToken' => $challengeToken,
-            'deviceInfo' => new DeviceInfo($this->deviceId),
-        ]));
+        $request = $this->requestBuilder->create(
+            'POST',
+            '/auth/challenge/sms/verify',
+            $this->defautlHeaders,
+            JSON::encode([
+                'phone' => $phone,
+                'code' => $verificationCode,
+                'challengeToken' => $challengeToken,
+                'deviceInfo' => new DeviceInfo($this->deviceId),
+            ])
+        );
 
         $response = $this->httpClient->sendRequest($request);
 
@@ -87,19 +95,23 @@ final class Authenticator
     }
 
     /**
-     * @throws ClientExceptionInterface
-     * @throws \JsonException
      * @return array{challengeToken: string, expireDate: string, expireIn: int}
+     * @throws DomainException
+     * @throws \JsonException
+     *
+     * @throws ClientExceptionInterface
      */
     public function createPhoneChallenge(string $phone): array
     {
-        $request = $this->requestBuilder->create('POST', '/auth/challenge/sms/start', [
-            'Referrer' => 'https://lknpd.nalog.ru/',
-            'Referrer-Policy' => 'strict-origin-when-cross-origin',
-        ], \json_encode([
-            'phone' => $phone,
-            'requireTpToBeActive' => true,
-        ]));
+        $request = $this->requestBuilder->create(
+            'POST',
+            '/auth/challenge/sms/start',
+            $this->defautlHeaders,
+            JSON::encode([
+                'phone' => $phone,
+                'requireTpToBeActive' => true,
+            ])
+        );
 
         $response = $this->httpClient->sendRequest($request);
 
@@ -118,13 +130,15 @@ final class Authenticator
      */
     public function refreshAccessToken(string $refreshToken): ?string
     {
-        $request = $this->requestBuilder->create('POST', '/auth/token', [
-            'Referrer' => 'https://lknpd.nalog.ru/sales',
-            'Referrer-Policy' => 'strict-origin-when-cross-origin',
-        ], JSON::encode([
-            'deviceInfo' => new DeviceInfo($this->deviceId),
-            'refreshToken' => $refreshToken,
-        ]));
+        $request = $this->requestBuilder->create(
+            'POST',
+            '/auth/token',
+            $this->defautlHeaders,
+            JSON::encode([
+                'deviceInfo' => new DeviceInfo($this->deviceId),
+                'refreshToken' => $refreshToken,
+            ])
+        );
 
         $response = $this->httpClient->sendRequest($request);
         if ($response->getStatusCode() !== 200) {

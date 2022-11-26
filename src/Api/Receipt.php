@@ -6,6 +6,7 @@ namespace Shoman4eg\Nalog\Api;
 use Http\Client\HttpClient;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
+use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception;
 use Shoman4eg\Nalog\Model\User\UserType;
 use Shoman4eg\Nalog\RequestBuilder;
@@ -14,7 +15,7 @@ use Webmozart\Assert\Assert;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
-class Receipt extends BaseHttpApi
+final class Receipt extends BaseHttpApi
 {
     private UserType $profile;
     private string $endpoint;
@@ -48,7 +49,7 @@ class Receipt extends BaseHttpApi
         $response = $this->httpGet($this->composePrintUrl($receiptUuid));
 
         if ($response->getStatusCode() >= 400) {
-            $this->handleErrors($response);
+            (new ErrorHandler())->handleResponse($response);
         }
 
         return $response;
@@ -65,7 +66,7 @@ class Receipt extends BaseHttpApi
         $response = $this->httpGet(sprintf('/receipt/%s/%s/json', $this->profile->getInn(), $receiptUuid));
 
         if ($response->getStatusCode() >= 400) {
-            $this->handleErrors($response);
+            (new ErrorHandler())->handleResponse($response);
         }
 
         return $response->getBody()->__toString();

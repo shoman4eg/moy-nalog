@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [0.3.1](https://github.com/shoman4eg/moy-nalog/compare/v0.3.1...v0.4.0) (2022-11-27)
+### Features
+* Добавлена аутентификация по номеру телефона и СМС
+
+### Fix
+* Добавлен struct_types=1
+* Добавлен `final` к некоторым классам
+* Исправлены ошибки psalm, phpstan
+* Код-стайл
+
+### Documentation
+* Переведена на русский язык
+* Добавлена на английском
+
 ## [0.3.1](https://github.com/shoman4eg/moy-nalog/compare/v0.3.0...v0.3.1) (2022-05-29)
 ### Features
 * Add throw `UnauthorizedException` if server respond 401 status #19

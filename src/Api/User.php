@@ -1,11 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Api;
 
 use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\Model\User\UserType;
 
-class User extends BaseHttpApi
+/**
+ * @author Artem Dubinin <artem@dubinin.me>
+ */
+final class User extends BaseHttpApi
 {
     /**
      * @throws ClientExceptionInterface

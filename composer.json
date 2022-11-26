@@ -1,8 +1,8 @@
 {
     "name": "shoman4eg/moy-nalog",
+    "type": "library",
     "description": "An unofficial wrapper client for lknpd.nalog.ru API",
     "license": "MIT",
-    "version": "0.3.1",
     "keywords": [
         "api",
         "nalog.ru"
@@ -20,8 +20,9 @@
         }
     ],
     "require": {
-        "php": ">=7.4 || ^8.0",
+        "php": ">=7.4",
         "ext-json": "*",
+        "ext-random": "*",
         "ext-mbstring": "*",
         "brick/math": "^0.9",
         "php-http/client-common": "^2.0",

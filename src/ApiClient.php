@@ -78,21 +78,22 @@ class ApiClient
     }
 
     /**
-     * Used as the first step, before createPhoneChallenge()
-     * 
+     * Used as the first step, before createPhoneChallenge().
+     *
      * Request the verification code in the SMS-message for authorization by phone number.
      * Returns the call token and its lifetime.
-     * 
+     *
      * Save the phone number and call token. When the user specifies the code from the SMS,
      * pass them to createNewAccessTokenByPhone() along with the code from the SMS
      *
      * Remember that there are restrictions on sending SMS. The value seems to be dynamic,
      * approximately 1 message every 1-2 minutes.
      * The restriction is removed after a successful createNewAccessTokenByPhone()
-     * 
+     *
      * @throws ClientExceptionInterface
      * @throws JsonException
      * @throws Exception\DomainException
+     *
      * @return array{challengeToken: string, expireDate: string, expireIn: int}
      */
     public static function createPhoneChallenge(string $phone): array
@@ -118,6 +119,7 @@ class ApiClient
 
         return $this->authenticator->createAccessTokenByPhone($phone, $challengeToken, $verificationCode);
     }
+
     /**
      * Authenticate the client with an access token. This should be the full access token object with
      * refresh token and expirery timestamps.

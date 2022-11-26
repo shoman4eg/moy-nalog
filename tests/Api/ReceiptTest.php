@@ -5,10 +5,12 @@ namespace Shoman4eg\Nalog\Tests\Api;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 
 /**
+ * @author Artem Dubinin <artem@dubinin.me>
+ *
  * @internal
  * @coversNothing
  */
-class ReceiptTest extends ApiTestCase
+final class ReceiptTest extends ApiTestCase
 {
     public function testPrintUrl(): void
     {

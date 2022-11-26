@@ -7,6 +7,7 @@ use Brick\Math\BigDecimal;
 use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\DTO;
 use Shoman4eg\Nalog\Enum;
+use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception;
 use Shoman4eg\Nalog\Model\Income\IncomeType;
 use Webmozart\Assert\Assert;
@@ -14,7 +15,7 @@ use Webmozart\Assert\Assert;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
-class Invoice extends BaseHttpApi
+final class Invoice extends BaseHttpApi
 {
     /**
      * @param float|int $amount
@@ -50,7 +51,7 @@ class Invoice extends BaseHttpApi
         ]);
 
         if ($response->getStatusCode() >= 400) {
-            $this->handleErrors($response);
+            (new ErrorHandler())->handleResponse($response);
         }
 
         return $this->hydrator->hydrate($response, IncomeType::class);

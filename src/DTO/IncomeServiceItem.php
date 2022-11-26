@@ -11,7 +11,11 @@ use Brick\Math\BigDecimal;
 final class IncomeServiceItem implements \JsonSerializable
 {
     private string $name;
+
+    /** @var float|int|string */
     private $amount;
+
+    /** @var float|int */
     private $quantity;
 
     /**

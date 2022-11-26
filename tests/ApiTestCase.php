@@ -11,6 +11,8 @@ use Shoman4eg\Nalog\ApiClient;
 use Shoman4eg\Nalog\Util\JSON;
 
 /**
+ * @author Artem Dubinin <artem@dubinin.me>
+ *
  * @internal
  * @coversNothing
  */

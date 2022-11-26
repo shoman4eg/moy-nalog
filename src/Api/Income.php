@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Api;
@@ -8,6 +7,7 @@ use Brick\Math\BigDecimal;
 use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\DTO;
 use Shoman4eg\Nalog\Enum;
+use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception;
 use Shoman4eg\Nalog\Model\Income\IncomeInfoType;
 use Shoman4eg\Nalog\Model\Income\IncomeType;
@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
-class Income extends BaseHttpApi
+final class Income extends BaseHttpApi
 {
     /**
      * @param float|int $amount
@@ -66,7 +66,7 @@ class Income extends BaseHttpApi
 
         $totalAmount = array_reduce(
             $serviceItems,
-            fn ($totalAmount, $serviceItem) => $totalAmount->plus($serviceItem->getTotalAmount()),
+            fn ($totalAmount, $serviceItem): BigDecimal => $totalAmount->plus($serviceItem->getTotalAmount()),
             BigDecimal::of(0)
         );
 
@@ -88,7 +88,7 @@ class Income extends BaseHttpApi
         ]);
 
         if ($response->getStatusCode() >= 400) {
-            $this->handleErrors($response);
+            (new ErrorHandler())->handleResponse($response);
         }
 
         return $this->hydrator->hydrate($response, IncomeType::class);
@@ -118,7 +118,7 @@ class Income extends BaseHttpApi
         ]);
 
         if ($response->getStatusCode() >= 400) {
-            $this->handleErrors($response);
+            (new ErrorHandler())->handleResponse($response);
         }
 
         return $this->hydrator->hydrate($response, IncomeInfoType::class);

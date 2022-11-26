@@ -6,7 +6,7 @@ namespace Shoman4eg\Nalog\Enum;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
-class PaymentType
+final class PaymentType
 {
     public const CASH = 'CASH';
     public const ACCOUNT = 'ACCOUNT';

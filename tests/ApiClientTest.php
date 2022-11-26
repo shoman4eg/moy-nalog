@@ -12,7 +12,7 @@ use Shoman4eg\Nalog\Exception\Domain\UnauthorizedException;
  * @internal
  * @coversNothing
  */
-class ApiClientTest extends ApiTestCase
+final class ApiClientTest extends ApiTestCase
 {
     /**
      * @throws \Psr\Http\Client\ClientExceptionInterface

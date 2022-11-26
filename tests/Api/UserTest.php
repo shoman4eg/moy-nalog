@@ -11,7 +11,7 @@ use Shoman4eg\Nalog\Tests\ApiTestCase;
  * @internal
  * @coversNothing
  */
-class UserTest extends ApiTestCase
+final class UserTest extends ApiTestCase
 {
     public function testGet(): void
     {

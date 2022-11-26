@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 use Shoman4eg\Nalog\Http\ClientConfigurator;
 
 /**
+ * @author Artem Dubinin <artem@dubinin.me>
+ *
  * @internal
  * @coversNothing
  */

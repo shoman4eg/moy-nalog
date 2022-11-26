@@ -6,10 +6,12 @@ use Shoman4eg\Nalog\Model\PaymentType\PaymentType;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 
 /**
+ * @author Artem Dubinin <artem@dubinin.me>
+ *
  * @internal
  * @coversNothing
  */
-class PaymentTypeTest extends ApiTestCase
+final class PaymentTypeTest extends ApiTestCase
 {
     public function testTable(): void
     {

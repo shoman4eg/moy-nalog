@@ -16,7 +16,7 @@ use Shoman4eg\Nalog\Tests\ApiTestCase;
  * @internal
  * @coversNothing
  */
-class IncomeTest extends ApiTestCase
+final class IncomeTest extends ApiTestCase
 {
     public function clientDataProvider(): iterable
     {

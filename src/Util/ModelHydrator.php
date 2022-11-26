@@ -11,6 +11,13 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
  */
 final class ModelHydrator
 {
+    /**
+     * @template T
+     *
+     * @param class-string<CreatableFromArray>|class-string<T> $class
+     *
+     * @return mixed|T
+     */
     public function hydrate(ResponseInterface $response, string $class)
     {
         $body = $response->getBody()->__toString();
