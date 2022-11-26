@@ -22,7 +22,6 @@
     "require": {
         "php": ">=7.4",
         "ext-json": "*",
-        "ext-random": "*",
         "ext-mbstring": "*",
         "brick/math": "^0.9",
         "php-http/client-common": "^2.0",
