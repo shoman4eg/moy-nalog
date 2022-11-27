@@ -208,7 +208,7 @@ $receiptUuid = $createdincome->getApprovedReceiptUuid();
 ### Получить чек (скан-копия) или данные чека в JSON формате
 ```php
 // UUID чека
-$receiptUuid = "20hykdxbp8"
+$receiptUuid = "20hykdxbp8";
 
 // Получить ссылку на чек для печати
 $receipt = $apiClient->receipt()->printUrl($receiptUuid);
@@ -220,7 +220,7 @@ $receipt = $apiClient->receipt()->json($receiptUuid);
 ### Отменить чек
 ```php
 // UUID чека
-$receiptUuid = "20hykdxbp8"
+$receiptUuid = "20hykdxbp8";
 
 // Причина отмены: "Чек выдан ошибочно"
 $comment = \Shoman4eg\Nalog\Enum\CancelCommentType::CANCEL;
@@ -265,4 +265,4 @@ $userInfo = $apiClient->user()->get();
 [Сделать пожертвование автору](https://www.tinkoff.ru/cf/7rZnC7N4bOO)
 
 ## License
-The MIT License (MIT). Please see License File for more information.
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
