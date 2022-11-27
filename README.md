@@ -17,7 +17,7 @@
 $ composer require shoman4eg/moy-nalog
 ```
 
-Также Вам понядобится релизация виртуального пакета [`psr/http-client-implementation`](https://packagist.org/providers/psr/http-client-implementation), например (рекомендуется):
+Также Вам понадобится релизация виртуального пакета [`psr/http-client-implementation`](https://packagist.org/providers/psr/http-client-implementation), например (рекомендуется):
 
 Symfony
 ```bash
