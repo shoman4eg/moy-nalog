@@ -15,7 +15,7 @@ final class DateTime implements \JsonSerializable
         $this->dateTime = $dateTime;
     }
 
-    public function jsonSerialize():mixed
+    public function jsonSerialize():string
     {
         return $this->dateTime->format(DATE_ATOM);
     }
