@@ -1,10 +1,23 @@
 on: [ pull_request ]
-name: Roave
+name: BC
 jobs:
-    roave_bc_check:
-        name: BC Check
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@master
-            - name: Roave BC Check
-              uses: docker://nyholm/roave-bc-check-ga
+  bc_check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout.
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install PHP with extensions.
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: none
+          php-version: 8.1
+
+      - name: Install roave/backward-compatibility-check.
+        run: composer require --dev roave/backward-compatibility-check
+
+      - name: Run roave/backward-compatibility-check.
+        run: vendor/bin/roave-backward-compatibility-check
