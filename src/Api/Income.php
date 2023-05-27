@@ -107,7 +107,7 @@ final class Income extends BaseHttpApi
         ?string $partnerCode = null
     ): IncomeInfoType {
         Assert::notEmpty($receiptUuid, 'ReceiptUuid cannot be empty');
-        Assert::inArray($comment, Enum\CancelCommentType::all(), 'Comment is invalid. Must be one of: %2$s');
+        Assert::oneOf($comment, Enum\CancelCommentType::all(), 'Comment is invalid. Must be one of: %2$s');
 
         $response = $this->httpPost('/cancel', [
             'operationTime' => new DTO\DateTime($operationTime ?: new \DateTimeImmutable()),
