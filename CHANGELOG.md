@@ -4,9 +4,20 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [0.4.2](https://github.com/shoman4eg/moy-nalog/compare/v0.4.1...v0.4.2) (2023-27-05)
+### Fix
+* Исправлена ошибка при установке минимальных версий зависимостей #29
+* Исправлены ошибки безопасности #29
+* Обновлены версии зависимостей #29
+
+## [0.4.1](https://github.com/shoman4eg/moy-nalog/compare/v0.4.0...v0.4.1) (2023-23-05)
+### Fix
+* Улучшена поддержка 8.2 #28
+* Добавлен возвращаемый тип к `DateTime::jsonSerialize()`  #28
+
 ## [0.4.0](https://github.com/shoman4eg/moy-nalog/compare/v0.3.1...v0.4.0) (2022-11-27)
 ### Features
-* Добавлена аутентификация по номеру телефона и СМС
+* Добавлена аутентификация по номеру телефона и СМС #23
 
 ### Fix
 * Добавлен struct_types=1
@@ -15,7 +26,7 @@ All notable changes to this project will be documented in this file.
 * Код-стайл
 
 ### Documentation
-* Переведена на русский язык
+* Переведена на русский язык #26
 * Добавлена на английском
 
 ## [0.3.1](https://github.com/shoman4eg/moy-nalog/compare/v0.3.0...v0.3.1) (2022-05-29)
