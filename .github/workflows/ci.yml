@@ -8,7 +8,7 @@ jobs:
     strategy:
       max-parallel: 10
       matrix:
-        php: [ '7.4', '8.0', '8.1' ]
+        php: [ '7.4', '8.0', '8.1', '8.2' ]
 
     steps:
       - name: Set up PHP
@@ -46,3 +46,15 @@ jobs:
 
       - name: Run tests
         run: ./vendor/bin/phpunit
+
+  audit:
+    name: Composer audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run audit
+        uses: pxgamer/composer-action@master
+        with:
+          command: audit
