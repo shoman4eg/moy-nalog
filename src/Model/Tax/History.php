@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Model\Tax;
 
-use DateTimeImmutable;
 use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
@@ -16,8 +15,8 @@ final class History implements CreatableFromArray
     private float $bonusAmount;
     private float $paidAmount;
     private ?float $taxBaseAmount;
-    private ?DateTimeImmutable $chargeDate;
-    private ?DateTimeImmutable $dueDate;
+    private ?\DateTimeImmutable $chargeDate;
+    private ?\DateTimeImmutable $dueDate;
     private string $oktmo;
     private string $regionName;
     private string $kbk;
@@ -25,6 +24,10 @@ final class History implements CreatableFromArray
     private string $type;
     private int $krsbTaxChargeId;
     private int $receiptCount;
+
+    private function __construct()
+    {
+    }
 
     /**
      * @throws \Exception
@@ -37,8 +40,8 @@ final class History implements CreatableFromArray
         $model->bonusAmount = $data['bonusAmount'];
         $model->paidAmount = $data['paidAmount'];
         $model->taxBaseAmount = $data['taxBaseAmount'];
-        $model->chargeDate = $data['chargeDate'] ? new DateTimeImmutable($data['chargeDate']) : null;
-        $model->dueDate = $data['chargeDate'] ? new DateTimeImmutable($data['dueDate']) : null;
+        $model->chargeDate = $data['chargeDate'] ? new \DateTimeImmutable($data['chargeDate']) : null;
+        $model->dueDate = $data['dueDate'] ? new \DateTimeImmutable($data['dueDate']) : null;
         $model->oktmo = $data['oktmo'];
         $model->regionName = $data['regionName'];
         $model->kbk = $data['kbk'];
@@ -105,12 +108,12 @@ final class History implements CreatableFromArray
         return $this->type;
     }
 
-    public function getChargeDate(): ?DateTimeImmutable
+    public function getChargeDate(): ?\DateTimeImmutable
     {
         return $this->chargeDate;
     }
 
-    public function getDueDate(): ?DateTimeImmutable
+    public function getDueDate(): ?\DateTimeImmutable
     {
         return $this->dueDate;
     }

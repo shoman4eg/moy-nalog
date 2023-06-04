@@ -11,6 +11,10 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
  */
 final class PaymentTypeCollection extends AbstractCollection implements CreatableFromArray
 {
+    private function __construct()
+    {
+    }
+
     public static function createFromArray(array $data): self
     {
         $data = $data['items'];

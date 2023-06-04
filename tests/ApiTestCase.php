@@ -59,8 +59,16 @@ class ApiTestCase extends TestCase
         ]);
     }
 
+    /**
+     * @throws \JsonException
+     */
     protected function appendSuccessJson(array $data): void
     {
-        $this->mock->append(new Response(200, ['Content-Type' => 'application/json'], JSON::encode($data)));
+        $this->appendSuccessJsonString(JSON::encode($data));
+    }
+
+    protected function appendSuccessJsonString(string $data): void
+    {
+        $this->mock->append(new Response(200, ['Content-Type' => 'application/json'], $data));
     }
 }

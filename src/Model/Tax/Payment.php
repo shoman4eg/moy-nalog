@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Model\Tax;
 
-use DateTimeImmutable;
 use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
@@ -15,14 +14,18 @@ final class Payment implements CreatableFromArray
     private string $type;
     private string $documentIndex;
     private float $amount;
-    private DateTimeImmutable $operationDate;
-    private DateTimeImmutable $dueDate;
+    private \DateTimeImmutable $operationDate;
+    private \DateTimeImmutable $dueDate;
     private string $oktmo;
     private string $kbk;
     private string $status;
     private int $taxPeriodId;
     private string $regionName;
-    private ?DateTimeImmutable $krsbAcceptedDate;
+    private ?\DateTimeImmutable $krsbAcceptedDate;
+
+    private function __construct()
+    {
+    }
 
     /**
      * @throws \Exception
@@ -34,14 +37,14 @@ final class Payment implements CreatableFromArray
         $model->type = $data['type'];
         $model->documentIndex = $data['documentIndex'];
         $model->amount = $data['amount'];
-        $model->operationDate = new DateTimeImmutable($data['operationDate']);
-        $model->dueDate = new DateTimeImmutable($data['dueDate']);
+        $model->operationDate = new \DateTimeImmutable($data['operationDate']);
+        $model->dueDate = new \DateTimeImmutable($data['dueDate']);
         $model->oktmo = $data['oktmo'];
         $model->kbk = $data['kbk'];
         $model->status = $data['status'];
         $model->taxPeriodId = $data['taxPeriodId'];
         $model->regionName = $data['regionName'];
-        $model->krsbAcceptedDate = $data['krsbAcceptedDate'] ? new DateTimeImmutable($data['krsbAcceptedDate']) : null;
+        $model->krsbAcceptedDate = $data['krsbAcceptedDate'] ? new \DateTimeImmutable($data['krsbAcceptedDate']) : null;
 
         return $model;
     }
@@ -51,7 +54,7 @@ final class Payment implements CreatableFromArray
         return $this->sourceType;
     }
 
-    public function getKrsbAcceptedDate(): ?DateTimeImmutable
+    public function getKrsbAcceptedDate(): ?\DateTimeImmutable
     {
         return $this->krsbAcceptedDate;
     }
@@ -71,12 +74,12 @@ final class Payment implements CreatableFromArray
         return $this->amount;
     }
 
-    public function getOperationDate(): DateTimeImmutable
+    public function getOperationDate(): \DateTimeImmutable
     {
         return $this->operationDate;
     }
 
-    public function getDueDate(): DateTimeImmutable
+    public function getDueDate(): \DateTimeImmutable
     {
         return $this->dueDate;
     }

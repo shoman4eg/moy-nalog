@@ -12,12 +12,96 @@ class TaxTest extends ApiTestCase
 {
     public function testHistory(): void
     {
-        self::markTestSkipped();
+        $data = [
+            'records' => [
+                [
+                    'taxPeriodId' => 202211,
+                    'taxAmount' => 12.00,
+                    'bonusAmount' => 12.33,
+                    'paidAmount' => 44.23,
+                    'taxBaseAmount' => 12.23,
+                    'chargeDate' => '2022-11-12',
+                    'dueDate' => '2022-12-11',
+                    'oktmo' => '260000',
+                    'regionName' => 'Калининградская область',
+                    'kbk' => '',
+                    'taxOrganCode' => '',
+                    'type' => '',
+                    'krsbTaxChargeId' => 0,
+                    'receiptCount' => 0,
+                ]
+            ]
+        ];
+
+        $this->appendSuccessJson($data);
+
+        $response = $this->client->tax()->history();
+
+        foreach ($response as $key => $item) {
+            $record = $data['records'][$key];
+            self::assertSame($record['taxPeriodId'], $item->getTaxPeriodId());
+            self::assertSame($record['taxAmount'], $item->getTaxAmount());
+            self::assertSame($record['bonusAmount'], $item->getBonusAmount());
+            self::assertSame($record['paidAmount'], $item->getPaidAmount());
+            self::assertEquals(
+                $record['chargeDate'] ? new \DateTimeImmutable($record['chargeDate']) : null,
+                $item->getChargeDate()
+            );
+            self::assertEquals(
+                $record['dueDate'] ? new \DateTimeImmutable($record['dueDate']) : null,
+                $item->getDueDate()
+            );
+            self::assertSame($record['oktmo'], $item->getOktmo());
+            self::assertSame($record['regionName'], $item->getRegionName());
+            self::assertSame($record['kbk'], $item->getKbk());
+            self::assertSame($record['taxOrganCode'], $item->getTaxOrganCode());
+            self::assertSame($record['type'], $item->getType());
+            self::assertSame($record['krsbTaxChargeId'], $item->getKrsbTaxChargeId());
+            self::assertSame($record['receiptCount'], $item->getReceiptCount());
+        }
     }
 
     public function testPayments(): void
     {
-        self::markTestSkipped();
+        $data = [
+            'records' => [
+                [
+                    'sourceType' => '',
+                    'type' => '',
+                    'documentIndex' => '',
+                    'amount' => 44.23,
+                    'operationDate' => '2022-11-12',
+                    'dueDate' => '2022-11-12',
+                    'oktmo' => '260000',
+                    'kbk' => '',
+                    'status' => 'Калининградская область',
+                    'taxPeriodId' => 202211,
+                    'regionName' => '',
+                    'krsbAcceptedDate' => '2022-11-12',
+                ]
+            ]
+        ];
+
+        $this->appendSuccessJson($data);
+
+        $response = $this->client->tax()->payments();
+
+        foreach ($response as $key => $item) {
+            $record = $data['records'][$key];
+            self::assertSame($record['type'], $item->getType());
+            self::assertSame($record['sourceType'], $item->getSourceType());
+            self::assertSame($record['documentIndex'], $item->getDocumentIndex());
+            self::assertSame($record['amount'], $item->getAmount());
+            self::assertEquals(new \DateTimeImmutable($record['operationDate']), $item->getOperationDate());
+            self::assertEquals(new \DateTimeImmutable($record['dueDate']), $item->getDueDate());
+            self::assertSame($record['oktmo'], $item->getOktmo());
+            self::assertSame($record['kbk'], $item->getKbk());
+            self::assertSame($record['regionName'], $item->getRegionName());
+            self::assertSame($record['status'], $item->getStatus());
+            self::assertSame($record['type'], $item->getType());
+            self::assertSame($record['taxPeriodId'], $item->getTaxPeriodId());
+            self::assertSame(strtotime($record['krsbAcceptedDate']), $item->getKrsbAcceptedDate()->getTimestamp());
+        }
     }
 
     public function testGet(): void
@@ -51,10 +135,9 @@ class TaxTest extends ApiTestCase
         self::assertEquals($data['nominalOverpayment'], $response->getNominalOverpayment());
         self::assertSame($data['taxPeriodId'], $response->getTaxPeriodId());
         self::assertEquals($data['lastPaymentAmount'], $response->getLastPaymentAmount());
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->getLastPaymentDate());
-        self::assertSame(
-            strtotime($data['lastPaymentDate']),
-            $response->getLastPaymentDate()->getTimestamp()
+        self::assertEquals(
+            $data['lastPaymentDate'] ? new \DateTimeImmutable($data['lastPaymentDate']) : null,
+            $response->getLastPaymentDate()
         );
         self::assertSame($data['regions'], $response->getRegions());
     }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Model\Tax;
 
-use DateTimeImmutable;
 use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
@@ -21,8 +20,12 @@ final class Tax implements CreatableFromArray
     private float $nominalOverpayment;
     private int $taxPeriodId;
     private ?float $lastPaymentAmount;
-    private ?DateTimeImmutable $lastPaymentDate;
+    private ?\DateTimeImmutable $lastPaymentDate;
     private array $regions;
+
+    private function __construct()
+    {
+    }
 
     /**
      * @throws \Exception
@@ -41,7 +44,7 @@ final class Tax implements CreatableFromArray
         $model->nominalOverpayment = $data['nominalOverpayment'];
         $model->taxPeriodId = $data['taxPeriodId'];
         $model->lastPaymentAmount = $data['lastPaymentAmount'];
-        $model->lastPaymentDate = $data['lastPaymentDate'] ? new DateTimeImmutable($data['lastPaymentDate']) : null;
+        $model->lastPaymentDate = $data['lastPaymentDate'] ? new \DateTimeImmutable($data['lastPaymentDate']) : null;
         $model->regions = $data['regions'];
 
         return $model;
@@ -97,7 +100,7 @@ final class Tax implements CreatableFromArray
         return $this->lastPaymentAmount;
     }
 
-    public function getLastPaymentDate(): ?DateTimeImmutable
+    public function getLastPaymentDate(): ?\DateTimeImmutable
     {
         return $this->lastPaymentDate;
     }
