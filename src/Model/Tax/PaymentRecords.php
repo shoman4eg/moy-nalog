@@ -8,6 +8,7 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
  * @method Payment current()
  */
 final class PaymentRecords extends AbstractCollection implements CreatableFromArray

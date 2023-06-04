@@ -29,8 +29,8 @@ class TaxTest extends ApiTestCase
                     'type' => '',
                     'krsbTaxChargeId' => 0,
                     'receiptCount' => 0,
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->appendSuccessJson($data);
@@ -78,8 +78,8 @@ class TaxTest extends ApiTestCase
                     'taxPeriodId' => 202211,
                     'regionName' => '',
                     'krsbAcceptedDate' => '2022-11-12',
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->appendSuccessJson($data);

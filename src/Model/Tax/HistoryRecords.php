@@ -8,6 +8,7 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
  * @method History current()
  */
 final class HistoryRecords extends AbstractCollection implements CreatableFromArray
