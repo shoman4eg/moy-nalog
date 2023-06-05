@@ -175,6 +175,11 @@ class ApiClient
         return new Api\PaymentType($this->getHttpClient(), $this->requestBuilder);
     }
 
+    public function tax(): Api\Tax
+    {
+        return new Api\Tax($this->getHttpClient(), $this->requestBuilder);
+    }
+
     private function getHttpClient(): HttpClient
     {
         return $this->clientConfigurator->createConfiguredClient();

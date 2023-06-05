@@ -12,6 +12,10 @@ final class IncomeType implements CreatableFromArray
 {
     private string $approvedReceiptUuid;
 
+    private function __construct()
+    {
+    }
+
     public static function createFromArray(array $data): self
     {
         $model = new self();

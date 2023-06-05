@@ -41,7 +41,7 @@ final class UserTest extends ApiTestCase
         $response = $this->client->user()->get();
 
         self::assertNull($response->getLastName());
-        self::assertSame(1000000, $response->getId());
+        self::assertSame($data['id'], $response->getId());
         self::assertSame($data['displayName'], $response->getDisplayName());
         self::assertSame($data['email'], $response->getEmail());
         self::assertSame($data['phone'], $response->getPhone());
@@ -53,6 +53,7 @@ final class UserTest extends ApiTestCase
             strtotime($data['initialRegistrationDate']),
             $response->getInitialRegistrationDate()->getTimestamp()
         );
+        self::assertInstanceOf(\DateTimeImmutable::class, $response->getFirstReceiptRegisterTime());
         self::assertSame(
             strtotime($data['firstReceiptRegisterTime']),
             $response->getFirstReceiptRegisterTime()->getTimestamp()

@@ -21,10 +21,13 @@ final class PaymentType implements CreatableFromArray
     private string $currentAccount;
     private bool $availableForPa;
 
+    private function __construct()
+    {
+    }
+
     public static function createFromArray(array $data): self
     {
         $model = new self();
-
         $model->id = $data['id'];
         $model->type = $data['type'];
         $model->bankName = $data['bankName'];

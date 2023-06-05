@@ -38,8 +38,8 @@ final class Authenticator
 
     /**
      * @throws ClientExceptionInterface
-     * @throws \JsonException
      * @throws DomainException
+     * @throws \JsonException
      */
     public function createAccessToken(string $username, string $password): ?string
     {
@@ -67,6 +67,7 @@ final class Authenticator
 
     /**
      * @throws ClientExceptionInterface
+     * @throws DomainException
      * @throws \JsonException
      */
     public function createAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
@@ -95,9 +96,9 @@ final class Authenticator
     }
 
     /**
-     * @throws DomainException
      * @throws \JsonException
      * @throws ClientExceptionInterface
+     * @throws DomainException
      *
      * @return array{challengeToken: string, expireDate: string, expireIn: int}
      */

@@ -15,6 +15,10 @@ final class CancellationInfoType implements CreatableFromArray
     private int $taxPeriodId;
     private string $comment;
 
+    private function __construct()
+    {
+    }
+
     /**
      * @throws \Exception
      */
