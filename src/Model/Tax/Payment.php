@@ -44,7 +44,9 @@ final class Payment implements CreatableFromArray
         $model->status = $data['status'];
         $model->taxPeriodId = $data['taxPeriodId'];
         $model->regionName = $data['regionName'];
-        $model->krsbAcceptedDate = $data['krsbAcceptedDate'] ? new \DateTimeImmutable($data['krsbAcceptedDate']) : null;
+        $model->krsbAcceptedDate = $data['krsbAcceptedDate']
+            ? new \DateTimeImmutable($data['krsbAcceptedDate'])
+            : null;
 
         return $model;
     }
