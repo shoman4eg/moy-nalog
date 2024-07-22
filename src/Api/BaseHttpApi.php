@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Api;
 
-use Http\Client\HttpClient;
 use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception\DomainException;
@@ -17,11 +17,11 @@ use Shoman4eg\Nalog\Util\ModelHydrator;
  */
 abstract class BaseHttpApi
 {
-    protected HttpClient $httpClient;
+    protected ClientInterface $httpClient;
     protected RequestBuilder $requestBuilder;
     protected ModelHydrator $hydrator;
 
-    public function __construct(HttpClient $httpClient, RequestBuilder $requestBuilder)
+    public function __construct(ClientInterface $httpClient, RequestBuilder $requestBuilder)
     {
         $this->httpClient = $httpClient;
         $this->requestBuilder = $requestBuilder;
@@ -55,8 +55,8 @@ abstract class BaseHttpApi
      * @param array  $params         POST parameters to be JSON encoded
      * @param array  $requestHeaders Request headers
      *
-     * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @throws ClientExceptionInterface
      */
     protected function httpPost(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
@@ -66,13 +66,9 @@ abstract class BaseHttpApi
     /**
      * Send a POST request with raw data.
      *
-     * @param string       $path           Request path
-     * @param array|string $body           Request body
-     * @param array        $requestHeaders Request headers
-     *
      * @throws ClientExceptionInterface
      */
-    protected function httpPostRaw(string $path, $body, array $requestHeaders = []): ResponseInterface
+    protected function httpPostRaw(string $path, ?string $body, array $requestHeaders = []): ResponseInterface
     {
         return $this->httpClient->sendRequest(
             $this->requestBuilder->create('POST', $path, $requestHeaders, $body)
@@ -86,8 +82,8 @@ abstract class BaseHttpApi
      * @param array  $params         POST parameters to be JSON encoded
      * @param array  $requestHeaders Request headers
      *
-     * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @throws ClientExceptionInterface
      */
     protected function httpPut(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
@@ -103,8 +99,8 @@ abstract class BaseHttpApi
      * @param array  $params         POST parameters to be JSON encoded
      * @param array  $requestHeaders Request headers
      *
-     * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @throws ClientExceptionInterface
      */
     protected function httpPatch(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
@@ -120,8 +116,8 @@ abstract class BaseHttpApi
      * @param array  $params         POST parameters to be JSON encoded
      * @param array  $requestHeaders Request headers
      *
-     * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @throws ClientExceptionInterface
      */
     protected function httpDelete(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {

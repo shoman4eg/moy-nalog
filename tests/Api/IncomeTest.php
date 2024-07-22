@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
+use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\DTO;
 use Shoman4eg\Nalog\Enum\CancelCommentType;
 use Shoman4eg\Nalog\Enum\IncomeType;
 use Shoman4eg\Nalog\Enum\PaymentType;
+use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  *
  * @internal
+ *
  * @coversNothing
  */
 final class IncomeTest extends ApiTestCase
@@ -30,8 +33,8 @@ final class IncomeTest extends ApiTestCase
      * @dataProvider clientDataProvider
      *
      * @throws \JsonException
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shoman4eg\Nalog\Exception\DomainException
+     * @throws ClientExceptionInterface
+     * @throws DomainException
      */
     public function testCreate(?DTO\IncomeClient $client): void
     {
@@ -44,8 +47,8 @@ final class IncomeTest extends ApiTestCase
 
     /**
      * @throws \JsonException
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shoman4eg\Nalog\Exception\DomainException
+     * @throws ClientExceptionInterface
+     * @throws DomainException
      */
     public function testCreateLegalEntityClient(): void
     {
@@ -81,8 +84,8 @@ final class IncomeTest extends ApiTestCase
      * @param mixed $quantity
      *
      * @throws \JsonException
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shoman4eg\Nalog\Exception\DomainException
+     * @throws ClientExceptionInterface
+     * @throws DomainException
      */
     public function testValidationCreate(
         string $name,
@@ -105,8 +108,8 @@ final class IncomeTest extends ApiTestCase
      * @dataProvider cancellationDataProvider
      *
      * @throws \JsonException
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shoman4eg\Nalog\Exception\DomainException
+     * @throws ClientExceptionInterface
+     * @throws DomainException
      */
     public function testCancel(string $receiptId, string $comment): void
     {
@@ -149,8 +152,8 @@ final class IncomeTest extends ApiTestCase
      * @dataProvider validationCancelDataProvider
      *
      * @throws \JsonException
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shoman4eg\Nalog\Exception\DomainException
+     * @throws ClientExceptionInterface
+     * @throws DomainException
      */
     public function testValidationCancel(string $receiptId, string $comment, string $message): void
     {
@@ -169,11 +172,9 @@ final class IncomeTest extends ApiTestCase
     /**
      * @dataProvider calculationItemsDataProvider
      *
-     * @param float|int $expected
-     *
      * @throws \JsonException
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shoman4eg\Nalog\Exception\DomainException
+     * @throws ClientExceptionInterface
+     * @throws DomainException
      */
     public function testCalculateAmount(array $items, $expected): void
     {

@@ -8,6 +8,4 @@ use Shoman4eg\Nalog\Exception\DomainException;
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class ClientException extends \Exception implements DomainException
-{
-}
+class ClientException extends \Exception implements DomainException {}

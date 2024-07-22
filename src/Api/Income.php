@@ -22,16 +22,16 @@ final class Income extends BaseHttpApi
      * @param float|int $amount
      * @param float|int $quantity
      *
+     * @throws \JsonException
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
-     * @throws \JsonException
      */
     public function create(
         string $name,
         $amount,
         $quantity,
-        \DateTimeInterface $operationTime = null,
-        DTO\IncomeClient $client = null
+        ?\DateTimeInterface $operationTime = null,
+        ?DTO\IncomeClient $client = null
     ): IncomeType {
         return $this->createMultipleItems(
             [new DTO\IncomeServiceItem($name, $amount, $quantity)],
@@ -43,14 +43,14 @@ final class Income extends BaseHttpApi
     /**
      * @param DTO\IncomeServiceItem[] $serviceItems
      *
+     * @throws \JsonException
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
-     * @throws \JsonException
      */
     public function createMultipleItems(
         array $serviceItems,
-        \DateTimeInterface $operationTime = null,
-        DTO\IncomeClient $client = null
+        ?\DateTimeInterface $operationTime = null,
+        ?DTO\IncomeClient $client = null
     ): IncomeType {
         Assert::minCount($serviceItems, 1, 'Items cannot be empty');
         Assert::allIsInstanceOf($serviceItems, DTO\IncomeServiceItem::class);
@@ -95,15 +95,15 @@ final class Income extends BaseHttpApi
     }
 
     /**
+     * @throws \JsonException
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
-     * @throws \JsonException
      */
     public function cancel(
         string $receiptUuid,
         string $comment,
-        \DateTimeImmutable $operationTime = null,
-        \DateTimeImmutable $requestTime = null,
+        ?\DateTimeImmutable $operationTime = null,
+        ?\DateTimeImmutable $requestTime = null,
         ?string $partnerCode = null
     ): IncomeInfoType {
         Assert::notEmpty($receiptUuid, 'ReceiptUuid cannot be empty');

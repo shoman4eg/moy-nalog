@@ -23,15 +23,21 @@ class UserType implements CreatableFromArray
     private ?\DateTimeInterface $firstReceiptRegisterTime;
     private ?\DateTimeInterface $firstReceiptCancelTime;
     private bool $hideCancelledReceipt;
+
+    /** @var mixed */
     private $registerAvailable;
+
     private ?string $status;
     private bool $restrictedMode;
     private ?string $pfrUrl;
     private ?string $login;
 
+    final private function __construct(array $data) {}
+
+    /** @constructor */
     public static function createFromArray(array $data): self
     {
-        $model = new self();
+        $model = new self($data);
         $model->id = $data['id'];
         $model->lastName = $data['lastName'];
         $model->displayName = $data['displayName'];

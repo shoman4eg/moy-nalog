@@ -12,7 +12,7 @@ use Psr\Http\Message\StreamInterface;
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  *
- * @internal this class should not be used outside of the API Client, it is not part of the BC promise
+ * @internal this class should not be used outside the API Client, it is not part of the BC promise
  */
 final class RequestBuilder
 {
@@ -20,8 +20,8 @@ final class RequestBuilder
     private StreamFactoryInterface $streamFactory;
 
     public function __construct(
-        RequestFactoryInterface $requestFactory = null,
-        StreamFactoryInterface $streamFactory = null
+        ?RequestFactoryInterface $requestFactory = null,
+        ?StreamFactoryInterface $streamFactory = null
     ) {
         $this->requestFactory = $requestFactory ?: Psr17FactoryDiscovery::findRequestFactory();
         $this->streamFactory = $streamFactory ?: Psr17FactoryDiscovery::findStreamFactory();

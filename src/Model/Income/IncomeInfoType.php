@@ -20,6 +20,8 @@ final class IncomeInfoType implements CreatableFromArray
     private CancellationInfoType $cancellationInfo;
     private string $sourceDeviceId;
 
+    private function __construct() {}
+
     /**
      * @throws \Exception
      */

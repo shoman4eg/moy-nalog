@@ -12,7 +12,7 @@ final class DeviceIdGenerator
     private bool $lowercased;
     private IdStrategyInterface $strategy;
 
-    public function __construct(IdStrategyInterface $strategy = null, int $length = 21, bool $lowercased = true)
+    public function __construct(?IdStrategyInterface $strategy = null, int $length = 21, bool $lowercased = true)
     {
         $this->length = $length;
         $this->lowercased = $lowercased;

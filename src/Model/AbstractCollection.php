@@ -5,6 +5,11 @@ namespace Shoman4eg\Nalog\Model;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
+ * @template T
+ *
+ * @template-implements \ArrayAccess<int, T>
+ * @template-implements \Iterator<T>
  */
 abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
 {
