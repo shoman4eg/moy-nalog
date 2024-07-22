@@ -9,17 +9,22 @@ namespace Shoman4eg\Nalog\Model;
  * @template T
  *
  * @template-implements \ArrayAccess<int, T>
- * @template-implements \Iterator<T>
+ * @template-implements \Iterator<int, T>
  */
 abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
 {
+    /** @var array<int, T> */
     private array $items = [];
+    /** @var int */
     private int $key;
     private int $count;
 
+    /**
+     * @return T|null
+     */
     public function current()
     {
-        return $this->items[$this->key];
+        return $this->offsetGet($this->key);
     }
 
     public function next(): void
@@ -27,9 +32,12 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
         ++$this->key;
     }
 
-    public function key()
+    /**
+     * @return int|null
+     */
+    public function key(): ?int
     {
-        if ($this->key >= $this->count) {
+        if (!$this->valid()) {
             return null;
         }
 
@@ -51,9 +59,13 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
         return isset($this->items[$offset]);
     }
 
+    /**
+     * @param int $offset
+     * @return T
+     */
     public function offsetGet($offset)
     {
-        if (!isset($this->items[$offset])) {
+        if (!$this->offsetExists($offset)) {
             throw new \RuntimeException(sprintf('Key "%s" does not exist in collection', $offset));
         }
 
