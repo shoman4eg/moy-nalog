@@ -34,7 +34,6 @@ class UserType implements CreatableFromArray
 
     final private function __construct(array $data) {}
 
-    /** @constructor */
     public static function createFromArray(array $data): self
     {
         $model = new self($data);
