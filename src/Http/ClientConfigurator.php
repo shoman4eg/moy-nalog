@@ -5,8 +5,8 @@ namespace Shoman4eg\Nalog\Http;
 
 use Http\Client\Common\Plugin;
 use Http\Client\Common\PluginClient;
-use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
@@ -50,7 +50,7 @@ final class ClientConfigurator
 
     public function __construct(ClientInterface $httpClient = null, UriFactoryInterface $uriFactory = null)
     {
-        $this->httpClient = $httpClient ?? HttpClientDiscovery::find();
+        $this->httpClient = $httpClient ?? Psr18ClientDiscovery::find();
         $this->uriFactory = $uriFactory ?? Psr17FactoryDiscovery::findUriFactory();
     }
 
