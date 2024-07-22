@@ -172,6 +172,8 @@ final class IncomeTest extends ApiTestCase
     /**
      * @dataProvider calculationItemsDataProvider
      *
+     * @param mixed $expected
+     *
      * @throws \JsonException
      * @throws ClientExceptionInterface
      * @throws DomainException

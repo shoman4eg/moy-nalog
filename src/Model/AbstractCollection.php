@@ -15,12 +15,13 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
 {
     /** @var array<int, T> */
     private array $items = [];
-    /** @var int */
+
     private int $key;
+
     private int $count;
 
     /**
-     * @return T|null
+     * @return null|T
      */
     public function current()
     {
@@ -32,9 +33,6 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
         ++$this->key;
     }
 
-    /**
-     * @return int|null
-     */
     public function key(): ?int
     {
         if (!$this->valid()) {
@@ -61,6 +59,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
 
     /**
      * @param int $offset
+     *
      * @return T
      */
     public function offsetGet($offset)
