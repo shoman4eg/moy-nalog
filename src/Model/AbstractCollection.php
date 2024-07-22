@@ -17,7 +17,6 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
     private array $items = [];
 
     private int $key;
-
     private int $count;
 
     /**
