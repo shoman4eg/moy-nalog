@@ -23,9 +23,7 @@ final class Tax implements CreatableFromArray
     private ?\DateTimeImmutable $lastPaymentDate;
     private array $regions;
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * @throws \Exception

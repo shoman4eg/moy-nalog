@@ -6,7 +6,7 @@ namespace Shoman4eg\Nalog\Util;
 /**
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class JSON
+final class JSON
 {
     /**
      * Generic JSON encode method with error handling support.

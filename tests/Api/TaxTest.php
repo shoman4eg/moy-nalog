@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
@@ -6,9 +7,10 @@ use Shoman4eg\Nalog\Tests\ApiTestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
-class TaxTest extends ApiTestCase
+final class TaxTest extends ApiTestCase
 {
     public function testHistory(): void
     {

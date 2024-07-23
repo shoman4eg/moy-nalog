@@ -26,10 +26,10 @@ final class Tax extends BaseHttpApi
     }
 
     /**
-     * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @throws ClientExceptionInterface
      */
-    public function history(string $oktmo = null): HistoryRecords
+    public function history(?string $oktmo = null): HistoryRecords
     {
         $response = $this->httpPost('/taxes/history', [
             'oktmo' => $oktmo,
@@ -39,11 +39,11 @@ final class Tax extends BaseHttpApi
     }
 
     /**
+     * @throws \JsonException
      * @throws ClientExceptionInterface
      * @throws DomainException
-     * @throws \JsonException
      */
-    public function payments(string $oktmo = null, bool $onlyPaid = false): PaymentRecords
+    public function payments(?string $oktmo = null, bool $onlyPaid = false): PaymentRecords
     {
         $response = $this->httpPost('/taxes/payments', [
             'oktmo' => $oktmo,

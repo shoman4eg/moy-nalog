@@ -25,9 +25,7 @@ final class History implements CreatableFromArray
     private int $krsbTaxChargeId;
     private int $receiptCount;
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * @throws \Exception

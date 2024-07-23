@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests;
 
@@ -17,7 +18,7 @@ use Shoman4eg\Nalog\Util\JSON;
  *
  * @coversNothing
  */
-class ApiTestCase extends TestCase
+abstract class ApiTestCase extends TestCase
 {
     protected MockHandler $mock;
     protected ApiClient $client;

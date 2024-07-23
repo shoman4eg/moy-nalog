@@ -23,9 +23,7 @@ final class Payment implements CreatableFromArray
     private string $regionName;
     private ?\DateTimeImmutable $krsbAcceptedDate;
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * @throws \Exception
