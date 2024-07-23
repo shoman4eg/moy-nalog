@@ -15,7 +15,7 @@ use Shoman4eg\Nalog\Util\JSON;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
-class ApiClient
+final class ApiClient
 {
     private RequestBuilder $requestBuilder;
     private ClientConfigurator $clientConfigurator;
@@ -120,7 +120,7 @@ class ApiClient
 
     /**
      * Authenticate the client with an access token. This should be the full access token object with
-     * refresh token and expirery timestamps.
+     * refresh token and expire timestamps.
      *
      * ```php
      *   $accessToken = $client->createNewAccessToken('inn', 'password');
@@ -171,6 +171,11 @@ class ApiClient
     public function paymentType(): Api\PaymentType
     {
         return new Api\PaymentType($this->getHttpClient(), $this->requestBuilder);
+    }
+
+    public function tax(): Api\Tax
+    {
+        return new Api\Tax($this->getHttpClient(), $this->requestBuilder);
     }
 
     private function getHttpClient(): ClientInterface

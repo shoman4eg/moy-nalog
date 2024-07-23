@@ -5,6 +5,7 @@ namespace Shoman4eg\Nalog\Http;
 
 use Http\Client\Common\Plugin;
 use Http\Promise\Promise;
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\Util\JSON;
@@ -28,6 +29,11 @@ final class AuthenticationPlugin implements Plugin
         $this->accessToken = JSON::decode($accessToken);
     }
 
+    /**
+     * @throws \Exception
+     * @throws \JsonException
+     * @throws ClientExceptionInterface
+     */
     public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
     {
         if ($this->accessToken === [] || $request->hasHeader('Authorization')) {

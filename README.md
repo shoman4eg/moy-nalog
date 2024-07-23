@@ -251,6 +251,27 @@ $apiClient->authenticate($accessToken);
 $userInfo = $apiClient->user()->get();
 ```
 
+### Получить информацию о необходимых платежах
+```php
+$apiClient->authenticate($accessToken);
+
+$userInfo = $apiClient->tax()->get();
+```
+
+### Получить информацию о платежах
+```php
+$apiClient->authenticate($accessToken);
+
+$userInfo = $apiClient->tax()->payments();
+```
+
+### Получить информацию о прошлых платежах
+```php
+$apiClient->authenticate($accessToken);
+
+$userInfo = $apiClient->tax()->history();
+```
+
 ## Использованные ресурсы
 Статья на Habr: [Автоматизация для самозанятых: как интегрировать налог с IT проектом](https://habr.com/ru/post/436656/)
 

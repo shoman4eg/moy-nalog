@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Model\User;
 
@@ -7,7 +8,7 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
-class UserType implements CreatableFromArray
+final class UserType implements CreatableFromArray
 {
     private ?string $lastName;
     private int $id;
