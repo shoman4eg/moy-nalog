@@ -9,6 +9,7 @@ use Shoman4eg\Nalog\Tests\ApiTestCase;
  * @author Artem Dubinin <artem@dubinin.me>
  *
  * @internal
+ *
  * @coversNothing
  */
 final class PaymentTypeTest extends ApiTestCase

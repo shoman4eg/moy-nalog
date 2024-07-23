@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Http;
 
-use Http\Client\HttpClient;
 use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
 use Shoman4eg\Nalog\DTO\DeviceInfo;
 use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception\DomainException;
@@ -16,20 +16,20 @@ use Shoman4eg\Nalog\Util\JSON;
  *
  * @author Artem Dubinin <artem@dubinin.me>
  *
- * @internal this class should not be used outside of the API Client, it is not part of the BC promise
+ * @internal this class should not be used outside the API Client, it is not part of the BC promise
  */
 final class Authenticator
 {
     private RequestBuilder $requestBuilder;
-    private HttpClient $httpClient;
+    private ClientInterface $httpClient;
     private ?string $accessToken;
     private string $deviceId;
-    private array $defautlHeaders = [
+    private array $defaultHeaders = [
         'Referrer' => 'https://lknpd.nalog.ru/',
         'Referrer-Policy' => 'strict-origin-when-cross-origin',
     ];
 
-    public function __construct(RequestBuilder $requestBuilder, HttpClient $httpClient, string $deviceId)
+    public function __construct(RequestBuilder $requestBuilder, ClientInterface $httpClient, string $deviceId)
     {
         $this->requestBuilder = $requestBuilder;
         $this->httpClient = $httpClient;
@@ -37,8 +37,8 @@ final class Authenticator
     }
 
     /**
-     * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @throws ClientExceptionInterface
      * @throws DomainException
      */
     public function createAccessToken(string $username, string $password): ?string
@@ -46,7 +46,7 @@ final class Authenticator
         $request = $this->requestBuilder->create(
             'POST',
             '/auth/lkfl',
-            $this->defautlHeaders,
+            $this->defaultHeaders,
             JSON::encode([
                 'username' => $username,
                 'password' => $password,
@@ -66,15 +66,15 @@ final class Authenticator
     }
 
     /**
-     * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @throws ClientExceptionInterface
      */
     public function createAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
     {
         $request = $this->requestBuilder->create(
             'POST',
             '/auth/challenge/sms/verify',
-            $this->defautlHeaders,
+            $this->defaultHeaders,
             JSON::encode([
                 'phone' => $phone,
                 'code' => $verificationCode,
@@ -95,18 +95,18 @@ final class Authenticator
     }
 
     /**
-     * @throws DomainException
+     * @return array{challengeToken: string, expireDate: string, expireIn: int}
+     *
      * @throws \JsonException
      * @throws ClientExceptionInterface
-     *
-     * @return array{challengeToken: string, expireDate: string, expireIn: int}
+     * @throws DomainException
      */
     public function createPhoneChallenge(string $phone): array
     {
         $request = $this->requestBuilder->create(
             'POST',
             '/auth/challenge/sms/start',
-            $this->defautlHeaders,
+            $this->defaultHeaders,
             JSON::encode([
                 'phone' => $phone,
                 'requireTpToBeActive' => true,
@@ -125,15 +125,15 @@ final class Authenticator
     }
 
     /**
-     * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @throws ClientExceptionInterface
      */
     public function refreshAccessToken(string $refreshToken): ?string
     {
         $request = $this->requestBuilder->create(
             'POST',
             '/auth/token',
-            $this->defautlHeaders,
+            $this->defaultHeaders,
             JSON::encode([
                 'deviceInfo' => new DeviceInfo($this->deviceId),
                 'refreshToken' => $refreshToken,

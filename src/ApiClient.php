@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog;
 
-use Http\Client\HttpClient;
-use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Shoman4eg\Nalog\Http\AuthenticationPlugin;
@@ -30,8 +28,8 @@ class ApiClient
      */
     public function __construct(
         ClientConfigurator $clientConfigurator,
-        RequestBuilder $requestBuilder = null,
-        DeviceIdGenerator $deviceIdGenerator = null
+        ?RequestBuilder $requestBuilder = null,
+        ?DeviceIdGenerator $deviceIdGenerator = null
     ) {
         $this->clientConfigurator = $clientConfigurator;
         $this->requestBuilder = $requestBuilder ?: new RequestBuilder();
@@ -66,8 +64,8 @@ class ApiClient
     /**
      * Warning, this will remove the current access token.
      *
+     * @throws \JsonException
      * @throws ClientExceptionInterface
-     * @throws JsonException
      * @throws Exception\DomainException
      */
     public function createNewAccessToken(string $username, string $password): ?string
@@ -90,11 +88,11 @@ class ApiClient
      * approximately 1 message every 1-2 minutes.
      * The restriction is removed after a successful createNewAccessTokenByPhone()
      *
-     * @throws ClientExceptionInterface
-     * @throws JsonException
-     * @throws Exception\DomainException
-     *
      * @return array{challengeToken: string, expireDate: string, expireIn: int}
+     *
+     * @throws \JsonException
+     * @throws ClientExceptionInterface
+     * @throws Exception\DomainException
      */
     public static function createPhoneChallenge(string $phone): array
     {
@@ -109,8 +107,8 @@ class ApiClient
      * Used as the second step, after createPhoneChallenge()
      * Warning, this will remove the current access token.
      *
+     * @throws \JsonException
      * @throws ClientExceptionInterface
-     * @throws JsonException
      * @throws Exception\DomainException
      */
     public function createNewAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
@@ -129,7 +127,7 @@ class ApiClient
      *   $client->authenticate($accessToken);
      *```
      *
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function authenticate(string $accessToken): void
     {
@@ -175,7 +173,7 @@ class ApiClient
         return new Api\PaymentType($this->getHttpClient(), $this->requestBuilder);
     }
 
-    private function getHttpClient(): HttpClient
+    private function getHttpClient(): ClientInterface
     {
         return $this->clientConfigurator->createConfiguredClient();
     }

@@ -6,6 +6,4 @@ namespace Shoman4eg\Nalog\Exception\Domain;
 /**
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-final class ValidationException extends ClientException
-{
-}
+final class ValidationException extends ClientException {}

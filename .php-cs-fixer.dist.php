@@ -2,16 +2,16 @@
 
 $finder = (new PhpCsFixer\Finder())
     ->in([
-        __DIR__.'/src',
-        __DIR__.'/tests',
-    ])
-;
+        __DIR__ . '/src',
+        __DIR__ . '/tests',
+    ]);
 
 return (new PhpCsFixer\Config())
     ->setFinder($finder)
     ->setRiskyAllowed(true)
     ->setRules([
         '@PhpCsFixer' => true,
+        'phpdoc_param_order' => true,
         'cast_spaces' => ['space' => 'none'],
         'trailing_comma_in_multiline' => true,
         'blank_line_after_opening_tag' => false,
@@ -20,8 +20,25 @@ return (new PhpCsFixer\Config())
         'trim_array_spaces' => true,
         'yoda_style' => ['identical' => false],
         'phpdoc_add_missing_param_annotation' => true,
+        'no_empty_comment' => true,
+        'no_superfluous_phpdoc_tags' => [
+            'allow_mixed' => true,
+            'allow_unused_params' => false,
+            'allow_hidden_params' => false,
+        ],
         'multiline_whitespace_before_semicolons' => [
             'strategy' => 'new_line_for_chained_calls'
+        ],
+        'phpdoc_order_by_value' => [
+            'annotations' => [
+                "covers",
+                "dataProvider",
+                "author",
+                "internal",
+                "property",
+                "throws",
+                "uses"
+            ]
         ],
         'ordered_imports' => [
             'sort_algorithm' => 'alpha',
@@ -48,5 +65,4 @@ return (new PhpCsFixer\Config())
                 'try',
             ],
         ],
-    ])
-;
+    ]);

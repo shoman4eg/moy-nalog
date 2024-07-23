@@ -14,6 +14,7 @@ use Shoman4eg\Nalog\Util\JSON;
  * @author Artem Dubinin <artem@dubinin.me>
  *
  * @internal
+ *
  * @coversNothing
  */
 class ApiTestCase extends TestCase

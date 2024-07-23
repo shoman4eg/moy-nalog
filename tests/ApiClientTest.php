@@ -4,20 +4,23 @@ declare(strict_types=1);
 namespace Shoman4eg\Nalog\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\Exception\Domain\UnauthorizedException;
+use Shoman4eg\Nalog\Exception\DomainException;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  *
  * @internal
+ *
  * @coversNothing
  */
 final class ApiClientTest extends ApiTestCase
 {
     /**
-     * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \JsonException
-     * @throws \Shoman4eg\Nalog\Exception\DomainException
+     * @throws ClientExceptionInterface
+     * @throws DomainException
      */
     public function testCreateNewAccessToken(): void
     {

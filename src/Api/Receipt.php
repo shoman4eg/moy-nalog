@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Api;
 
-use Http\Client\HttpClient;
 use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception;
@@ -21,7 +21,7 @@ final class Receipt extends BaseHttpApi
     private string $endpoint;
 
     public function __construct(
-        HttpClient $httpClient,
+        ClientInterface $httpClient,
         RequestBuilder $requestBuilder,
         UserType $profile,
         string $endpoint

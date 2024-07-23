@@ -48,7 +48,7 @@ final class ClientConfigurator
      */
     private bool $configurationModified = true;
 
-    public function __construct(ClientInterface $httpClient = null, UriFactoryInterface $uriFactory = null)
+    public function __construct(?ClientInterface $httpClient = null, ?UriFactoryInterface $uriFactory = null)
     {
         $this->httpClient = $httpClient ?? Psr18ClientDiscovery::find();
         $this->uriFactory = $uriFactory ?? Psr17FactoryDiscovery::findUriFactory();

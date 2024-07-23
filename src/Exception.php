@@ -8,6 +8,4 @@ namespace Shoman4eg\Nalog;
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-interface Exception extends \Throwable
-{
-}
+interface Exception extends \Throwable {}

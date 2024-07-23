@@ -9,8 +9,13 @@ namespace Shoman4eg\Nalog\DTO;
 final class InvoiceServiceItem implements \JsonSerializable
 {
     private string $name;
+
+    /** @var float|int|string */
     private $amount;
+
+    /** @var float|int */
     private $quantity;
+
     private ?int $serviceNumber;
 
     /**
