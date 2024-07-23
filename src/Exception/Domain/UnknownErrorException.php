@@ -8,6 +8,4 @@ use Shoman4eg\Nalog\Exception\DomainException;
 /**
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-final class UnknownErrorException extends \Exception implements DomainException
-{
-}
+final class UnknownErrorException extends \Exception implements DomainException {}

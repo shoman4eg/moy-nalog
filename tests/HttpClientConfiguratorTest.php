@@ -18,6 +18,7 @@ use Shoman4eg\Nalog\Http\ClientConfigurator;
  * @author Artem Dubinin <artem@dubinin.me>
  *
  * @internal
+ *
  * @coversNothing
  */
 final class HttpClientConfiguratorTest extends TestCase

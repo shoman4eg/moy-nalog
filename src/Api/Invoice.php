@@ -21,15 +21,15 @@ final class Invoice extends BaseHttpApi
      * @param float|int $amount
      * @param float|int $quantity
      *
+     * @throws \JsonException
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
-     * @throws \JsonException
      */
     public function create(
         string $name,
         $amount,
         $quantity,
-        \DateTimeInterface $operationTime = null
+        ?\DateTimeInterface $operationTime = null
     ): IncomeType {
         Assert::notEmpty($name, 'Name cannot be empty');
         Assert::numeric($amount, 'Amount must be int or float');

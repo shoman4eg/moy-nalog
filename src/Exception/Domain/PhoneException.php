@@ -8,6 +8,4 @@ use Shoman4eg\Nalog\Exception\DomainException;
 /**
  * @author Nikita Komissarov <me@nikita-komissarov.ru>
  */
-final class PhoneException extends \Exception implements DomainException
-{
-}
+final class PhoneException extends \Exception implements DomainException {}
