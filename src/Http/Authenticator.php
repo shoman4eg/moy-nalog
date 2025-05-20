@@ -25,8 +25,7 @@ final class Authenticator
     private ?string $accessToken;
     private string $deviceId;
     private array $defaultHeaders = [
-        'Referrer' => 'https://lknpd.nalog.ru/',
-        'Referrer-Policy' => 'strict-origin-when-cross-origin',
+        'Referrer' => 'https://lknpd.nalog.ru/auth/login',
     ];
 
     public function __construct(RequestBuilder $requestBuilder, ClientInterface $httpClient, string $deviceId)
