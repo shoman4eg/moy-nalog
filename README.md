@@ -17,7 +17,7 @@
 $ composer require shoman4eg/moy-nalog
 ```
 
-Также Вам понадобится релизация виртуального пакета [`psr/http-client-implementation`](https://packagist.org/providers/psr/http-client-implementation), например (рекомендуется):
+Также Вам понадобится реализация виртуального пакета [`psr/http-client-implementation`](https://packagist.org/providers/psr/http-client-implementation), например (рекомендуется):
 
 Symfony
 ```bash
@@ -81,7 +81,7 @@ try {
     /**
      * $phoneChallengeResponse = [
      *  'challengeToken' => '00000000-0000-0000-0000-000000000000',
-     *  'expireDate' => 2022-11-24T00:20:19.135436Z,
+     *  'expireDate' => '2022-11-24T00:20:19.135436Z',,
      *  'expireIn' => 120,
      *  ];
      */
@@ -113,7 +113,7 @@ $apiClient->authenticate($accessToken);
 ### Создать чек c контрагентом по умолчанию (физ. лицо)
 ```php
 $name = 'Предоставление информационных услуг #970/2495'; // Наименование
-$amount = 1800.30; // Стоимость
+$amount = 1800.30; // Стоимость в рублях
 $quantity = 1; // Количество
 $operationTime = new DateTimeImmutable('2020-12-31 12:12:00'); // Дата продажи
 
@@ -126,7 +126,7 @@ $createdIncome = $apiClient->income()->create(
 );
 
 // UUID чека для операций запроса данных чека или его отмены
-$receiptUuid = $createdincome->getApprovedReceiptUuid();
+$receiptUuid = $createdIncome->getApprovedReceiptUuid();
 ```
 
 ### Создать чек с несколькими позициями
@@ -155,10 +155,10 @@ $createdIncome = $apiClient->income()->createMultipleItems(
 );
 
 // UUID чека для операций запроса данных чека или его отмены
-$receiptUuid = $createdincome->getApprovedReceiptUuid();
+$receiptUuid = $createdIncome->getApprovedReceiptUuid();
 ```
 
-### Создать чек для различных контрагентов (физ. лицо, юр. лицо или иностранная организация)
+### Создать чек для указанного типа контрагента (физ. лицо, юр. лицо или иностранная организация)
 ```php
 $name = 'Предоставление информационных услуг #970/2495'; // Наименование
 $amount = 1800.30; // Стоимость
@@ -181,7 +181,7 @@ $client = new \Shoman4eg\Nalog\DTO\IncomeClient(
     null,
     'ИП Вася Пупкин Валерьевич',
     \Shoman4eg\Nalog\Enum\IncomeType::LEGAL_ENTITY,
-    '7700000000' // ИНН юр лица (10 символов)
+    '7700000000' // ИНН юр. лица (10 символов)
 );
 
 // Или иностранная организация (FOREIGN_AGENCY)
@@ -202,7 +202,7 @@ $createdIncome = $apiClient->income()->create(
 );
 
 // UUID чека для операций запроса данных чека или его отмены
-$receiptUuid = $createdincome->getApprovedReceiptUuid();
+$receiptUuid = $createdIncome->getApprovedReceiptUuid();
 ```
 
 ### Получить чек (скан-копия) или данные чека в JSON формате
