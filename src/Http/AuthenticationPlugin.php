@@ -30,9 +30,9 @@ final class AuthenticationPlugin implements Plugin
     }
 
     /**
-     * @throws \Exception
-     * @throws \JsonException
      * @throws ClientExceptionInterface
+     * @throws \JsonException
+     * @throws \Throwable
      */
     public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
     {

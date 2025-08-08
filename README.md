@@ -40,6 +40,40 @@ date_default_timezone_set('Europe/Kaliningrad');
 // или через класс DateTimeImmutable, с нужным часовым поясом, перед созданием чека
 $operationTime = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Kaliningrad'))
 ```
+
+### Создание клиента
+```php
+use Shoman4eg\Nalog\ApiClient;
+use Shoman4eg\Nalog\Http\ClientConfigurator;
+use Shoman4eg\Nalog\Service\Generator\DeviceIdGenerator;
+use Shoman4eg\Nalog\Service\Generator\StaticIdStrategy;
+use Shoman4eg\Nalog\Service\Generator\IdStrategyInterface;
+
+// Клиент с настройками по умолчанию
+$apiClient = ApiClient::create();
+
+// Создание клиента с прокси
+$proxiedHttpClient = new \GuzzleHttp\Client([
+    'proxy' => 'tcp://12.34.56.78:3128',
+]);
+$apiClient = ApiClient::createWithCustomClient($proxiedHttpClient);
+// или
+$apiClient = new ApiClient(clientConfigurator: new ClientConfigurator($proxiedHttpClient));
+
+// Изменить DeviceId. По умолчанию используется PlatformIdStrategy где deviceId генерируется на основе платформы.
+$apiClient = new ApiClient(deviceIdGenerator: new DeviceIdGenerator()); // По умолчанию
+
+// Полезно использовать, если вы обслуживаете несколько самозанятых
+$apiClient = new ApiClient(deviceIdGenerator: new DeviceIdGenerator(new StaticIdStrategy('example id')))
+
+// Так же возможно написать свою реализацию
+$apiClient = new ApiClient(deviceIdGenerator: new DeviceIdGenerator(new class implements IdStrategyInterface {
+    public function getId(): string
+    {
+        return md5('example id');
+    }
+}));
+```
 ### Аутентификация
 
 При аутентификации с помощью методов `createNewAccessToken` (по ИНН и паролю) или `createNewAccessTokenByPhone` (по номеру телефона) , вместе с токеном доступа (**accessToken**), возвращается также токен обновления (**refreshToken**) с неограниченным сроком действия. Сохраните оригинальный ответ этих методов и используйте повторно в методе `authenticate`.
@@ -66,7 +100,7 @@ $apiClient->authenticate($accessToken);
 #### По номеру телефона
 Вариант аутентификации по номеру телефона происходит в 2 шага:
 1. Запросите SMS с кодом подтверждения на номер телефона и сохраните возвращённый **challengeToken**;
-1. Обменяйте номер телефона, **challengeToken** и код подтверждения на **accessToken**.
+2. Обменяйте номер телефона, **challengeToken** и код подтверждения на **accessToken**.
 
 > **Внимание:** запрос нового кода подтверждения возможен только если предыдущий код истёк (2 минуты), или по предыдущему коду произошла успешная аутентификация. Повторная отправка выпущенного кода подтверждения невозможна, только одновременно с созданием нового.
 
