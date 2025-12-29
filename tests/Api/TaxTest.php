@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 
 /**
- * @internal
+ * @author Artem Dubinin <artem@dubinin.me>
  *
- * @coversNothing
+ * @internal
  */
+#[CoversNothing]
 final class TaxTest extends ApiTestCase
 {
     public function testHistory(): void
@@ -39,20 +41,16 @@ final class TaxTest extends ApiTestCase
 
         $response = $this->client->tax()->history();
 
+        self::assertCount(count($data['records']), $response);
         foreach ($response as $key => $item) {
+            /** @psalm-suppress PossiblyNullArrayOffset */
             $record = $data['records'][$key];
             self::assertSame($record['taxPeriodId'], $item->getTaxPeriodId());
             self::assertSame($record['taxAmount'], $item->getTaxAmount());
             self::assertSame($record['bonusAmount'], $item->getBonusAmount());
             self::assertSame($record['paidAmount'], $item->getPaidAmount());
-            self::assertEquals(
-                $record['chargeDate'] ? new \DateTimeImmutable($record['chargeDate']) : null,
-                $item->getChargeDate()
-            );
-            self::assertEquals(
-                $record['dueDate'] ? new \DateTimeImmutable($record['dueDate']) : null,
-                $item->getDueDate()
-            );
+            self::assertEquals(new \DateTimeImmutable($record['chargeDate']), $item->getChargeDate());
+            self::assertEquals(new \DateTimeImmutable($record['dueDate']), $item->getDueDate());
             self::assertSame($record['oktmo'], $item->getOktmo());
             self::assertSame($record['regionName'], $item->getRegionName());
             self::assertSame($record['kbk'], $item->getKbk());
@@ -137,10 +135,7 @@ final class TaxTest extends ApiTestCase
         self::assertEquals($data['nominalOverpayment'], $response->getNominalOverpayment());
         self::assertSame($data['taxPeriodId'], $response->getTaxPeriodId());
         self::assertEquals($data['lastPaymentAmount'], $response->getLastPaymentAmount());
-        self::assertEquals(
-            $data['lastPaymentDate'] ? new \DateTimeImmutable($data['lastPaymentDate']) : null,
-            $response->getLastPaymentDate()
-        );
+        self::assertEquals(new \DateTimeImmutable($data['lastPaymentDate']), $response->getLastPaymentDate());
         self::assertSame($data['regions'], $response->getRegions());
     }
 }

@@ -17,14 +17,12 @@ use Shoman4eg\Nalog\Util\ModelHydrator;
  */
 abstract class BaseHttpApi
 {
-    protected ClientInterface $httpClient;
-    protected RequestBuilder $requestBuilder;
     protected ModelHydrator $hydrator;
 
-    public function __construct(ClientInterface $httpClient, RequestBuilder $requestBuilder)
-    {
-        $this->httpClient = $httpClient;
-        $this->requestBuilder = $requestBuilder;
+    public function __construct(
+        protected ClientInterface $httpClient,
+        protected RequestBuilder $requestBuilder
+    ) {
         $this->hydrator = new ModelHydrator();
     }
 

@@ -57,12 +57,12 @@ final class Invoice extends BaseHttpApi
         return $this->hydrator->hydrate($response, IncomeType::class);
     }
 
-    public function cancel(int $invoiceId): void
+    public function cancel(int $invoiceId): never
     {
         throw new \BadMethodCallException('Not impemented');
     }
 
-    public function updatePaymentInfo(): void
+    public function updatePaymentInfo(): never
     {
         throw new \BadMethodCallException('Not impemented');
     }

@@ -14,7 +14,7 @@ use Psr\Http\Message\StreamInterface;
  *
  * @internal this class should not be used outside the API Client, it is not part of the BC promise
  */
-final class RequestBuilder
+final readonly class RequestBuilder
 {
     private RequestFactoryInterface $requestFactory;
     private StreamFactoryInterface $streamFactory;

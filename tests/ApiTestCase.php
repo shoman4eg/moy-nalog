@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use Shoman4eg\Nalog\ApiClient;
 use Shoman4eg\Nalog\Util\JSON;
@@ -15,9 +16,8 @@ use Shoman4eg\Nalog\Util\JSON;
  * @author Artem Dubinin <artem@dubinin.me>
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 abstract class ApiTestCase extends TestCase
 {
     protected MockHandler $mock;

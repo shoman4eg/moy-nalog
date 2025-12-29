@@ -14,9 +14,9 @@ final class History implements CreatableFromArray
     private float $taxAmount;
     private float $bonusAmount;
     private float $paidAmount;
-    private ?float $taxBaseAmount;
-    private ?\DateTimeImmutable $chargeDate;
-    private ?\DateTimeImmutable $dueDate;
+    private ?float $taxBaseAmount = null;
+    private ?\DateTimeImmutable $chargeDate = null;
+    private ?\DateTimeImmutable $dueDate = null;
     private string $oktmo;
     private string $regionName;
     private string $kbk;
