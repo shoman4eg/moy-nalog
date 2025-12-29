@@ -20,7 +20,7 @@ final class HistoryRecords extends AbstractCollection implements CreatableFromAr
      */
     public static function createFromArray(array $data): self
     {
-        $items = array_map(static fn (array $record) => History::createFromArray($record), $data['records']);
+        $items = array_map(History::createFromArray(...), $data['records']);
 
         $model = new self();
         $model->setItems($items);

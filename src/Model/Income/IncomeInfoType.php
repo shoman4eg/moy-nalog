@@ -15,7 +15,7 @@ final class IncomeInfoType implements CreatableFromArray
     private \DateTimeImmutable $operationTime;
     private \DateTimeImmutable $requestTime;
     private string $paymentType;
-    private ?string $partnerCode;
+    private ?string $partnerCode = null;
     private float $totalAmount;
     private CancellationInfoType $cancellationInfo;
     private string $sourceDeviceId;

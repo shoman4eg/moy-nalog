@@ -22,7 +22,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
     /**
      * @return null|T
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->offsetGet($this->key);
     }
@@ -61,6 +61,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
      *
      * @return T
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (!$this->offsetExists($offset)) {

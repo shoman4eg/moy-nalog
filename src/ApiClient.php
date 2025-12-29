@@ -17,17 +17,17 @@ use Shoman4eg\Nalog\Util\JSON;
  */
 final class ApiClient
 {
-    private RequestBuilder $requestBuilder;
-    private ClientConfigurator $clientConfigurator;
-    private Authenticator $authenticator;
-    private ?UserType $profile;
+    private readonly RequestBuilder $requestBuilder;
+    private readonly ClientConfigurator $clientConfigurator;
+    private readonly Authenticator $authenticator;
+    private ?UserType $profile = null;
 
     /**
      * The constructor accepts already configured HTTP clients.
      * Use the configure method to pass a configuration to the Client and create an HTTP Client.
      */
     public function __construct(
-        ClientConfigurator $clientConfigurator = null,
+        ?ClientConfigurator $clientConfigurator = null,
         ?RequestBuilder $requestBuilder = null,
         ?DeviceIdGenerator $deviceIdGenerator = null
     ) {
@@ -66,7 +66,7 @@ final class ApiClient
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
-    public function createNewAccessToken(string $username, string $password): ?string
+    public function createNewAccessToken(string $username, string $password): string
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
 
@@ -109,7 +109,7 @@ final class ApiClient
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
-    public function createNewAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
+    public function createNewAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): string
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
 
