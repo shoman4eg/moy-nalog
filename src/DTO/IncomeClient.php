@@ -8,24 +8,14 @@ use Shoman4eg\Nalog\Enum\IncomeType;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
-final class IncomeClient implements \JsonSerializable
+final readonly class IncomeClient implements \JsonSerializable
 {
-    private ?string $contactPhone;
-    private ?string $displayName;
-    private string $incomeType;
-    private ?string $inn;
-
     public function __construct(
-        ?string $contactPhone = null,
-        ?string $displayName = null,
-        string $incomeType = IncomeType::INDIVIDUAL,
-        ?string $inn = null
-    ) {
-        $this->contactPhone = $contactPhone;
-        $this->displayName = $displayName;
-        $this->incomeType = $incomeType;
-        $this->inn = $inn;
-    }
+        private ?string $contactPhone = null,
+        private ?string $displayName = null,
+        private string $incomeType = IncomeType::INDIVIDUAL,
+        private ?string $inn = null
+    ) {}
 
     public function jsonSerialize(): array
     {
@@ -50,5 +40,10 @@ final class IncomeClient implements \JsonSerializable
     public function getDisplayName(): ?string
     {
         return $this->displayName;
+    }
+
+    public function getContactPhone(): ?string
+    {
+        return $this->contactPhone;
     }
 }

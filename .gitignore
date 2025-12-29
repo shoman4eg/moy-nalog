@@ -2,5 +2,6 @@
 /.phpunit.result.cache
 /composer.lock
 /phpunit.xml
+/tools/**/vendor/
 /vendor/
-
+/var/

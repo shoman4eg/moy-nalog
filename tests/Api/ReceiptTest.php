@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class ReceiptTest extends ApiTestCase
 {
     public function testPrintUrl(): void

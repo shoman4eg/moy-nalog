@@ -21,12 +21,12 @@ final class ClientConfigurator
 {
     private string $endpoint = 'https://lknpd.nalog.ru/api';
     private string $version = 'v1';
-    private UriFactoryInterface $uriFactory;
+    private readonly UriFactoryInterface $uriFactory;
 
     /**
      * This is the client we use for actually sending the requests.
      */
-    private ClientInterface $httpClient;
+    private readonly ClientInterface $httpClient;
 
     /**
      * This is the client wrapping the $httpClient.

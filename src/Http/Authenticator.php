@@ -20,27 +20,23 @@ use Shoman4eg\Nalog\Util\JSON;
  */
 final class Authenticator
 {
-    private RequestBuilder $requestBuilder;
-    private ClientInterface $httpClient;
-    private ?string $accessToken;
-    private string $deviceId;
+    private ?string $accessToken = null;
     private array $defaultHeaders = [
         'Referrer' => 'https://lknpd.nalog.ru/auth/login',
     ];
 
-    public function __construct(RequestBuilder $requestBuilder, ClientInterface $httpClient, string $deviceId)
-    {
-        $this->requestBuilder = $requestBuilder;
-        $this->httpClient = $httpClient;
-        $this->deviceId = $deviceId;
-    }
+    public function __construct(
+        private readonly RequestBuilder $requestBuilder,
+        private readonly ClientInterface $httpClient,
+        private readonly string $deviceId
+    ) {}
 
     /**
      * @throws \JsonException
      * @throws ClientExceptionInterface
      * @throws DomainException
      */
-    public function createAccessToken(string $username, string $password): ?string
+    public function createAccessToken(string $username, string $password): string
     {
         $request = $this->requestBuilder->create(
             'POST',
@@ -67,8 +63,9 @@ final class Authenticator
     /**
      * @throws \JsonException
      * @throws ClientExceptionInterface
+     * @throws DomainException
      */
-    public function createAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
+    public function createAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): string
     {
         $request = $this->requestBuilder->create(
             'POST',

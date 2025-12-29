@@ -6,30 +6,23 @@ namespace Shoman4eg\Nalog\Service\Generator;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
-final class DeviceIdGenerator
+final readonly class DeviceIdGenerator
 {
-    private int $length;
-    private bool $lowercased;
+    private const LENGTH = 21;
+
     private IdStrategyInterface $strategy;
 
-    public function __construct(?IdStrategyInterface $strategy = null, int $length = 21, bool $lowercased = true)
+    public function __construct(?IdStrategyInterface $strategy = null)
     {
-        $this->length = $length;
-        $this->lowercased = $lowercased;
         $this->strategy = $strategy ?? new PlatformIdStrategy();
     }
 
     public function generate(): string
     {
-        $generated = \substr(
+        return \substr(
             \str_replace(['+', '/', '='], '', base64_encode($this->strategy->getId())),
             0,
-            $this->length
+            self::LENGTH
         );
-        if ($this->lowercased) {
-            $generated = \mb_strtolower($generated);
-        }
-
-        return $generated;
     }
 }
