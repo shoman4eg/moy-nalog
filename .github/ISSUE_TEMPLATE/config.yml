@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+    - name: Вопросы общего характера
+      url: https://github.com/shoman4eg/moy-nalog/discussions
+      about: Используйте Discussions для общих вопросов и идей.
