@@ -1,105 +1,131 @@
 <!--- BEGIN HEADER -->
 # Changelog
 
-All notable changes to this project will be documented in this file.
+Все заметные изменения в этом проекте будут задокументированы в этом файле.
 <!--- END HEADER -->
 
+## [0.6.0](https://github.com/shoman4eg/moy-nalog/compare/v0.5.1...v0.6.0) (2025-12-28)
+
+### Добавлено
+- Добавлена стратегия для deviceId с возможностью передать свой id.
+
+### Изменено
+- Обновлены зависимости и внутренняя реализация некоторых компонентов.
+
+### Исправлено
+- Исправлены найденные ошибки и улучшена устойчивость к изменению API сервиса «Мой Налог».
+
+## [0.5.1](https://github.com/shoman4eg/moy-nalog/compare/v0.5.0...v0.5.1) (2025-05-21)
+
+### Исправлено
+- Убран лишний заголовок для запросов.
+
+## [0.5.0](https://github.com/shoman4eg/moy-nalog/compare/v0.4.4...v0.5.0) (2024-05-20)
+
+### Добавлено
+- Добавлены новые методы для просмотра платежей и начисленных налогов.
+
+## [0.4.4](https://github.com/shoman4eg/moy-nalog/compare/v0.4.3...v0.4.4) (2024-07-24)
+
+### Изменено
+- Удалено использование устаревших (deprecated) методов.
+- Обновлён код-стайл.
+- Повышен уровень psalm.
+
+## [0.4.3](https://github.com/shoman4eg/moy-nalog/compare/v0.4.2...v0.4.3) (2024-07-22)
+
+### Изменено
+- Обновлена минимальная версия `http-client-discovery` для поддержки `symfony/http-client`.
+
 ## [0.4.2](https://github.com/shoman4eg/moy-nalog/compare/v0.4.1...v0.4.2) (2023-27-05)
-### Fix
+
+### Изменено
 * Исправлена ошибка при установке минимальных версий зависимостей #29
 * Исправлены ошибки безопасности #29
 * Обновлены версии зависимостей #29
 
 ## [0.4.1](https://github.com/shoman4eg/moy-nalog/compare/v0.4.0...v0.4.1) (2023-23-05)
-### Fix
-* Улучшена поддержка 8.2 #28
-* Добавлен возвращаемый тип к `DateTime::jsonSerialize()`  #28
+
+### Изменено
+* Улучшена поддержка PHP 8.2 #28
+* Добавлен возвращаемый тип к `DateTime::jsonSerialize()` #28
 
 ## [0.4.0](https://github.com/shoman4eg/moy-nalog/compare/v0.3.1...v0.4.0) (2022-11-27)
-### Features
+
+### Добавлено
 * Добавлена аутентификация по номеру телефона и СМС #23
 
-### Fix
-* Добавлен struct_types=1
+### Изменено
+* Добавлен `struct_types=1`
 * Добавлен `final` к некоторым классам
-* Исправлены ошибки psalm, phpstan
-* Код-стайл
+* Исправлены ошибки psalm и phpstan
+* Улучшен код-стайл
 
-### Documentation
-* Переведена на русский язык #26
-* Добавлена на английском
+### Документация
+* Документация переведена на русский язык #26
+* Добавлена документация на английском
 
 ## [0.3.1](https://github.com/shoman4eg/moy-nalog/compare/v0.3.0...v0.3.1) (2022-05-29)
-### Features
-* Add throw `UnauthorizedException` if server respond 401 status #19
 
-### Documentation
-* Update README with exception
-* Add donation link
+### Добавлено
+* Добавлено выбрасывание `UnauthorizedException`, если сервер отвечает статусом 401 #19
+
+### Документация
+* Обновлён README с описанием исключения
+* Добавлена ссылка на пожертвования
+
 ---
 
 ## [0.3.0](https://github.com/shoman4eg/moy-nalog/compare/v0.2.3...v0.3.0) (2022-05-15)
-### Features
-* Add new method for income with multiple items #14
 
-### Documentation
-* Update README with new income method
+### Добавлено
+* Добавлен новый метод для создания дохода с несколькими позициями #14
+
+### Документация
+* Обновлён README с описанием нового метода для дохода
 
 ---
 
 ## [0.2.3](https://github.com/shoman4eg/moy-nalog/compare/v0.2.2...v0.2.3) (2022-04-11)
-### Fix
-* Change uses for avoid className conflicts
-* Update README
+
+### Изменено
+* Изменены `use`-директивы для предотвращения конфликтов имён классов
+* Обновлён README
 
 ---
 
 ## [0.2.2](https://github.com/shoman4eg/moy-nalog/compare/v0.2.1...v0.2.2) (2022-04-11)
-### Fix
-* Remove unused files
-* Fix composer.json version
-* Update .gitattributes
+
+### Изменено
+* Удалены неиспользуемые файлы
+* Исправлена версия в `composer.json`
+* Обновлён `.gitattributes`
 
 ---
 
 ## [0.2.1](https://github.com/shoman4eg/moy-nalog/compare/v0.2.0...v0.2.1) (2022-04-11)
 
-### Documentation
-* Fix cancel income method docs
-* Ошибка в документации #9
+### Документация
+* Исправлена документация для метода отмены дохода
+* Исправлена ошибка в документации #9
 
-### Fix
-* Type email can be nullable #10
-* Fix Receipt print url #11
+### Изменено
+* Тип `email` может быть `nullable` #10
+* Исправлена ссылка для печати чека (`Receipt print url`) #11
 
 ---
 
 ## [0.2.0](https://github.com/shoman4eg/moy-nalog/compare/v0.1.0...v0.2.0) (2022-04-09)
-### Features
-* Add Payment type methods
-* Add Cancel income method
-* Add custom client for create income
-* Add custom client for create income
 
-### Tests
-* Add tests
-* Add test for api client with custom access token
-* Add test for create income
-* Add test validation for income
-* Add test for cancel income
-* Add test for get paymentType
+### Добавлено
+* Добавлены методы для работы с типами платежей (`Payment type`)
+* Добавлен метод отмены дохода
+* Добавлен кастомный клиент для создания дохода
+* Добавлен кастомный клиент для создания дохода (дублирующая запись в оригинале — можно убрать)
 
-### Documentation
-* Update Create api client
-* Update Create income
-* Update Get receipt
-* Update Get user info
-* Add Cancel income
-* Add References
-
----
-
-## [0.1.0](https://github.com/shoman4eg/moy-nalog/compare/306901e41d3ae4d4a4913f6da9606213f9d9a11d...v0.1.0) (2022-02-01)
-
----
-Initial release
+### Тесты
+* Добавлены тесты
+* Добавлен тест для API-клиента с кастомным access token
+* Добавлен тест для создания дохода
+* Добавлен тест валидации дохода
+* Добавлен
