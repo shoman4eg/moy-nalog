@@ -5,7 +5,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/shoman4eg/moy-nalog.svg?style=flat-square)](https://packagist.org/packages/shoman4eg/moy-nalog)
 [![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/shoman4eg/moy-nalog/master?style=flat-square)](https://scrutinizer-ci.com/g/shoman4eg/moy-nalog/?branch=master)
 [![Packagist License](https://img.shields.io/packagist/l/shoman4eg/moy-nalog?style=flat-square)](LICENSE)
-[![Donate](https://img.shields.io/badge/Donate-Tinkoff-yellow?style=flat-square)](https://www.tinkoff.ru/cf/7rZnC7N4bOO)
+[![Donate](https://img.shields.io/badge/Donate-Tinkoff-yellow?style=flat-square)](https://pay.cloudtips.ru/p/2e70e850)
 
 Позволяет автоматизировать отправку информации о доходах для самозанятых, получать информацию о созданных чеках и удалять их. Поддерживается аутентификация по ИНН и паролю, а также по номеру телефона.
 
@@ -317,7 +317,7 @@ $userInfo = $apiClient->tax()->history();
 ## На кофе
 Если этот проект поможет Вам сократить время разработки, вы можете угостить меня чашкой кофе :)
 
-[Сделать пожертвование автору](https://www.tinkoff.ru/cf/7rZnC7N4bOO)
+[Сделать пожертвование автору](https://pay.cloudtips.ru/p/2e70e850)
 
 ## License
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
