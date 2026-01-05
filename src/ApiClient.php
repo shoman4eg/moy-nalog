@@ -3,8 +3,12 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog;
 
+use Http\Client\Common\Plugin\LoggerPlugin;
+use Http\Message\Formatter\FullHttpMessageFormatter;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
+use Psr\Log\LoggerInterface;
+use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\Http\AuthenticationPlugin;
 use Shoman4eg\Nalog\Http\Authenticator;
 use Shoman4eg\Nalog\Http\ClientConfigurator;
@@ -17,19 +21,19 @@ use Shoman4eg\Nalog\Util\JSON;
  */
 final class ApiClient
 {
-    private RequestBuilder $requestBuilder;
-    private ClientConfigurator $clientConfigurator;
-    private Authenticator $authenticator;
-    private ?UserType $profile;
+    private readonly RequestBuilder $requestBuilder;
+    private readonly ClientConfigurator $clientConfigurator;
+    private readonly Authenticator $authenticator;
+    private ?UserType $profile = null;
 
     /**
      * The constructor accepts already configured HTTP clients.
      * Use the configure method to pass a configuration to the Client and create an HTTP Client.
      */
     public function __construct(
-        ClientConfigurator $clientConfigurator = null,
+        ?ClientConfigurator $clientConfigurator = null,
         ?RequestBuilder $requestBuilder = null,
-        ?DeviceIdGenerator $deviceIdGenerator = null
+        ?DeviceIdGenerator $deviceIdGenerator = null,
     ) {
         $this->clientConfigurator = $clientConfigurator ?: new ClientConfigurator();
         $this->requestBuilder = $requestBuilder ?: new RequestBuilder();
@@ -66,7 +70,7 @@ final class ApiClient
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
-    public function createNewAccessToken(string $username, string $password): ?string
+    public function createNewAccessToken(string $username, string $password): string
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
 
@@ -109,7 +113,7 @@ final class ApiClient
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
-    public function createNewAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
+    public function createNewAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): string
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
 
@@ -137,6 +141,14 @@ final class ApiClient
         $this->authenticator->setAccessToken($accessToken);
     }
 
+    public function withLogger(LoggerInterface $logger): ApiClient
+    {
+        $this->clientConfigurator->removePlugin(LoggerPlugin::class);
+        $this->clientConfigurator->appendPlugin(new LoggerPlugin($logger, new FullHttpMessageFormatter()));
+
+        return $this;
+    }
+
     /**
      * The access token may have been refreshed during the requests. Use this function to
      * get back the (possibly) refreshed access token.
@@ -151,13 +163,17 @@ final class ApiClient
         return new Api\Income($this->getHttpClient(), $this->requestBuilder);
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     * @throws DomainException
+     */
     public function receipt(): Api\Receipt
     {
         return new Api\Receipt(
             $this->getHttpClient(),
             $this->requestBuilder,
             $this->profile ?? $this->user()->get(),
-            (string)$this->clientConfigurator->getEndpoint()
+            (string)$this->clientConfigurator->getEndpoint(),
         );
     }
 

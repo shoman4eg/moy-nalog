@@ -20,7 +20,7 @@ final class PaymentRecords extends AbstractCollection implements CreatableFromAr
      */
     public static function createFromArray(array $data): self
     {
-        $items = array_map(static fn (array $record) => Payment::createFromArray($record), $data['records']);
+        $items = array_map(Payment::createFromArray(...), $data['records']);
 
         $model = new self();
         $model->setItems($items);

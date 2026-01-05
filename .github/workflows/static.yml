@@ -13,7 +13,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.2
           coverage: none
           tools: phpstan:1.4, cs2pr
 
@@ -34,7 +34,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.2
           coverage: none
           tools: php-cs-fixer:3.59.3, cs2pr
 
@@ -51,9 +51,9 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.2
           coverage: none
-          tools: vimeo/psalm:5.25.0
+          tools: vimeo/psalm:6.14.0
 
       - name: Download dependencies
         uses: ramsey/composer-install@v1
@@ -69,7 +69,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.2
           coverage: none
           tools: composer-normalize
 

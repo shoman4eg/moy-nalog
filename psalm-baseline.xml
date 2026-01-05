@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.14.3@d0b040a91f280f071c1abcb1b77ce3822058725a">
+  <file src="tests/Api/TaxTest.php">
+    <PossiblyNullArrayOffset>
+      <code><![CDATA[$data['records']]]></code>
+    </PossiblyNullArrayOffset>
+    <PossiblyNullReference>
+      <code><![CDATA[getTaxPeriodId]]></code>
+      <code><![CDATA[getTimestamp]]></code>
+      <code><![CDATA[getType]]></code>
+    </PossiblyNullReference>
+  </file>
+  <file src="tests/ApiClientTest.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$this->client->getAccessToken()]]></code>
+    </PossiblyNullArgument>
+  </file>
+  <file src="tests/ClientConfiguratorTest.php">
+    <PossiblyInvalidArrayAccess>
+      <code><![CDATA[$plugins[0]]]></code>
+      <code><![CDATA[$plugins[0]]]></code>
+      <code><![CDATA[$plugins[0]]]></code>
+      <code><![CDATA[$plugins[0]]]></code>
+      <code><![CDATA[$plugins[0]]]></code>
+      <code><![CDATA[$plugins[1]]]></code>
+      <code><![CDATA[$plugins[1]]]></code>
+      <code><![CDATA[$plugins[1]]]></code>
+    </PossiblyInvalidArrayAccess>
+    <UndefinedInterfaceMethod>
+      <code><![CDATA[$plugins]]></code>
+      <code><![CDATA[$plugins]]></code>
+      <code><![CDATA[$plugins]]></code>
+      <code><![CDATA[$plugins]]></code>
+      <code><![CDATA[$plugins]]></code>
+      <code><![CDATA[$plugins]]></code>
+      <code><![CDATA[$plugins]]></code>
+      <code><![CDATA[$plugins]]></code>
+    </UndefinedInterfaceMethod>
+  </file>
+</files>

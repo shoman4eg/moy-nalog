@@ -14,7 +14,7 @@ use Psr\Http\Message\StreamInterface;
  *
  * @internal this class should not be used outside the API Client, it is not part of the BC promise
  */
-final class RequestBuilder
+final readonly class RequestBuilder
 {
     private RequestFactoryInterface $requestFactory;
     private StreamFactoryInterface $streamFactory;
@@ -31,9 +31,9 @@ final class RequestBuilder
      * Creates a new PSR-7 request.
      *
      * @param array<string, array|string> $headers name => value or name=>[value]
-     * @param null|StreamInterface|string $body    request body
+     * @param string|StreamInterface|null $body    request body
      */
-    public function create(string $method, string $uri, array $headers = [], $body = null): RequestInterface
+    public function create(string $method, string $uri, array $headers = [], StreamInterface|string|null $body = null): RequestInterface
     {
         $request = $this->requestFactory->createRequest($method, $uri);
         foreach ($headers as $name => $value) {

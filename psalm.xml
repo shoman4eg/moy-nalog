@@ -4,17 +4,26 @@
     resolveFromConfigFile="true"
     findUnusedCode="false"
     findUnusedBaselineEntry="false"
+    phpVersion="8.2"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    errorBaseline="psalm.baseline.xml"
+    ensureOverrideAttribute="false"
+    errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
         <directory name="src"/>
+        <directory name="tests" />
         <ignoreFiles>
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
+
+
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin" />
+    </plugins>
+
     <issueHandlers>
         <PropertyNotSetInConstructor errorLevel="info"/>
         <RedundantConditionGivenDocblockType errorLevel="info"/>

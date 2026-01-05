@@ -17,7 +17,7 @@ final class PaymentTypeCollection extends AbstractCollection implements Creatabl
 
     public static function createFromArray(array $data): self
     {
-        $items = array_map(static fn (array $item) => PaymentType::createFromArray($item), $data['items']);
+        $items = array_map(PaymentType::createFromArray(...), $data['items']);
 
         $model = new self();
         $model->setItems($items);

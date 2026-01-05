@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Shoman4eg\Nalog\Model\PaymentType\PaymentType;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 
@@ -10,9 +11,8 @@ use Shoman4eg\Nalog\Tests\ApiTestCase;
  * @author Artem Dubinin <artem@dubinin.me>
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class PaymentTypeTest extends ApiTestCase
 {
     public function testTable(): void
