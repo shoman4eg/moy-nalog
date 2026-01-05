@@ -6,14 +6,12 @@ namespace Shoman4eg\Nalog\Api;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
-use Shoman4eg\Nalog\ErrorHandler;
-use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\RequestBuilder;
 use Shoman4eg\Nalog\Util\JSON;
 use Shoman4eg\Nalog\Util\ModelHydrator;
 
 /**
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * @author Artem Dubinin <artem@dubinin.me>
  */
 abstract class BaseHttpApi
 {
@@ -21,7 +19,7 @@ abstract class BaseHttpApi
 
     public function __construct(
         protected ClientInterface $httpClient,
-        protected RequestBuilder $requestBuilder
+        protected RequestBuilder $requestBuilder,
     ) {
         $this->hydrator = new ModelHydrator();
     }
@@ -122,21 +120,6 @@ abstract class BaseHttpApi
         return $this->httpClient->sendRequest(
             $this->requestBuilder->create('DELETE', $path, $requestHeaders, $this->createJsonBody($params))
         );
-    }
-
-    /**
-     * Handle HTTP errors.
-     *
-     * Call is controlled by the specific API methods.
-     * Use ErrorHandler::handle instead of this
-     *
-     * @throws DomainException
-     *
-     * @deprecated
-     */
-    protected function handleErrors(ResponseInterface $response): void
-    {
-        (new ErrorHandler())->handleResponse($response);
     }
 
     /**

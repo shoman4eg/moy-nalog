@@ -27,7 +27,11 @@
         "brick/math": "^0.14",
         "php-http/client-common": "^2.7",
         "php-http/discovery": "^1.19",
+        "php-http/logger-plugin": "^1.4",
+        "php-http/message": "^1.16",
+        "php-http/promise": "^1.3",
         "psr/http-client": "^1.0.3",
+        "psr/log": "^3.0",
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
@@ -39,7 +43,8 @@
         "phpunit/phpunit": "^11.4"
     },
     "suggest": {
-        "psr/http-client-implementation": "Required for using this package"
+        "psr/http-client-implementation": "Required for using this package",
+        "psr/log-implementation": "Require for logging"
     },
     "autoload": {
         "psr-4": {
@@ -49,6 +54,20 @@
     "autoload-dev": {
         "psr-4": {
             "Shoman4eg\\Nalog\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true,
+            "php-http/discovery": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "bamarni-bin": {
+            "bin-links": false,
+            "forward-command": true,
+            "target-directory": "tools"
         }
     },
     "scripts": {
@@ -70,19 +89,5 @@
         "psalm": "tools/psalm/vendor/bin/psalm --show-info --no-diff --no-cache",
         "rector": "tools/rector/vendor/bin/rector process",
         "test": "phpunit"
-    },
-    "config": {
-        "allow-plugins": {
-            "bamarni/composer-bin-plugin": true,
-            "php-http/discovery": true
-        },
-        "sort-packages": true
-    },
-    "extra": {
-        "bamarni-bin": {
-            "bin-links": false,
-            "forward-command": true,
-            "target-directory": "tools"
-        }
     }
 }

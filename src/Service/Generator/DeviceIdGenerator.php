@@ -10,12 +10,9 @@ final readonly class DeviceIdGenerator
 {
     private const LENGTH = 21;
 
-    private IdStrategyInterface $strategy;
-
-    public function __construct(?IdStrategyInterface $strategy = null)
-    {
-        $this->strategy = $strategy ?? new PlatformIdStrategy();
-    }
+    public function __construct(
+        private ?IdStrategyInterface $strategy = new PlatformIdStrategy()
+    ) {}
 
     public function generate(): string
     {

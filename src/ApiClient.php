@@ -3,8 +3,12 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog;
 
+use Http\Client\Common\Plugin\LoggerPlugin;
+use Http\Message\Formatter\FullHttpMessageFormatter;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
+use Psr\Log\LoggerInterface;
+use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\Http\AuthenticationPlugin;
 use Shoman4eg\Nalog\Http\Authenticator;
 use Shoman4eg\Nalog\Http\ClientConfigurator;
@@ -29,7 +33,7 @@ final class ApiClient
     public function __construct(
         ?ClientConfigurator $clientConfigurator = null,
         ?RequestBuilder $requestBuilder = null,
-        ?DeviceIdGenerator $deviceIdGenerator = null
+        ?DeviceIdGenerator $deviceIdGenerator = null,
     ) {
         $this->clientConfigurator = $clientConfigurator ?: new ClientConfigurator();
         $this->requestBuilder = $requestBuilder ?: new RequestBuilder();
@@ -137,6 +141,14 @@ final class ApiClient
         $this->authenticator->setAccessToken($accessToken);
     }
 
+    public function withLogger(LoggerInterface $logger): ApiClient
+    {
+        $this->clientConfigurator->removePlugin(LoggerPlugin::class);
+        $this->clientConfigurator->appendPlugin(new LoggerPlugin($logger, new FullHttpMessageFormatter()));
+
+        return $this;
+    }
+
     /**
      * The access token may have been refreshed during the requests. Use this function to
      * get back the (possibly) refreshed access token.
@@ -151,13 +163,17 @@ final class ApiClient
         return new Api\Income($this->getHttpClient(), $this->requestBuilder);
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     * @throws DomainException
+     */
     public function receipt(): Api\Receipt
     {
         return new Api\Receipt(
             $this->getHttpClient(),
             $this->requestBuilder,
             $this->profile ?? $this->user()->get(),
-            (string)$this->clientConfigurator->getEndpoint()
+            (string)$this->clientConfigurator->getEndpoint(),
         );
     }
 

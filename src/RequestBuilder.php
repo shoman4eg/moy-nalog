@@ -31,9 +31,9 @@ final readonly class RequestBuilder
      * Creates a new PSR-7 request.
      *
      * @param array<string, array|string> $headers name => value or name=>[value]
-     * @param null|StreamInterface|string $body    request body
+     * @param string|StreamInterface|null $body    request body
      */
-    public function create(string $method, string $uri, array $headers = [], $body = null): RequestInterface
+    public function create(string $method, string $uri, array $headers = [], StreamInterface|string|null $body = null): RequestInterface
     {
         $request = $this->requestFactory->createRequest($method, $uri);
         foreach ($headers as $name => $value) {
