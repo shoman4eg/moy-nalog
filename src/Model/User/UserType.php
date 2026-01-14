@@ -10,28 +10,28 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
  */
 final class UserType implements CreatableFromArray
 {
-    private ?string $lastName;
+    private ?string $lastName = null;
     private int $id;
     private string $displayName;
-    private ?string $middleName;
-    private ?string $email;
+    private ?string $middleName = null;
+    private ?string $email = null;
     private string $phone;
     private string $inn;
-    private ?string $snils;
+    private ?string $snils = null;
     private bool $avatarExists;
-    private ?\DateTimeInterface $initialRegistrationDate;
-    private ?\DateTimeInterface $registrationDate;
-    private ?\DateTimeInterface $firstReceiptRegisterTime;
-    private ?\DateTimeInterface $firstReceiptCancelTime;
+    private ?\DateTimeInterface $initialRegistrationDate = null;
+    private ?\DateTimeInterface $registrationDate = null;
+    private ?\DateTimeInterface $firstReceiptRegisterTime = null;
+    private ?\DateTimeInterface $firstReceiptCancelTime = null;
     private bool $hideCancelledReceipt;
 
     /** @var mixed */
     private $registerAvailable;
 
-    private ?string $status;
+    private ?string $status = null;
     private bool $restrictedMode;
-    private ?string $pfrUrl;
-    private ?string $login;
+    private ?string $pfrUrl = null;
+    private ?string $login = null;
 
     final private function __construct() {}
 

@@ -19,17 +19,14 @@ use Webmozart\Assert\Assert;
 final class Income extends BaseHttpApi
 {
     /**
-     * @param float|int $amount
-     * @param float|int $quantity
-     *
      * @throws \JsonException
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
     public function create(
         string $name,
-        $amount,
-        $quantity,
+        float|int|string $amount,
+        float|int $quantity,
         ?\DateTimeInterface $operationTime = null,
         ?DTO\IncomeClient $client = null
     ): IncomeType {
