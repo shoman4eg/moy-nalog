@@ -239,6 +239,37 @@ $createdIncome = $apiClient->income()->create(
 $receiptUuid = $createdIncome->getApprovedReceiptUuid();
 ```
 
+### Получить список чеков
+```php
+// Получить список чеков
+$incomes = $apiClient->income()->list();
+
+// Фильтрация
+$incomes = $apiClient->income()->list(
+    from: new DateTimeImmutable('31.12.2025 23:59:59'), // начало периода для поиска (по умолчанию: null)
+    to: new DateTimeImmutable('31.12.2025 23:59:59'), // конец периода для поиска (по умолчанию: null)
+    offset: 10, // смещение результатов для пагинации (по умолчанию: 0)
+    limit: 25, // Количество результатов (по умолчанию: 100)
+    buyerType: \Shoman4eg\Nalog\Enum\BuyerType::PERSON, // Тип покупателя (по умолчанию: null)
+    receiptType: \Shoman4eg\Nalog\Enum\ReceiptType::REGISTERED, // Тип чека (по умолчанию: null)
+    sortBy: \Shoman4eg\Nalog\Api\Income::SORT_OPERATION_TIME_ASC // Сортировка (по умолчанию: \Shoman4eg\Nalog\Api\Income::SORT_OPERATION_TIME_DESC)
+);
+
+// Возможные значения фильтрации:
+$buyerType = \Shoman4eg\Nalog\Enum\BuyerType::PERSON; // физлицо
+$buyerType = \Shoman4eg\Nalog\Enum\BuyerType::COMPANY; // юрлицо
+$buyerType = \Shoman4eg\Nalog\Enum\BuyerType::FOREIGN_AGENCY; // Иностранная организация
+
+$receiptType = \Shoman4eg\Nalog\Enum\ReceiptType::REGISTERED; // Действителен
+$receiptType = \Shoman4eg\Nalog\Enum\ReceiptType::CANCELLED; // Аннулирован
+
+$sortBy = Shoman4eg\Nalog\Api\Income::SORT_OPERATION_TIME_ASC; // Дата: сначала старые
+$sortBy = Shoman4eg\Nalog\Api\Income::SORT_OPERATION_TIME_DESC; // Дата: сначала новые
+$sortBy = Shoman4eg\Nalog\Api\Income::SORT_TOTAL_AMOUNT_ASC; // Стоимость: по возрастанию
+$sortBy = Shoman4eg\Nalog\Api\Income::SORT_TOTAL_AMOUNT_DESC; // Стоимость: по убыванию
+```
+
+
 ### Получить чек (скан-копия) или данные чека в JSON формате
 ```php
 // UUID чека

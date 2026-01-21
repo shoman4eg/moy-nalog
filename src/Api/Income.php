@@ -8,8 +8,9 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\DTO;
 use Shoman4eg\Nalog\Enum;
 use Shoman4eg\Nalog\ErrorHandler;
-use Shoman4eg\Nalog\Exception;
-use Shoman4eg\Nalog\Model\Income\IncomeInfoType;
+use Shoman4eg\Nalog\Exception\DomainException;
+use Shoman4eg\Nalog\Model\Income\CancelIncomeInfoType;
+use Shoman4eg\Nalog\Model\Income\IncomeList;
 use Shoman4eg\Nalog\Model\Income\IncomeType;
 use Webmozart\Assert\Assert;
 
@@ -18,13 +19,26 @@ use Webmozart\Assert\Assert;
  */
 final class Income extends BaseHttpApi
 {
+    public const SORT_OPERATION_TIME_DESC = 'operation_time:desc';
+    public const SORT_OPERATION_TIME_ASC = 'operation_time:asc';
+    public const SORT_TOTAL_AMOUNT_DESC = 'total_amount:desc';
+    public const SORT_TOTAL_AMOUNT_ASC = 'total_amount:asc';
+    private const MIN_LIST_LIMIT = 1;
+    private const MAX_LIST_LIMIT = 100;
+    private const ALLOWED_SORT_BY = [
+        self::SORT_OPERATION_TIME_DESC,
+        self::SORT_OPERATION_TIME_ASC,
+        self::SORT_TOTAL_AMOUNT_DESC,
+        self::SORT_TOTAL_AMOUNT_ASC,
+    ];
+
     /**
      * @param float|int $amount
      * @param float|int $quantity
      *
      * @throws \JsonException
      * @throws ClientExceptionInterface
-     * @throws Exception\DomainException
+     * @throws DomainException
      */
     public function create(
         string $name,
@@ -45,7 +59,7 @@ final class Income extends BaseHttpApi
      *
      * @throws \JsonException
      * @throws ClientExceptionInterface
-     * @throws Exception\DomainException
+     * @throws DomainException
      */
     public function createMultipleItems(
         array $serviceItems,
@@ -95,9 +109,58 @@ final class Income extends BaseHttpApi
     }
 
     /**
+     * @throws ClientExceptionInterface
+     * @throws DomainException
+     */
+    public function list(
+        ?\DateTimeInterface $from = null,
+        ?\DateTimeInterface $to = null,
+        ?int $offset = 0,
+        ?int $limit = 100,
+        ?string $sortBy = self::SORT_OPERATION_TIME_DESC,
+        ?string $buyerType = null,
+        ?string $receiptType = null
+    ): IncomeList {
+        $query = [];
+
+        if ($from !== null) {
+            $query['from'] = $from->format(\DateTimeInterface::RFC3339_EXTENDED);
+        }
+
+        if ($to !== null) {
+            $query['to'] = $to->format(\DateTimeInterface::RFC3339_EXTENDED);
+        }
+
+        $query['limit'] = max(self::MIN_LIST_LIMIT, min($limit, self::MAX_LIST_LIMIT));
+        $query['offset'] = $offset;
+        if ($sortBy !== null) {
+            Assert::oneOf($sortBy, self::ALLOWED_SORT_BY, 'Sort is invalid. Must be one of: %2$s');
+            $query['sortBy'] = $sortBy;
+        }
+
+        if ($buyerType !== null) {
+            Assert::oneOf($buyerType, Enum\BuyerType::all(), 'Buyer is invalid. Must be one of: %2$s');
+            $query['buyerType'] = $buyerType;
+        }
+
+        if ($receiptType !== null) {
+            Assert::oneOf($receiptType, Enum\ReceiptType::all(), 'Receipt type is invalid. Must be one of: %2$s');
+            $query['receiptType'] = $receiptType;
+        }
+
+        $response = $this->httpGet('/incomes', $query);
+
+        if ($response->getStatusCode() >= 400) {
+            (new ErrorHandler())->handleResponse($response);
+        }
+
+        return $this->hydrator->hydrate($response, IncomeList::class);
+    }
+
+    /**
      * @throws \JsonException
      * @throws ClientExceptionInterface
-     * @throws Exception\DomainException
+     * @throws DomainException
      */
     public function cancel(
         string $receiptUuid,
@@ -105,7 +168,7 @@ final class Income extends BaseHttpApi
         ?\DateTimeImmutable $operationTime = null,
         ?\DateTimeImmutable $requestTime = null,
         ?string $partnerCode = null
-    ): IncomeInfoType {
+    ): CancelIncomeInfoType {
         Assert::notEmpty($receiptUuid, 'ReceiptUuid cannot be empty');
         Assert::oneOf($comment, Enum\CancelCommentType::all(), 'Comment is invalid. Must be one of: %2$s');
 
@@ -121,6 +184,6 @@ final class Income extends BaseHttpApi
             (new ErrorHandler())->handleResponse($response);
         }
 
-        return $this->hydrator->hydrate($response, IncomeInfoType::class);
+        return $this->hydrator->hydrate($response, CancelIncomeInfoType::class);
     }
 }
