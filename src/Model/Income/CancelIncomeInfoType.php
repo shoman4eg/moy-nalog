@@ -8,7 +8,7 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
-final class IncomeInfoType implements CreatableFromArray
+final class CancelIncomeInfoType implements CreatableFromArray
 {
     private string $approvedReceiptUuid;
     private string $name;

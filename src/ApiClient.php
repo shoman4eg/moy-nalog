@@ -27,7 +27,7 @@ final class ApiClient
      * Use the configure method to pass a configuration to the Client and create an HTTP Client.
      */
     public function __construct(
-        ClientConfigurator $clientConfigurator = null,
+        ?ClientConfigurator $clientConfigurator = null,
         ?RequestBuilder $requestBuilder = null,
         ?DeviceIdGenerator $deviceIdGenerator = null
     ) {

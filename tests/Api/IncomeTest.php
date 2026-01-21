@@ -21,14 +21,6 @@ use Shoman4eg\Nalog\Tests\ApiTestCase;
  */
 final class IncomeTest extends ApiTestCase
 {
-    public function clientDataProvider(): iterable
-    {
-        yield [new DTO\IncomeClient()];
-        yield [new DTO\IncomeClient(null, 'testClient', IncomeType::LEGAL_ENTITY, '1234567890')];
-        yield [new DTO\IncomeClient(null, null, IncomeType::INDIVIDUAL, null)];
-        yield [new DTO\IncomeClient('phone', 'testClient', IncomeType::FOREIGN_AGENCY)];
-    }
-
     /**
      * @dataProvider clientDataProvider
      *
@@ -45,6 +37,14 @@ final class IncomeTest extends ApiTestCase
         self::assertSame($receiptId, $response->getApprovedReceiptUuid());
     }
 
+    public function clientDataProvider(): iterable
+    {
+        yield [new DTO\IncomeClient()];
+        yield [new DTO\IncomeClient(null, 'testClient', IncomeType::LEGAL_ENTITY, '1234567890')];
+        yield [new DTO\IncomeClient(null, null, IncomeType::INDIVIDUAL, null)];
+        yield [new DTO\IncomeClient('phone', 'testClient', IncomeType::FOREIGN_AGENCY)];
+    }
+
     /**
      * @throws \JsonException
      * @throws ClientExceptionInterface
@@ -58,23 +58,6 @@ final class IncomeTest extends ApiTestCase
         $response = $this->client->income()->create('name', 100, 1, null, $client);
 
         self::assertSame($receiptId, $response->getApprovedReceiptUuid());
-    }
-
-    public function validationCreateDataProvider(): iterable
-    {
-        $fakeClientWithInn = static fn ($inn) => new DTO\IncomeClient(null, '', IncomeType::LEGAL_ENTITY, $inn);
-
-        yield ['', 100, 1, null, 'Name of item[0] cannot be empty'];
-        yield ['name', '', 1, null, 'Amount of item[0] must be int or float'];
-        yield ['name', -1, 1, null, 'Amount of item[0] must be greater than 0'];
-        yield ['name', 1, 0, null, 'Quantity of item[0] cannot be empty'];
-        yield ['name', 1, 'zero', null, 'Quantity of item[0] must be int or float'];
-        yield ['name', 1, 1, $fakeClientWithInn(''), 'Client INN cannot be empty'];
-        yield ['name', 1, 1, $fakeClientWithInn('aaaa'), 'Client INN must contain only numbers'];
-        yield ['name', 1, 1, $fakeClientWithInn(str_repeat('1', 9)), 'Client INN length must been 10 or 12'];
-        yield ['name', 1, 1, $fakeClientWithInn(str_repeat('1', 11)), 'Client INN length must been 10 or 12'];
-        yield ['name', 1, 1, $fakeClientWithInn(str_repeat('1', 13)), 'Client INN length must been 10 or 12'];
-        yield ['name', 1, 1, $fakeClientWithInn('1234567890'), 'Client DisplayName cannot be empty'];
     }
 
     /**
@@ -98,10 +81,21 @@ final class IncomeTest extends ApiTestCase
         $this->client->income()->create($name, $amount, $quantity, null, $client);
     }
 
-    public function cancellationDataProvider(): iterable
+    public function validationCreateDataProvider(): iterable
     {
-        yield ['12345678', CancelCommentType::CANCEL];
-        yield ['12345678', CancelCommentType::REFUND];
+        $fakeClientWithInn = static fn ($inn) => new DTO\IncomeClient(null, '', IncomeType::LEGAL_ENTITY, $inn);
+
+        yield ['', 100, 1, null, 'Name of item[0] cannot be empty'];
+        yield ['name', '', 1, null, 'Amount of item[0] must be int or float'];
+        yield ['name', -1, 1, null, 'Amount of item[0] must be greater than 0'];
+        yield ['name', 1, 0, null, 'Quantity of item[0] cannot be empty'];
+        yield ['name', 1, 'zero', null, 'Quantity of item[0] must be int or float'];
+        yield ['name', 1, 1, $fakeClientWithInn(''), 'Client INN cannot be empty'];
+        yield ['name', 1, 1, $fakeClientWithInn('aaaa'), 'Client INN must contain only numbers'];
+        yield ['name', 1, 1, $fakeClientWithInn(str_repeat('1', 9)), 'Client INN length must been 10 or 12'];
+        yield ['name', 1, 1, $fakeClientWithInn(str_repeat('1', 11)), 'Client INN length must been 10 or 12'];
+        yield ['name', 1, 1, $fakeClientWithInn(str_repeat('1', 13)), 'Client INN length must been 10 or 12'];
+        yield ['name', 1, 1, $fakeClientWithInn('1234567890'), 'Client DisplayName cannot be empty'];
     }
 
     /**
@@ -138,14 +132,10 @@ final class IncomeTest extends ApiTestCase
         self::assertSame($comment, $incomeInfo->getCancellationInfo()->getComment());
     }
 
-    public function validationCancelDataProvider(): iterable
+    public function cancellationDataProvider(): iterable
     {
-        yield ['', CancelCommentType::REFUND, 'ReceiptUuid cannot be empty'];
-        yield [
-            'ReceiptUuid',
-            'InvalidCommentType',
-            'Comment is invalid. Must be one of: "Чек сформирован ошибочно", "Возврат средств"',
-        ];
+        yield ['12345678', CancelCommentType::CANCEL];
+        yield ['12345678', CancelCommentType::REFUND];
     }
 
     /**
@@ -161,12 +151,14 @@ final class IncomeTest extends ApiTestCase
         $this->client->income()->cancel($receiptId, $comment);
     }
 
-    public function calculationItemsDataProvider(): iterable
+    public function validationCancelDataProvider(): iterable
     {
-        $name = 'randomName';
-        yield [[[$name, 100, 1], [$name, 200, 2], [$name, 300, 3]], 1400];
-        yield [[[$name, 30.23, 1], [$name, 12.33, 8], [$name, 32.44, 9]], 420.83];
-        yield [[[$name, '30.23', 1], [$name, '12.33', 8], [$name, '32.44', 9]], '420.83'];
+        yield ['', CancelCommentType::REFUND, 'ReceiptUuid cannot be empty'];
+        yield [
+            'ReceiptUuid',
+            'InvalidCommentType',
+            'Comment is invalid. Must be one of: "Чек сформирован ошибочно", "Возврат средств"',
+        ];
     }
 
     /**
@@ -187,5 +179,13 @@ final class IncomeTest extends ApiTestCase
         $request = json_decode($this->mock->getLastRequest()->getBody()->getContents(), true);
 
         self::assertEquals($request['totalAmount'], $expected);
+    }
+
+    public function calculationItemsDataProvider(): iterable
+    {
+        $name = 'randomName';
+        yield [[[$name, 100, 1], [$name, 200, 2], [$name, 300, 3]], 1400];
+        yield [[[$name, 30.23, 1], [$name, 12.33, 8], [$name, 32.44, 9]], 420.83];
+        yield [[[$name, '30.23', 1], [$name, '12.33', 8], [$name, '32.44', 9]], '420.83'];
     }
 }
