@@ -9,30 +9,23 @@ use Shoman4eg\Nalog\DTO\DeviceInfo;
 use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\RequestBuilder;
-use Shoman4eg\Nalog\Util\JSON;
+use Shoman4eg\Nalog\Service\Util\JSON;
 
 /**
- * Helper class to get access tokens.
- *
- * @author Artem Dubinin <artem@dubinin.me>
- *
  * @internal this class should not be used outside the API Client, it is not part of the BC promise
  */
 final class Authenticator
 {
-    private RequestBuilder $requestBuilder;
-    private ClientInterface $httpClient;
-    private ?string $accessToken;
-    private string $deviceId;
-    private array $defaultHeaders = [
-        'Referrer' => 'https://lknpd.nalog.ru/auth/login',
-    ];
+    private ?string $accessToken = null;
 
-    public function __construct(RequestBuilder $requestBuilder, ClientInterface $httpClient, string $deviceId)
-    {
-        $this->requestBuilder = $requestBuilder;
-        $this->httpClient = $httpClient;
-        $this->deviceId = $deviceId;
+    private readonly array $defaultHeaders;
+
+    public function __construct(
+        private readonly RequestBuilder $requestBuilder,
+        private readonly ClientInterface $httpClient,
+        private readonly string $deviceId,
+    ) {
+        $this->defaultHeaders = ['Referrer' => 'https://lknpd.nalog.ru/auth/login'];
     }
 
     /**
@@ -59,7 +52,7 @@ final class Authenticator
             (new ErrorHandler())->handleResponse($response);
         }
 
-        $this->accessToken = (string)$response->getBody();
+        $this->accessToken = (string) $response->getBody();
 
         return $this->accessToken;
     }
@@ -88,7 +81,7 @@ final class Authenticator
             (new ErrorHandler())->handleResponse($response);
         }
 
-        $this->accessToken = (string)$response->getBody();
+        $this->accessToken = (string) $response->getBody();
 
         return $this->accessToken;
     }
@@ -118,9 +111,7 @@ final class Authenticator
             (new ErrorHandler())->handleResponse($response);
         }
 
-        $response = (string)$response->getBody();
-
-        return JSON::decode($response);
+        return JSON::decode((string) $response->getBody());
     }
 
     /**
@@ -144,7 +135,7 @@ final class Authenticator
             return null;
         }
 
-        $this->accessToken = (string)$response->getBody();
+        $this->accessToken = (string) $response->getBody();
 
         return $this->accessToken;
     }

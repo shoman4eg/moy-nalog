@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class TaxTest extends ApiTestCase
 {
     public function testHistory(): void

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Api;
 
-use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\ErrorHandler;
@@ -12,23 +11,15 @@ use Shoman4eg\Nalog\Model\User\UserType;
 use Shoman4eg\Nalog\RequestBuilder;
 use Webmozart\Assert\Assert;
 
-/**
- * @author Artem Dubinin <artem@dubinin.me>
- */
 final class Receipt extends BaseHttpApi
 {
-    private UserType $profile;
-    private string $endpoint;
-
     public function __construct(
         ClientInterface $httpClient,
         RequestBuilder $requestBuilder,
-        UserType $profile,
-        string $endpoint
+        private readonly UserType $profile,
+        private readonly string $endpoint,
     ) {
         parent::__construct($httpClient, $requestBuilder);
-        $this->profile = $profile;
-        $this->endpoint = $endpoint;
     }
 
     public function printUrl(string $receiptUuid): string
@@ -37,10 +28,9 @@ final class Receipt extends BaseHttpApi
     }
 
     /**
-     * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      *
-     * @deprecated
+     * @deprecated use printUrl() instead
      */
     public function print(string $receiptUuid): ResponseInterface
     {
@@ -56,7 +46,6 @@ final class Receipt extends BaseHttpApi
     }
 
     /**
-     * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
     public function json(string $receiptUuid): string
@@ -69,7 +58,7 @@ final class Receipt extends BaseHttpApi
             (new ErrorHandler())->handleResponse($response);
         }
 
-        return $response->getBody()->__toString();
+        return (string) $response->getBody();
     }
 
     private function composePrintUrl(string $receiptUuid): string

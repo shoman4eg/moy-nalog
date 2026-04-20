@@ -4,17 +4,15 @@ declare(strict_types=1);
 namespace Shoman4eg\Nalog\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\Exception\Domain\UnauthorizedException;
 use Shoman4eg\Nalog\Exception\DomainException;
 
 /**
- * @author Artem Dubinin <artem@dubinin.me>
- *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class ApiClientTest extends ApiTestCase
 {
     /**

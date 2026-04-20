@@ -10,30 +10,25 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- *
  * @internal this class should not be used outside the API Client, it is not part of the BC promise
  */
-final class RequestBuilder
+final readonly class RequestBuilder
 {
     private RequestFactoryInterface $requestFactory;
     private StreamFactoryInterface $streamFactory;
 
     public function __construct(
         ?RequestFactoryInterface $requestFactory = null,
-        ?StreamFactoryInterface $streamFactory = null
+        ?StreamFactoryInterface $streamFactory = null,
     ) {
-        $this->requestFactory = $requestFactory ?: Psr17FactoryDiscovery::findRequestFactory();
-        $this->streamFactory = $streamFactory ?: Psr17FactoryDiscovery::findStreamFactory();
+        $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
+        $this->streamFactory = $streamFactory ?? Psr17FactoryDiscovery::findStreamFactory();
     }
 
     /**
-     * Creates a new PSR-7 request.
-     *
      * @param array<string, array|string> $headers name => value or name=>[value]
-     * @param null|StreamInterface|string $body    request body
      */
-    public function create(string $method, string $uri, array $headers = [], $body = null): RequestInterface
+    public function create(string $method, string $uri, array $headers = [], StreamInterface|string|null $body = null): RequestInterface
     {
         $request = $this->requestFactory->createRequest($method, $uri);
         foreach ($headers as $name => $value) {

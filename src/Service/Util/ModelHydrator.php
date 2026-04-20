@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Shoman4eg\Nalog\Util;
+namespace Shoman4eg\Nalog\Service\Util;
 
 use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\Exception\HydrationException;

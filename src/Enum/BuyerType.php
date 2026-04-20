@@ -1,19 +1,16 @@
 <?php
+declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Enum;
 
-class BuyerType
+enum BuyerType: string implements \JsonSerializable
 {
-    public const PERSON = 'PERSON';
-    public const COMPANY = 'COMPANY';
-    public const FOREIGN_AGENCY = 'FOREIGN_AGENCY';
+    case PERSON = 'PERSON';
+    case COMPANY = 'COMPANY';
+    case FOREIGN_AGENCY = 'FOREIGN_AGENCY';
 
-    public static function all(): array
+    public function jsonSerialize(): string
     {
-        return [
-            self::PERSON,
-            self::COMPANY,
-            self::FOREIGN_AGENCY,
-        ];
+        return $this->value;
     }
 }

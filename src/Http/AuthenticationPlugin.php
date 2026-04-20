@@ -8,7 +8,7 @@ use Http\Promise\Promise;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Shoman4eg\Nalog\Util\JSON;
+use Shoman4eg\Nalog\Service\Util\JSON;
 
 /**
  * This will automatically refresh expired access token.

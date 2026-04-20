@@ -9,8 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\RequestBuilder;
-use Shoman4eg\Nalog\Util\JSON;
-use Shoman4eg\Nalog\Util\ModelHydrator;
+use Shoman4eg\Nalog\Service\Util\JSON;
+use Shoman4eg\Nalog\Service\Util\ModelHydrator;
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>

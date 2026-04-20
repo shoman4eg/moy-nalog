@@ -10,7 +10,7 @@ use Shoman4eg\Nalog\Http\Authenticator;
 use Shoman4eg\Nalog\Http\ClientConfigurator;
 use Shoman4eg\Nalog\Model\User\UserType;
 use Shoman4eg\Nalog\Service\Generator\DeviceIdGenerator;
-use Shoman4eg\Nalog\Util\JSON;
+use Shoman4eg\Nalog\Service\Util\JSON;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
@@ -149,6 +149,11 @@ final class ApiClient
     public function income(): Api\Income
     {
         return new Api\Income($this->getHttpClient(), $this->requestBuilder);
+    }
+
+    public function invoice(): Api\Invoice
+    {
+        return new Api\Invoice($this->getHttpClient(), $this->requestBuilder);
     }
 
     public function receipt(): Api\Receipt

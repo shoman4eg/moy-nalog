@@ -11,16 +11,14 @@ namespace Shoman4eg\Nalog\Tests;
 
 use Http\Client\Common\Plugin\HeaderAppendPlugin;
 use Nyholm\NSA;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use Shoman4eg\Nalog\Http\ClientConfigurator;
 
 /**
- * @author Artem Dubinin <artem@dubinin.me>
- *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class HttpClientConfiguratorTest extends TestCase
 {
     public function testAppendPlugin(): void
