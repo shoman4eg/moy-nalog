@@ -66,7 +66,7 @@ final class ApiClient
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
-    public function createNewAccessToken(string $username, string $password): string
+    public function createNewAccessToken(string $username, #[\SensitiveParameter] string $password): string
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
 
