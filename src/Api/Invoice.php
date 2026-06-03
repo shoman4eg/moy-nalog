@@ -41,7 +41,7 @@ final class Invoice extends BaseHttpApi
             'services' => [new DTO\InvoiceServiceItem($name, $amount, $quantity)],
             'requestTime' => new DTO\DateTime(new \DateTimeImmutable()),
             'operationTime' => new DTO\DateTime($operationTime ?? new \DateTimeImmutable()),
-            'totalAmount' => (string) $totalAmount,
+            'totalAmount' => (string)$totalAmount,
         ]);
 
         if ($response->getStatusCode() >= 400) {
@@ -51,12 +51,12 @@ final class Invoice extends BaseHttpApi
         return $this->hydrator->hydrate($response, IncomeType::class);
     }
 
-    public function cancel(int $invoiceId): void
+    public function cancel(int $invoiceId): never
     {
         throw new \BadMethodCallException('Not implemented');
     }
 
-    public function updatePaymentInfo(): void
+    public function updatePaymentInfo(): never
     {
         throw new \BadMethodCallException('Not implemented');
     }

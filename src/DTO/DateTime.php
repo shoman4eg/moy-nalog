@@ -5,9 +5,7 @@ namespace Shoman4eg\Nalog\DTO;
 
 final readonly class DateTime implements \JsonSerializable
 {
-    public function __construct(private \DateTimeInterface $dateTime)
-    {
-    }
+    public function __construct(private \DateTimeInterface $dateTime) {}
 
     public function jsonSerialize(): string
     {

@@ -6,12 +6,11 @@ namespace Shoman4eg\Nalog\DTO;
 final readonly class InvoiceServiceItem implements \JsonSerializable
 {
     public function __construct(
-        public string           $name,
+        public string $name,
         public float|int|string $amount,
-        public float|int        $quantity,
-        public ?int             $serviceNumber = 0,
-    ) {
-    }
+        public float|int $quantity,
+        public ?int $serviceNumber = 0,
+    ) {}
 
     public function jsonSerialize(): array
     {

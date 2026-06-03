@@ -21,11 +21,9 @@ final class AuthenticationPlugin implements Plugin
 
     private array $accessToken;
     private array $retryStorage = [];
-    private Authenticator $authenticator;
 
-    public function __construct(Authenticator $authenticator, string $accessToken)
+    public function __construct(private readonly Authenticator $authenticator, string $accessToken)
     {
-        $this->authenticator = $authenticator;
         $this->accessToken = JSON::decode($accessToken);
     }
 

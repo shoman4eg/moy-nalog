@@ -14,8 +14,7 @@ final readonly class DeviceInfo implements \JsonSerializable
         private string $type = self::SOURCE_TYPE_WEB,
         private string $appVersion = self::APP_VERSION,
         private string $userAgent = self::USER_AGENT,
-    ) {
-    }
+    ) {}
 
     public function jsonSerialize(): array
     {

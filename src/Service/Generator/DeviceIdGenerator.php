@@ -9,8 +9,8 @@ final readonly class DeviceIdGenerator
 
     public function __construct(
         ?IdStrategyInterface $strategy = null,
-        private int          $length = 21,
-        private bool         $lowercased = true,
+        private int $length = 21,
+        private bool $lowercased = true,
     ) {
         $this->strategy = $strategy ?? new PlatformIdStrategy();
     }

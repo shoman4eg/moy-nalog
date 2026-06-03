@@ -8,11 +8,10 @@ use Brick\Math\BigDecimal;
 final readonly class IncomeServiceItem implements \JsonSerializable
 {
     public function __construct(
-        public string           $name,
+        public string $name,
         public float|int|string $amount,
-        public float|int        $quantity,
-    ) {
-    }
+        public float|int $quantity,
+    ) {}
 
     public function jsonSerialize(): array
     {

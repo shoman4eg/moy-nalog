@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
-use Psr\Http\Client\ClientExceptionInterface;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\DTO;
 use Shoman4eg\Nalog\Enum\BuyerType;
 use Shoman4eg\Nalog\Enum\CancelCommentType;
@@ -247,7 +247,7 @@ final class IncomeTest extends ApiTestCase
 
         $query = [];
         parse_str($this->mock->getLastRequest()->getUri()->getQuery(), $query);
-        self::assertSame((string) $expected, $query['limit']);
+        self::assertSame((string)$expected, $query['limit']);
     }
 
     public static function listLimitClampDataProvider(): iterable

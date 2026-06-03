@@ -58,7 +58,7 @@ final class Receipt extends BaseHttpApi
             (new ErrorHandler())->handleResponse($response);
         }
 
-        return (string) $response->getBody();
+        return (string)$response->getBody();
     }
 
     private function composePrintUrl(string $receiptUuid): string

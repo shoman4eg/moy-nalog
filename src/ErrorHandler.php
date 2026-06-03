@@ -14,7 +14,7 @@ final class ErrorHandler
      */
     public function handleResponse(ResponseInterface $response): void
     {
-        $body = (string) $response->getBody();
+        $body = (string)$response->getBody();
 
         throw match ($response->getStatusCode()) {
             400 => new DomainExceptions\ValidationException($body),

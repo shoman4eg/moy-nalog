@@ -16,8 +16,8 @@ final class PaymentType implements CreatableFromArray
     private string $bankBik;
     private string $corrAccount;
     private bool $favorite;
-    private ?string $phone;
-    private ?string $bankId;
+    private ?string $phone = null;
+    private ?string $bankId = null;
     private string $currentAccount;
     private bool $availableForPa;
 

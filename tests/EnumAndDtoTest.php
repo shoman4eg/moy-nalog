@@ -66,7 +66,7 @@ final class EnumAndDtoTest extends TestCase
     public function testIncomeServiceItemGetTotalAmount(): void
     {
         $item = new IncomeServiceItem('service', 30.23, 3);
-        self::assertSame('90.69', (string) $item->getTotalAmount());
+        self::assertSame('90.69', (string)$item->getTotalAmount());
     }
 
     public function testIncomeServiceItemGetters(): void

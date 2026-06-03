@@ -21,7 +21,7 @@ final class Payment implements CreatableFromArray
     private string $status;
     private int $taxPeriodId;
     private string $regionName;
-    private ?\DateTimeImmutable $krsbAcceptedDate;
+    private ?\DateTimeImmutable $krsbAcceptedDate = null;
 
     private function __construct() {}
 

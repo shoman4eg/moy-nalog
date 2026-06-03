@@ -89,7 +89,7 @@ final class Income extends BaseHttpApi
             'operationTime' => new DTO\DateTime($operationTime ?? new \DateTimeImmutable()),
             'requestTime' => new DTO\DateTime(new \DateTimeImmutable()),
             'services' => $serviceItems,
-            'totalAmount' => (string) $totalAmount,
+            'totalAmount' => (string)$totalAmount,
             'client' => $client ?? new DTO\IncomeClient(),
             'paymentType' => Enum\PaymentType::CASH->value,
             'ignoreMaxTotalIncomeRestriction' => false,

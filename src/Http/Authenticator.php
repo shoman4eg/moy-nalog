@@ -17,7 +17,6 @@ use Shoman4eg\Nalog\Service\Util\JSON;
 final class Authenticator
 {
     private ?string $accessToken = null;
-
     private readonly array $defaultHeaders;
 
     public function __construct(
@@ -52,7 +51,7 @@ final class Authenticator
             (new ErrorHandler())->handleResponse($response);
         }
 
-        $this->accessToken = (string) $response->getBody();
+        $this->accessToken = (string)$response->getBody();
 
         return $this->accessToken;
     }
@@ -81,7 +80,7 @@ final class Authenticator
             (new ErrorHandler())->handleResponse($response);
         }
 
-        $this->accessToken = (string) $response->getBody();
+        $this->accessToken = (string)$response->getBody();
 
         return $this->accessToken;
     }
@@ -111,7 +110,7 @@ final class Authenticator
             (new ErrorHandler())->handleResponse($response);
         }
 
-        return JSON::decode((string) $response->getBody());
+        return JSON::decode((string)$response->getBody());
     }
 
     /**
@@ -135,7 +134,7 @@ final class Authenticator
             return null;
         }
 
-        $this->accessToken = (string) $response->getBody();
+        $this->accessToken = (string)$response->getBody();
 
         return $this->accessToken;
     }

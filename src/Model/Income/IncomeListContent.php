@@ -20,7 +20,7 @@ final class IncomeListContent extends AbstractCollection implements CreatableFro
      */
     public static function createFromArray(array $data): self
     {
-        $items = array_map(static fn (array $item) => IncomeListContentItem::createFromArray($item), $data);
+        $items = array_map(IncomeListContentItem::createFromArray(...), $data);
 
         $model = new self();
         $model->setItems($items);

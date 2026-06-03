@@ -19,8 +19,8 @@ final class Tax implements CreatableFromArray
     private float $nominalTax;
     private float $nominalOverpayment;
     private int $taxPeriodId;
-    private ?float $lastPaymentAmount;
-    private ?\DateTimeImmutable $lastPaymentDate;
+    private ?float $lastPaymentAmount = null;
+    private ?\DateTimeImmutable $lastPaymentDate = null;
     private array $regions;
 
     private function __construct() {}

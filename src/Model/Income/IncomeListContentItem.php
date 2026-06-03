@@ -19,19 +19,19 @@ final class IncomeListContentItem implements CreatableFromArray
     private int $taxPeriodId;
     private string $paymentType;
     private string $incomeType;
-    private ?string $partnerCode;
+    private ?string $partnerCode = null;
     private float $totalAmount;
-    private ?CancellationInfoType $cancellationInfo;
-    private ?string $sourceDeviceId;
-    private ?string $clientInn;
-    private ?string $clientDisplayName;
-    private ?string $partnerDisplayName;
-    private ?string $partnerLogo;
-    private ?string $partnerInn;
+    private ?CancellationInfoType $cancellationInfo = null;
+    private ?string $sourceDeviceId = null;
+    private ?string $clientInn = null;
+    private ?string $clientDisplayName = null;
+    private ?string $partnerDisplayName = null;
+    private ?string $partnerLogo = null;
+    private ?string $partnerInn = null;
     private string $inn;
     private string $profession;
     private array $description;
-    private ?string $invoiceId;
+    private ?string $invoiceId = null;
 
     private function __construct() {}
 
@@ -41,7 +41,7 @@ final class IncomeListContentItem implements CreatableFromArray
     public static function createFromArray(array $data): self
     {
         $services = array_map(
-            static fn (array $service) => ServiceItemType::fromArray($service),
+            ServiceItemType::fromArray(...),
             $data['services'] ?? []
         );
 
