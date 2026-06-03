@@ -17,10 +17,10 @@ use Shoman4eg\Nalog\Service\Util\JSON;
  */
 final class ApiClient
 {
-    private RequestBuilder $requestBuilder;
-    private ClientConfigurator $clientConfigurator;
-    private Authenticator $authenticator;
-    private ?UserType $profile;
+    private readonly RequestBuilder $requestBuilder;
+    private readonly ClientConfigurator $clientConfigurator;
+    private readonly Authenticator $authenticator;
+    private ?UserType $profile = null;
 
     /**
      * The constructor accepts already configured HTTP clients.
