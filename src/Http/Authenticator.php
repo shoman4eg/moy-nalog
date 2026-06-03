@@ -32,7 +32,7 @@ final class Authenticator
      * @throws ClientExceptionInterface
      * @throws DomainException
      */
-    public function createAccessToken(string $username, string $password): ?string
+    public function createAccessToken(string $username, #[\SensitiveParameter] string $password): ?string
     {
         $request = $this->requestBuilder->create(
             'POST',

@@ -12,7 +12,7 @@ final class ErrorHandler
     /**
      * @throws DomainException
      */
-    public function handleResponse(ResponseInterface $response): void
+    public function handleResponse(ResponseInterface $response): never
     {
         $body = (string)$response->getBody();
 
