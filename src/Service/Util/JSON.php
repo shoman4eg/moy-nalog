@@ -21,8 +21,6 @@ final class JSON
      *                          The behaviour of these constants is described on the JSON constants page.
      * @param null|int $depth   Set the maximum depth. Must be greater than zero.
      *
-     * @psalm-param null|int<1, 2147483647> $depth
-     *
      * @throws \JsonException
      */
     public static function encode($input, ?int $options = null, ?int $depth = null): string
@@ -44,8 +42,6 @@ final class JSON
      * @param null|int  $depth   user specified recursion depth
      * @param null|int  $options Bitmask of JSON decode options. Currently only JSON_BIGINT_AS_STRING is supported
      *                           (default is to cast large integers as floats)
-     *
-     * @psalm-param null|int<1, 2147483647> $depth
      *
      * @return mixed
      *

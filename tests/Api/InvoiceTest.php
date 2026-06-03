@@ -50,7 +50,7 @@ final class InvoiceTest extends ApiTestCase
         yield ['', 100, 1, 'Name cannot be empty'];
         yield ['name', '', 1, 'Amount must be int or float'];
         yield ['name', -1, 1, 'Amount must be greater than 0'];
-        yield ['name', 1, 0, 'Quantity cannot be empty'];
+        yield ['name', 1, 0, 'Quantity must be greater than 0'];
     }
 
     public function testCancelThrows(): void

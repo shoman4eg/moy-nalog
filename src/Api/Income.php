@@ -61,7 +61,6 @@ final class Income extends BaseHttpApi
         ?DTO\IncomeClient $client = null,
     ): IncomeType {
         Assert::minCount($serviceItems, 1, 'Items cannot be empty');
-        Assert::allIsInstanceOf($serviceItems, DTO\IncomeServiceItem::class);
 
         foreach ($serviceItems as $key => $serviceItem) {
             Assert::notEmpty($serviceItem->name, "Name of item[{$key}] cannot be empty");

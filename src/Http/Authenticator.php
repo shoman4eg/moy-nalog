@@ -32,7 +32,7 @@ final class Authenticator
      * @throws ClientExceptionInterface
      * @throws DomainException
      */
-    public function createAccessToken(string $username, #[\SensitiveParameter] string $password): ?string
+    public function createAccessToken(string $username, #[\SensitiveParameter] string $password): string
     {
         $request = $this->requestBuilder->create(
             'POST',
@@ -60,7 +60,7 @@ final class Authenticator
      * @throws \JsonException
      * @throws ClientExceptionInterface
      */
-    public function createAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
+    public function createAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): string
     {
         $request = $this->requestBuilder->create(
             'POST',

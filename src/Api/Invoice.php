@@ -28,8 +28,6 @@ final class Invoice extends BaseHttpApi
         Assert::notEmpty($name, 'Name cannot be empty');
         Assert::numeric($amount, 'Amount must be int or float');
         Assert::greaterThan($amount, 0, 'Amount must be greater than %2$s');
-        Assert::notEmpty($quantity, 'Quantity cannot be empty');
-        Assert::numeric($quantity, 'Quantity must be int or float');
         Assert::greaterThan($quantity, 0, 'Quantity must be greater than %2$s');
 
         $totalAmount = BigDecimal::of($amount)->multipliedBy($quantity);

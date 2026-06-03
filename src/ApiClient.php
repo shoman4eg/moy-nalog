@@ -66,7 +66,7 @@ final class ApiClient
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
-    public function createNewAccessToken(string $username, string $password): ?string
+    public function createNewAccessToken(string $username, string $password): string
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
 
@@ -109,7 +109,7 @@ final class ApiClient
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
-    public function createNewAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
+    public function createNewAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): string
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
 
