@@ -14,6 +14,9 @@ final readonly class IncomeClient implements \JsonSerializable
         public ?string $inn = null,
     ) {}
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array
     {
         return [

@@ -26,7 +26,7 @@ final readonly class RequestBuilder
     }
 
     /**
-     * @param array<string, array|string> $headers name => value or name=>[value]
+     * @param array<string, list<string>|string> $headers name => value or name=>[value]
      */
     public function create(string $method, string $uri, array $headers = [], StreamInterface|string|null $body = null): RequestInterface
     {

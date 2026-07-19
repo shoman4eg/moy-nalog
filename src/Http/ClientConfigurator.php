@@ -4,12 +4,15 @@ declare(strict_types=1);
 namespace Shoman4eg\Nalog\Http;
 
 use Http\Client\Common\Plugin;
+use Http\Client\Common\Plugin\LoggerPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
+use Http\Message\Formatter;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
+use Psr\Log\LoggerInterface;
 use Shoman4eg\Nalog\DTO\DeviceInfo;
 
 /**
@@ -74,6 +77,17 @@ final class ClientConfigurator
         }
 
         return $this->configuredClient;
+    }
+
+    /**
+     * Enable PSR-3 logging of requests and responses.
+     *
+     * Call before authenticate() so the logger sits ahead of the auth plugin.
+     */
+    public function setLogger(LoggerInterface $logger, ?Formatter $formatter = null): void
+    {
+        $this->removePlugin(LoggerPlugin::class);
+        $this->appendPlugin(new LoggerPlugin($logger, $formatter));
     }
 
     public function setEndpoint(string $endpoint): void

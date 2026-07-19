@@ -16,6 +16,9 @@ final readonly class DeviceInfo implements \JsonSerializable
         private string $userAgent = self::USER_AGENT,
     ) {}
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array
     {
         return [

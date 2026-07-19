@@ -17,6 +17,8 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
     private array $items = [];
 
     private int $key;
+
+    /** @var int<0, max> */
     private int $count;
 
     /**
@@ -80,11 +82,17 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
         throw new \RuntimeException('Cannot unset value on READ ONLY collection');
     }
 
+    /**
+     * @return int<0, max>
+     */
     public function count(): int
     {
         return $this->count;
     }
 
+    /**
+     * @param array<array-key, T> $items
+     */
     protected function setItems(array $items): void
     {
         if ($this->items !== []) {

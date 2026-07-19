@@ -33,15 +33,15 @@ final class PaymentTypeTest extends ApiTestCase
         /** @var PaymentType $paymentType */
         $paymentType = $response[0];
         self::assertCount(1, $response);
-        self::assertSame($item['id'], $paymentType->getId());
-        self::assertSame($item['phone'], $paymentType->getPhone());
-        self::assertSame($item['bankId'], $paymentType->getBankId());
-        self::assertSame($item['bankName'], $paymentType->getBankName());
-        self::assertSame($item['bankBik'], $paymentType->getBankBik());
-        self::assertSame($item['corrAccount'], $paymentType->getCorrAccount());
-        self::assertSame($item['type'], $paymentType->getType());
-        self::assertSame($item['currentAccount'], $paymentType->getCurrentAccount());
-        self::assertSame($item['availableForPa'], $paymentType->isAvailableForPa());
-        self::assertSame($item['favorite'], $paymentType->isFavorite());
+        self::assertSame($item['id'], $paymentType->id);
+        self::assertSame($item['phone'], $paymentType->phone);
+        self::assertSame($item['bankId'], $paymentType->bankId);
+        self::assertSame($item['bankName'], $paymentType->bankName);
+        self::assertSame($item['bankBik'], $paymentType->bankBik);
+        self::assertSame($item['corrAccount'], $paymentType->corrAccount);
+        self::assertSame($item['type'], $paymentType->type);
+        self::assertSame($item['currentAccount'], $paymentType->currentAccount);
+        self::assertSame($item['availableForPa'], $paymentType->availableForPa);
+        self::assertSame($item['favorite'], $paymentType->favorite);
     }
 }

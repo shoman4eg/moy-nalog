@@ -30,7 +30,9 @@ final class Invoice extends BaseHttpApi
         Assert::greaterThan($amount, 0, 'Amount must be greater than %2$s');
         Assert::greaterThan($quantity, 0, 'Quantity must be greater than %2$s');
 
-        $totalAmount = BigDecimal::of($amount)->multipliedBy($quantity);
+        $amountForTotal = \is_float($amount) ? (string)$amount : $amount;
+        $quantityForTotal = \is_float($quantity) ? (string)$quantity : $quantity;
+        $totalAmount = BigDecimal::of($amountForTotal)->multipliedBy($quantityForTotal);
 
         $response = $this->httpPost('/invoice', [
             'paymentType' => Enum\PaymentType::ACCOUNT->value,

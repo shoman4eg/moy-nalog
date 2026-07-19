@@ -8,22 +8,23 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
-final class IncomeType implements CreatableFromArray
+final readonly class IncomeType implements CreatableFromArray
 {
-    private string $approvedReceiptUuid;
+    public string $approvedReceiptUuid;
 
-    private function __construct() {}
-
-    public static function createFromArray(array $data): self
+    /**
+     * @param array{approvedReceiptUuid: string} $data
+     */
+    private function __construct(array $data)
     {
-        $model = new self();
-        $model->approvedReceiptUuid = $data['approvedReceiptUuid'];
-
-        return $model;
+        $this->approvedReceiptUuid = $data['approvedReceiptUuid'];
     }
 
-    public function getApprovedReceiptUuid(): string
+    /**
+     * @param array{approvedReceiptUuid: string} $data
+     */
+    public static function createFromArray(array $data): self
     {
-        return $this->approvedReceiptUuid;
+        return new self($data);
     }
 }

@@ -63,6 +63,39 @@ $client->income()->cancel($uuid, CancelCommentType::REFUND); // enum instance
 
 ---
 
+### Response-модели — геттеры удалены, свойства стали публичными
+
+Все модели ответов теперь имеют публичные `readonly` свойства вместо геттеров.
+Тривиальные геттеры (`getApprovedReceiptUuid()`, `getPhone()`, `getRegionName()`
+и т.п.) удалены — обращайтесь к свойствам напрямую.
+
+```php
+// Было
+$income->getApprovedReceiptUuid(); // string
+$user->getPhone();                 // string
+
+// Стало
+$income->approvedReceiptUuid;      // string
+$user->phone;                      // string
+```
+
+Это касается и составных геттеров:
+
+```php
+// Было
+$incomeList->getContent();   // IncomeListContent
+$item->isCancelled();        // bool
+
+// Стало
+$incomeList->content;        // IncomeListContent
+$item->cancelled;            // bool
+```
+
+Затронутые пространства имён моделей:
+`Model\Income\*`, `Model\Tax\*`, `Model\PaymentType\*`, `Model\User\UserType`.
+
+---
+
 ### IncomeClient / InvoiceClient — параметр incomeType
 
 ```php
@@ -76,15 +109,24 @@ new IncomeClient(incomeType: IncomeType::INDIVIDUAL); // enum instance
 
 ---
 
-### IncomeClient::getIncomeType() — возвращаемый тип
+### IncomeClient / InvoiceClient — геттеры удалены, свойства стали публичными
+
+`IncomeClient` (и `InvoiceClient`) теперь `final readonly` классы с публичными
+свойствами. У `IncomeClient` геттеры `getIncomeType()`, `getInn()`,
+`getDisplayName()` удалены — обращайтесь к свойствам напрямую. Тип `incomeType`
+изменился со `string` на enum `IncomeType`.
 
 ```php
-// Было: string
-$type = $incomeClient->getIncomeType(); // 'FROM_INDIVIDUAL'
+// Было
+$incomeClient->getIncomeType();  // string 'FROM_INDIVIDUAL'
+$incomeClient->getInn();         // ?string
+$incomeClient->getDisplayName(); // ?string
 
-// Стало: IncomeType (enum)
-$type = $incomeClient->getIncomeType(); // IncomeType::INDIVIDUAL
-$type->value;                           // 'FROM_INDIVIDUAL'
+// Стало
+$incomeClient->incomeType;        // IncomeType::INDIVIDUAL (enum)
+$incomeClient->incomeType->value; // 'FROM_INDIVIDUAL'
+$incomeClient->inn;               // ?string
+$incomeClient->displayName;       // ?string
 ```
 
 ---

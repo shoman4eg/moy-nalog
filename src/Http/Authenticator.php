@@ -10,6 +10,7 @@ use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\RequestBuilder;
 use Shoman4eg\Nalog\Service\Util\JSON;
+use Webmozart\Assert\Assert;
 
 /**
  * @internal this class should not be used outside the API Client, it is not part of the BC promise
@@ -17,6 +18,8 @@ use Shoman4eg\Nalog\Service\Util\JSON;
 final class Authenticator
 {
     private ?string $accessToken = null;
+
+    /** @var array<string, string> */
     private readonly array $defaultHeaders;
 
     public function __construct(
@@ -110,7 +113,17 @@ final class Authenticator
             (new ErrorHandler())->handleResponse($response);
         }
 
-        return JSON::decode((string)$response->getBody());
+        $result = JSON::decode((string)$response->getBody());
+        Assert::isArray($result);
+        Assert::string($result['challengeToken']);
+        Assert::string($result['expireDate']);
+        Assert::integer($result['expireIn']);
+
+        return [
+            'challengeToken' => $result['challengeToken'],
+            'expireDate' => $result['expireDate'],
+            'expireIn' => $result['expireIn'],
+        ];
     }
 
     /**

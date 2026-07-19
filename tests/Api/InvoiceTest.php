@@ -26,7 +26,7 @@ final class InvoiceTest extends ApiTestCase
         $this->appendSuccessJson(['approvedReceiptUuid' => $receiptId]);
 
         $response = $this->client->invoice()->create('service', 100, 2);
-        self::assertSame($receiptId, $response->getApprovedReceiptUuid());
+        self::assertSame($receiptId, $response->approvedReceiptUuid);
     }
 
     /**

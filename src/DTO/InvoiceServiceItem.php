@@ -12,6 +12,9 @@ final readonly class InvoiceServiceItem implements \JsonSerializable
         public ?int $serviceNumber = 0,
     ) {}
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array
     {
         return array_filter([

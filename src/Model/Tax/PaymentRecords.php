@@ -9,6 +9,8 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  *
+ * @phpstan-import-type PaymentData from Payment
+ *
  * @extends AbstractCollection<Payment>
  */
 final class PaymentRecords extends AbstractCollection implements CreatableFromArray
@@ -16,6 +18,8 @@ final class PaymentRecords extends AbstractCollection implements CreatableFromAr
     private function __construct() {}
 
     /**
+     * @param array{records: list<PaymentData>} $data
+     *
      * @throws \Exception
      */
     public static function createFromArray(array $data): self

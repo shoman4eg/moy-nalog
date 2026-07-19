@@ -9,10 +9,18 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use Http\Client\Common\Plugin\HeaderAppendPlugin;
+use Http\Client\Common\Plugin\LoggerPlugin;
 use Nyholm\NSA;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\AbstractLogger;
+use Psr\Log\NullLogger;
+use Shoman4eg\Nalog\ApiClient;
 use Shoman4eg\Nalog\Http\ClientConfigurator;
 
 /**
@@ -79,5 +87,74 @@ final class HttpClientConfiguratorTest extends TestCase
         $this->assertCount(2, $plugins);
         $this->assertEquals($plugin0, $plugins[0]);
         $this->assertEquals($plugin1, $plugins[1]);
+    }
+
+    public function testSetLoggerAppendsLoggerPlugin(): void
+    {
+        $hcc = new ClientConfigurator();
+        $hcc->setLogger(new NullLogger());
+
+        $plugins = NSA::getProperty($hcc, 'appendPlugins');
+        $this->assertCount(1, $plugins);
+        $this->assertInstanceOf(LoggerPlugin::class, $plugins[0]);
+    }
+
+    public function testSetLoggerIsIdempotent(): void
+    {
+        $hcc = new ClientConfigurator();
+        $hcc->setLogger(new NullLogger());
+        $hcc->setLogger(new NullLogger());
+
+        // Calling setLogger twice replaces the plugin instead of stacking a second one.
+        $this->assertCount(1, NSA::getProperty($hcc, 'appendPlugins'));
+    }
+
+    public function testLoggerRecordsRequestAndResponse(): void
+    {
+        $logger = new class extends AbstractLogger {
+            /** @var list<string> */
+            public array $messages = [];
+
+            public function log($level, string|\Stringable $message, array $context = []): void
+            {
+                $this->messages[] = (string)$message;
+            }
+        };
+
+        $userJson = json_encode([
+            'lastName' => null,
+            'id' => 1000000,
+            'displayName' => 'Surname Name',
+            'middleName' => null,
+            'email' => null,
+            'phone' => '79000000000',
+            'inn' => '300000000000',
+            'snils' => null,
+            'avatarExists' => false,
+            'initialRegistrationDate' => null,
+            'registrationDate' => null,
+            'firstReceiptRegisterTime' => null,
+            'firstReceiptCancelTime' => null,
+            'hideCancelledReceipt' => false,
+            'registerAvailable' => null,
+            'status' => 'ACTIVE',
+            'restrictedMode' => false,
+            'pfrUrl' => null,
+            'login' => null,
+        ], JSON_THROW_ON_ERROR);
+
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], $userJson),
+        ]);
+        $configurator = new ClientConfigurator(new Client(['handler' => new HandlerStack($mock)]));
+        $configurator->setLogger($logger);
+
+        $client = new ApiClient(clientConfigurator: $configurator);
+        $client->authenticate(ApiTestCase::getAccessToken());
+        $client->user()->get();
+
+        $this->assertNotEmpty($logger->messages);
+        $this->assertStringContainsString('Sending request', implode("\n", $logger->messages));
+        $this->assertStringContainsString('Received response', implode("\n", $logger->messages));
     }
 }

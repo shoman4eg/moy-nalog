@@ -7,163 +7,90 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
+ * @phpstan-type UserTypeData array{
+ *     id: int,
+ *     lastName: null|string,
+ *     displayName: string,
+ *     middleName: null|string,
+ *     email?: null|string,
+ *     phone: string,
+ *     inn: string,
+ *     snils: null|string,
+ *     avatarExists: bool,
+ *     initialRegistrationDate: null|string,
+ *     registrationDate: null|string,
+ *     firstReceiptRegisterTime: null|string,
+ *     firstReceiptCancelTime: null|string,
+ *     hideCancelledReceipt: bool,
+ *     registerAvailable: mixed,
+ *     status: null|string,
+ *     restrictedMode: bool,
+ *     pfrUrl: null|string,
+ *     login: null|string,
+ * }
  */
-final class UserType implements CreatableFromArray
+final readonly class UserType implements CreatableFromArray
 {
-    private ?string $lastName = null;
-    private int $id;
-    private string $displayName;
-    private ?string $middleName = null;
-    private ?string $email = null;
-    private string $phone;
-    private string $inn;
-    private ?string $snils = null;
-    private bool $avatarExists;
-    private ?\DateTimeInterface $initialRegistrationDate = null;
-    private ?\DateTimeInterface $registrationDate = null;
-    private ?\DateTimeInterface $firstReceiptRegisterTime = null;
-    private ?\DateTimeInterface $firstReceiptCancelTime = null;
-    private bool $hideCancelledReceipt;
+    public ?string $lastName;
+    public int $id;
+    public string $displayName;
+    public ?string $middleName;
+    public ?string $email;
+    public string $phone;
+    public string $inn;
+    public ?string $snils;
+    public bool $avatarExists;
+    public ?\DateTimeInterface $initialRegistrationDate;
+    public ?\DateTimeInterface $registrationDate;
+    public ?\DateTimeInterface $firstReceiptRegisterTime;
+    public ?\DateTimeInterface $firstReceiptCancelTime;
+    public bool $hideCancelledReceipt;
+    public mixed $registerAvailable;
+    public ?string $status;
+    public bool $restrictedMode;
+    public ?string $pfrUrl;
+    public ?string $login;
 
-    /** @var mixed */
-    private $registerAvailable;
-
-    private ?string $status = null;
-    private bool $restrictedMode;
-    private ?string $pfrUrl = null;
-    private ?string $login = null;
-
-    final private function __construct() {}
-
-    public static function createFromArray(array $data): self
+    /**
+     * @param UserTypeData $data
+     */
+    final private function __construct(array $data)
     {
-        $model = new self();
-        $model->id = $data['id'];
-        $model->lastName = $data['lastName'];
-        $model->displayName = $data['displayName'];
-        $model->middleName = $data['middleName'];
-        $model->email = $data['email'] ?? null;
-        $model->phone = $data['phone'];
-        $model->inn = $data['inn'];
-        $model->snils = $data['snils'];
-        $model->avatarExists = $data['avatarExists'];
-        $model->initialRegistrationDate = $data['initialRegistrationDate'] !== null
+        $this->id = $data['id'];
+        $this->lastName = $data['lastName'];
+        $this->displayName = $data['displayName'];
+        $this->middleName = $data['middleName'];
+        $this->email = $data['email'] ?? null;
+        $this->phone = $data['phone'];
+        $this->inn = $data['inn'];
+        $this->snils = $data['snils'];
+        $this->avatarExists = $data['avatarExists'];
+        $this->initialRegistrationDate = $data['initialRegistrationDate'] !== null
             ? new \DateTimeImmutable($data['initialRegistrationDate'])
             : null;
-        $model->registrationDate = $data['registrationDate'] !== null
+        $this->registrationDate = $data['registrationDate'] !== null
             ? new \DateTimeImmutable($data['registrationDate'])
             : null;
-        $model->firstReceiptRegisterTime = $data['firstReceiptRegisterTime'] !== null
+        $this->firstReceiptRegisterTime = $data['firstReceiptRegisterTime'] !== null
             ? new \DateTimeImmutable($data['firstReceiptRegisterTime'])
             : null;
-        $model->firstReceiptCancelTime = $data['firstReceiptCancelTime'] !== null
+        $this->firstReceiptCancelTime = $data['firstReceiptCancelTime'] !== null
             ? new \DateTimeImmutable($data['firstReceiptCancelTime'])
             : null;
-        $model->hideCancelledReceipt = $data['hideCancelledReceipt'];
-        $model->registerAvailable = $data['registerAvailable'];
-        $model->status = $data['status'];
-        $model->restrictedMode = $data['restrictedMode'];
-        $model->pfrUrl = $data['pfrUrl'];
-        $model->login = $data['login'];
-
-        return $model;
-    }
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function getInn(): string
-    {
-        return $this->inn;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function getDisplayName(): string
-    {
-        return $this->displayName;
-    }
-
-    public function isHideCancelledReceipt(): bool
-    {
-        return $this->hideCancelledReceipt;
+        $this->hideCancelledReceipt = $data['hideCancelledReceipt'];
+        $this->registerAvailable = $data['registerAvailable'];
+        $this->status = $data['status'];
+        $this->restrictedMode = $data['restrictedMode'];
+        $this->pfrUrl = $data['pfrUrl'];
+        $this->login = $data['login'];
     }
 
     /**
-     * @return mixed
+     * @param UserTypeData $data
      */
-    public function getRegisterAvailable()
+    public static function createFromArray(array $data): self
     {
-        return $this->registerAvailable;
-    }
-
-    public function getMiddleName(): ?string
-    {
-        return $this->middleName;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function getPhone(): string
-    {
-        return $this->phone;
-    }
-
-    public function isAvatarExists(): bool
-    {
-        return $this->avatarExists;
-    }
-
-    public function getInitialRegistrationDate(): ?\DateTimeInterface
-    {
-        return $this->initialRegistrationDate;
-    }
-
-    public function getRegistrationDate(): ?\DateTimeInterface
-    {
-        return $this->registrationDate;
-    }
-
-    public function getFirstReceiptRegisterTime(): ?\DateTimeInterface
-    {
-        return $this->firstReceiptRegisterTime;
-    }
-
-    public function getFirstReceiptCancelTime(): ?\DateTimeInterface
-    {
-        return $this->firstReceiptCancelTime;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function isRestrictedMode(): bool
-    {
-        return $this->restrictedMode;
-    }
-
-    public function getPfrUrl(): ?string
-    {
-        return $this->pfrUrl;
-    }
-
-    public function getLogin(): ?string
-    {
-        return $this->login;
-    }
-
-    public function getSnils(): ?string
-    {
-        return $this->snils;
+        return new self($data);
     }
 }

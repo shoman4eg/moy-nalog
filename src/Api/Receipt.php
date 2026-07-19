@@ -52,7 +52,7 @@ final class Receipt extends BaseHttpApi
     {
         Assert::notEmpty($receiptUuid);
 
-        $response = $this->httpGet(sprintf('/receipt/%s/%s/json', $this->profile->getInn(), $receiptUuid));
+        $response = $this->httpGet(sprintf('/receipt/%s/%s/json', $this->profile->inn, $receiptUuid));
 
         if ($response->getStatusCode() >= 400) {
             (new ErrorHandler())->handleResponse($response);
@@ -65,6 +65,6 @@ final class Receipt extends BaseHttpApi
     {
         Assert::notEmpty($receiptUuid);
 
-        return sprintf('/receipt/%s/%s/print', $this->profile->getInn(), $receiptUuid);
+        return sprintf('/receipt/%s/%s/print', $this->profile->inn, $receiptUuid);
     }
 }

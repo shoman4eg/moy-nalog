@@ -131,7 +131,8 @@ final class ApiClient
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
         $this->clientConfigurator->appendPlugin(new AuthenticationPlugin($this->authenticator, $accessToken));
-        if (($token = JSON::decode($accessToken)) && array_key_exists('profile', $token)) {
+        $token = JSON::decode($accessToken);
+        if (\is_array($token) && array_key_exists('profile', $token)) {
             $this->profile = UserType::createFromArray($token['profile']);
         }
         $this->authenticator->setAccessToken($accessToken);
@@ -179,6 +180,11 @@ final class ApiClient
     public function tax(): Api\Tax
     {
         return new Api\Tax($this->getHttpClient(), $this->requestBuilder);
+    }
+
+    public function taxpayer(): Api\Taxpayer
+    {
+        return new Api\Taxpayer($this->getHttpClient(), $this->requestBuilder);
     }
 
     private function getHttpClient(): ClientInterface

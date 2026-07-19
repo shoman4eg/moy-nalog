@@ -13,6 +13,9 @@ final readonly class IncomeServiceItem implements \JsonSerializable
         public float|int $quantity,
     ) {}
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array
     {
         return [
@@ -24,6 +27,9 @@ final readonly class IncomeServiceItem implements \JsonSerializable
 
     public function getTotalAmount(): BigDecimal
     {
-        return BigDecimal::of($this->amount)->multipliedBy($this->quantity);
+        $amount = \is_float($this->amount) ? (string)$this->amount : $this->amount;
+        $quantity = \is_float($this->quantity) ? (string)$this->quantity : $this->quantity;
+
+        return BigDecimal::of($amount)->multipliedBy($quantity);
     }
 }

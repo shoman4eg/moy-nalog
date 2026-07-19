@@ -14,6 +14,9 @@ final readonly class InvoiceClient implements \JsonSerializable
         public ?string $inn = null,
     ) {}
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array
     {
         return [

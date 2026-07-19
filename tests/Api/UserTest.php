@@ -39,29 +39,29 @@ final class UserTest extends ApiTestCase
 
         $response = $this->client->user()->get();
 
-        self::assertNull($response->getLastName());
-        self::assertSame($data['id'], $response->getId());
-        self::assertSame($data['displayName'], $response->getDisplayName());
-        self::assertSame($data['email'], $response->getEmail());
-        self::assertSame($data['phone'], $response->getPhone());
-        self::assertSame($data['inn'], $response->getInn());
-        self::assertSame($data['snils'], $response->getSnils());
-        self::assertSame($data['avatarExists'], $response->isAvatarExists());
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->getInitialRegistrationDate());
+        self::assertNull($response->lastName);
+        self::assertSame($data['id'], $response->id);
+        self::assertSame($data['displayName'], $response->displayName);
+        self::assertSame($data['email'], $response->email);
+        self::assertSame($data['phone'], $response->phone);
+        self::assertSame($data['inn'], $response->inn);
+        self::assertSame($data['snils'], $response->snils);
+        self::assertSame($data['avatarExists'], $response->avatarExists);
+        self::assertInstanceOf(\DateTimeImmutable::class, $response->initialRegistrationDate);
         self::assertSame(
             strtotime($data['initialRegistrationDate']),
-            $response->getInitialRegistrationDate()->getTimestamp()
+            $response->initialRegistrationDate->getTimestamp()
         );
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->getFirstReceiptRegisterTime());
+        self::assertInstanceOf(\DateTimeImmutable::class, $response->firstReceiptRegisterTime);
         self::assertSame(
             strtotime($data['firstReceiptRegisterTime']),
-            $response->getFirstReceiptRegisterTime()->getTimestamp()
+            $response->firstReceiptRegisterTime->getTimestamp()
         );
-        self::assertNull($response->getFirstReceiptCancelTime());
-        self::assertNull($response->getRegisterAvailable());
-        self::assertSame($data['login'], $response->getLogin());
-        self::assertSame($data['pfrUrl'], $response->getPfrUrl());
-        self::assertSame($data['status'], $response->getStatus());
-        self::assertSame($data['hideCancelledReceipt'], $response->isHideCancelledReceipt());
+        self::assertNull($response->firstReceiptCancelTime);
+        self::assertNull($response->registerAvailable);
+        self::assertSame($data['login'], $response->login);
+        self::assertSame($data['pfrUrl'], $response->pfrUrl);
+        self::assertSame($data['status'], $response->status);
+        self::assertSame($data['hideCancelledReceipt'], $response->hideCancelledReceipt);
     }
 }

@@ -7,38 +7,73 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
+ * @phpstan-import-type ServiceItemData from ServiceItemType
+ * @phpstan-import-type CancellationInfoData from CancellationInfoType
+ *
+ * @phpstan-type IncomeListContentItemData array{
+ *     approvedReceiptUuid: string,
+ *     name: string,
+ *     services?: list<ServiceItemData>,
+ *     operationTime: string,
+ *     requestTime: string,
+ *     registerTime: string,
+ *     taxPeriodId: int,
+ *     paymentType: string,
+ *     incomeType: string,
+ *     partnerCode: string|null,
+ *     totalAmount: float|int,
+ *     cancellationInfo: CancellationInfoData|null,
+ *     sourceDeviceId: string|null,
+ *     clientInn: string|null,
+ *     clientDisplayName: string|null,
+ *     partnerDisplayName: string|null,
+ *     partnerLogo: string|null,
+ *     partnerInn: string|null,
+ *     inn: string,
+ *     profession: string,
+ *     description?: list<string>,
+ *     invoiceId: string|null,
+ * }
  */
-final class IncomeListContentItem implements CreatableFromArray
+final readonly class IncomeListContentItem implements CreatableFromArray
 {
-    private string $approvedReceiptUuid;
-    private string $name;
-    private array $services;
-    private \DateTimeInterface $operationTime;
-    private \DateTimeInterface $requestTime;
-    private \DateTimeInterface $registerTime;
-    private int $taxPeriodId;
-    private string $paymentType;
-    private string $incomeType;
-    private ?string $partnerCode = null;
-    private float $totalAmount;
-    private ?CancellationInfoType $cancellationInfo = null;
-    private ?string $sourceDeviceId = null;
-    private ?string $clientInn = null;
-    private ?string $clientDisplayName = null;
-    private ?string $partnerDisplayName = null;
-    private ?string $partnerLogo = null;
-    private ?string $partnerInn = null;
-    private string $inn;
-    private string $profession;
-    private array $description;
-    private ?string $invoiceId = null;
+    public string $approvedReceiptUuid;
+    public string $name;
 
-    private function __construct() {}
+    /** @var array<int, ServiceItemType> */
+    public array $services;
+
+    public \DateTimeInterface $operationTime;
+    public \DateTimeInterface $requestTime;
+    public \DateTimeInterface $registerTime;
+    public int $taxPeriodId;
+    public string $paymentType;
+    public string $incomeType;
+    public ?string $partnerCode;
+    public float $totalAmount;
+    public ?CancellationInfoType $cancellationInfo;
+    public bool $cancelled;
+    public ?string $sourceDeviceId;
+    public ?string $clientInn;
+    public ?string $clientDisplayName;
+    public ?string $partnerDisplayName;
+    public ?string $partnerLogo;
+    public ?string $partnerInn;
+    public string $inn;
+    public string $profession;
+
+    /** @var array<int, string> */
+    public array $description;
+
+    public ?string $invoiceId;
 
     /**
+     * @param IncomeListContentItemData $data
+     *
      * @throws \Exception
      */
-    public static function createFromArray(array $data): self
+    private function __construct(array $data)
     {
         $services = array_map(
             ServiceItemType::fromArray(...),
@@ -50,151 +85,38 @@ final class IncomeListContentItem implements CreatableFromArray
             $cancellationInfo = CancellationInfoType::createFromArray($data['cancellationInfo']);
         }
 
-        $model = new self();
-        $model->approvedReceiptUuid = $data['approvedReceiptUuid'];
-        $model->name = $data['name'];
-        $model->services = $services;
-        $model->operationTime = new \DateTimeImmutable($data['operationTime']);
-        $model->requestTime = new \DateTimeImmutable($data['requestTime']);
-        $model->registerTime = new \DateTimeImmutable($data['registerTime']);
-        $model->taxPeriodId = $data['taxPeriodId'];
-        $model->paymentType = $data['paymentType'];
-        $model->incomeType = $data['incomeType'];
-        $model->partnerCode = $data['partnerCode'];
-        $model->totalAmount = (float)$data['totalAmount'];
-        $model->cancellationInfo = $cancellationInfo;
-        $model->sourceDeviceId = $data['sourceDeviceId'];
-        $model->clientInn = $data['clientInn'];
-        $model->clientDisplayName = $data['clientDisplayName'];
-        $model->partnerDisplayName = $data['partnerDisplayName'];
-        $model->partnerLogo = $data['partnerLogo'];
-        $model->partnerInn = $data['partnerInn'];
-        $model->inn = $data['inn'];
-        $model->profession = $data['profession'];
-        $model->description = $data['description'] ?? [];
-        $model->invoiceId = $data['invoiceId'];
-
-        return $model;
-    }
-
-    public function getApprovedReceiptUuid(): string
-    {
-        return $this->approvedReceiptUuid;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
+        $this->approvedReceiptUuid = $data['approvedReceiptUuid'];
+        $this->name = $data['name'];
+        $this->services = $services;
+        $this->operationTime = new \DateTimeImmutable($data['operationTime']);
+        $this->requestTime = new \DateTimeImmutable($data['requestTime']);
+        $this->registerTime = new \DateTimeImmutable($data['registerTime']);
+        $this->taxPeriodId = $data['taxPeriodId'];
+        $this->paymentType = $data['paymentType'];
+        $this->incomeType = $data['incomeType'];
+        $this->partnerCode = $data['partnerCode'];
+        $this->totalAmount = (float)$data['totalAmount'];
+        $this->cancellationInfo = $cancellationInfo;
+        $this->cancelled = $cancellationInfo !== null;
+        $this->sourceDeviceId = $data['sourceDeviceId'];
+        $this->clientInn = $data['clientInn'];
+        $this->clientDisplayName = $data['clientDisplayName'];
+        $this->partnerDisplayName = $data['partnerDisplayName'];
+        $this->partnerLogo = $data['partnerLogo'];
+        $this->partnerInn = $data['partnerInn'];
+        $this->inn = $data['inn'];
+        $this->profession = $data['profession'];
+        $this->description = $data['description'] ?? [];
+        $this->invoiceId = $data['invoiceId'];
     }
 
     /**
-     * @return ServiceItemType[]
+     * @param IncomeListContentItemData $data
+     *
+     * @throws \Exception
      */
-    public function getServices(): array
+    public static function createFromArray(array $data): self
     {
-        return $this->services;
-    }
-
-    public function getOperationTime(): \DateTimeInterface
-    {
-        return $this->operationTime;
-    }
-
-    public function getRequestTime(): \DateTimeInterface
-    {
-        return $this->requestTime;
-    }
-
-    public function getRegisterTime(): \DateTimeInterface
-    {
-        return $this->registerTime;
-    }
-
-    public function getTaxPeriodId(): int
-    {
-        return $this->taxPeriodId;
-    }
-
-    public function getPaymentType(): string
-    {
-        return $this->paymentType;
-    }
-
-    public function getIncomeType(): string
-    {
-        return $this->incomeType;
-    }
-
-    public function getPartnerCode(): ?string
-    {
-        return $this->partnerCode;
-    }
-
-    public function getTotalAmount(): float
-    {
-        return $this->totalAmount;
-    }
-
-    public function getCancellationInfo(): ?CancellationInfoType
-    {
-        return $this->cancellationInfo;
-    }
-
-    public function isCancelled(): bool
-    {
-        return $this->cancellationInfo !== null;
-    }
-
-    public function getSourceDeviceId(): ?string
-    {
-        return $this->sourceDeviceId;
-    }
-
-    public function getClientInn(): ?string
-    {
-        return $this->clientInn;
-    }
-
-    public function getClientDisplayName(): ?string
-    {
-        return $this->clientDisplayName;
-    }
-
-    public function getPartnerDisplayName(): ?string
-    {
-        return $this->partnerDisplayName;
-    }
-
-    public function getPartnerLogo(): ?string
-    {
-        return $this->partnerLogo;
-    }
-
-    public function getPartnerInn(): ?string
-    {
-        return $this->partnerInn;
-    }
-
-    public function getInn(): string
-    {
-        return $this->inn;
-    }
-
-    public function getProfession(): string
-    {
-        return $this->profession;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getDescription(): array
-    {
-        return $this->description;
-    }
-
-    public function getInvoiceId(): ?string
-    {
-        return $this->invoiceId;
+        return new self($data);
     }
 }

@@ -27,6 +27,7 @@ final class JSON
     {
         $options ??= 0;
         $depth ??= 512;
+        \assert($depth >= 1);
 
         return \json_encode($input, JSON_THROW_ON_ERROR | $options, $depth);
     }
@@ -52,6 +53,7 @@ final class JSON
         $assoc ??= true;
         $depth ??= 512;
         $options ??= 0;
+        \assert($depth >= 1);
 
         return \json_decode($json, $assoc, $depth, JSON_THROW_ON_ERROR | $options);
     }

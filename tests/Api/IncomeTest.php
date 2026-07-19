@@ -34,7 +34,7 @@ final class IncomeTest extends ApiTestCase
         $this->appendSuccessJson(['approvedReceiptUuid' => $receiptId]);
         $response = $this->client->income()->create('name', 100, 1, null, $client);
 
-        self::assertSame($receiptId, $response->getApprovedReceiptUuid());
+        self::assertSame($receiptId, $response->approvedReceiptUuid);
     }
 
     public static function clientDataProvider(): iterable
@@ -57,7 +57,7 @@ final class IncomeTest extends ApiTestCase
         $client = new DTO\IncomeClient(null, 'testClient', IncomeType::LEGAL_ENTITY, '1234567890');
         $response = $this->client->income()->create('name', 100, 1, null, $client);
 
-        self::assertSame($receiptId, $response->getApprovedReceiptUuid());
+        self::assertSame($receiptId, $response->approvedReceiptUuid);
     }
 
     /**
@@ -122,8 +122,8 @@ final class IncomeTest extends ApiTestCase
 
         $incomeInfo = $this->client->income()->cancel($receiptId, $comment);
 
-        self::assertSame($receiptId, $incomeInfo->getApprovedReceiptUuid());
-        self::assertSame($comment->value, $incomeInfo->getCancellationInfo()->getComment());
+        self::assertSame($receiptId, $incomeInfo->approvedReceiptUuid);
+        self::assertSame($comment->value, $incomeInfo->cancellationInfo->comment);
     }
 
     public static function cancellationDataProvider(): iterable
@@ -161,7 +161,7 @@ final class IncomeTest extends ApiTestCase
         ]);
 
         $incomeInfo = $this->client->income()->cancel($receiptId, $comment);
-        self::assertSame($comment, $incomeInfo->getCancellationInfo()->getComment());
+        self::assertSame($comment, $incomeInfo->cancellationInfo->comment);
     }
 
     /**
@@ -200,9 +200,9 @@ final class IncomeTest extends ApiTestCase
         ]);
 
         $result = $this->client->income()->list();
-        self::assertSame(0, $result->getCurrentOffset());
-        self::assertSame(10, $result->getCurrentLimit());
-        self::assertFalse($result->isHasMore());
+        self::assertSame(0, $result->currentOffset);
+        self::assertSame(10, $result->currentLimit);
+        self::assertFalse($result->hasMore);
     }
 
     /**

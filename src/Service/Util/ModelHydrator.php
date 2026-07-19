@@ -13,11 +13,11 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 final class ModelHydrator
 {
     /**
-     * @template T
+     * @template T of CreatableFromArray
      *
-     * @param class-string<CreatableFromArray>|class-string<T> $class
+     * @param class-string<T> $class
      *
-     * @return mixed|T
+     * @return T
      */
     public function hydrate(ResponseInterface $response, string $class)
     {
@@ -32,12 +32,10 @@ final class ModelHydrator
             throw new HydrationException(\sprintf('Error (%d) when trying to json_decode response', $e->getCode()));
         }
 
-        if (\is_subclass_of($class, CreatableFromArray::class)) {
-            $object = \call_user_func($class.'::createFromArray', $data);
-        } else {
-            $object = new $class($data);
+        if (!\is_array($data)) {
+            throw new HydrationException('The ModelHydrator cannot hydrate a non-array JSON response');
         }
 
-        return $object;
+        return $class::createFromArray($data);
     }
 }

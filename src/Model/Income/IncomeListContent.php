@@ -9,13 +9,17 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  *
- * @extends AbstractCollection<IncomeListContent>
+ * @phpstan-import-type IncomeListContentItemData from IncomeListContentItem
+ *
+ * @extends AbstractCollection<IncomeListContentItem>
  */
 final class IncomeListContent extends AbstractCollection implements CreatableFromArray
 {
     private function __construct() {}
 
     /**
+     * @param list<IncomeListContentItemData> $data
+     *
      * @throws \Exception
      */
     public static function createFromArray(array $data): self
