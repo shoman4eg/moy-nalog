@@ -3,15 +3,19 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
+use Testo\Assert;
+use Testo\Codecov\CoversNothing;
+use Testo\Data\DataProvider;
+use Testo\Expect;
+use Testo\Test;
 
 /**
  * @internal
  */
+#[Test]
 #[CoversNothing]
 final class InvoiceTest extends ApiTestCase
 {
@@ -26,7 +30,7 @@ final class InvoiceTest extends ApiTestCase
         $this->appendSuccessJson(['approvedReceiptUuid' => $receiptId]);
 
         $response = $this->client->invoice()->create('service', 100, 2);
-        self::assertSame($receiptId, $response->approvedReceiptUuid);
+        Assert::same($response->approvedReceiptUuid, $receiptId);
     }
 
     /**
@@ -41,7 +45,7 @@ final class InvoiceTest extends ApiTestCase
         float|int $quantity,
         string $message,
     ): void {
-        $this->expectExceptionMessage($message);
+        Expect::exception(\InvalidArgumentException::class)->withMessageContaining($message);
         $this->client->invoice()->create($name, $amount, $quantity);
     }
 
@@ -53,15 +57,15 @@ final class InvoiceTest extends ApiTestCase
         yield ['name', 1, 0, 'Quantity must be greater than 0'];
     }
 
-    public function testCancelThrows(): void
+    public function testCancelThrows(): never
     {
-        $this->expectException(\BadMethodCallException::class);
+        Expect::exception(\BadMethodCallException::class);
         $this->client->invoice()->cancel(1);
     }
 
-    public function testUpdatePaymentInfoThrows(): void
+    public function testUpdatePaymentInfoThrows(): never
     {
-        $this->expectException(\BadMethodCallException::class);
+        Expect::exception(\BadMethodCallException::class);
         $this->client->invoice()->updatePaymentInfo();
     }
 }

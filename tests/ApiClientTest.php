@@ -4,14 +4,18 @@ declare(strict_types=1);
 namespace Shoman4eg\Nalog\Tests;
 
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\Attributes\CoversNothing;
 use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\Exception\Domain\UnauthorizedException;
 use Shoman4eg\Nalog\Exception\DomainException;
+use Testo\Assert;
+use Testo\Codecov\CoversNothing;
+use Testo\Expect;
+use Testo\Test;
 
 /**
  * @internal
  */
+#[Test]
 #[CoversNothing]
 final class ApiClientTest extends ApiTestCase
 {
@@ -27,14 +31,14 @@ final class ApiClientTest extends ApiTestCase
             new Response(401, [], json_encode(['message' => 'Указанный Вами ИНН некорректен'])),
         );
 
-        self::assertJson($this->client->createNewAccessToken('validUserName', 'validPassword'));
-        $this->expectException(UnauthorizedException::class);
+        Assert::true(json_decode($this->client->createNewAccessToken('validUserName', 'validPassword')) !== null);
+        Expect::exception(UnauthorizedException::class);
         $this->client->createNewAccessToken('invalidUserName', 'invalidPassword');
     }
 
     public function testGetAccessToken(): void
     {
         $this->client->authenticate(self::getAccessToken());
-        self::assertJson($this->client->getAccessToken());
+        Assert::true(json_decode((string)$this->client->getAccessToken()) !== null);
     }
 }

@@ -3,13 +3,16 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
 use Shoman4eg\Nalog\Model\Taxpayer\AnnualIncome;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
+use Testo\Assert;
+use Testo\Codecov\CoversNothing;
+use Testo\Test;
 
 /**
  * @internal
  */
+#[Test]
 #[CoversNothing]
 final class TaxpayerTest extends ApiTestCase
 {
@@ -23,9 +26,9 @@ final class TaxpayerTest extends ApiTestCase
 
         $debts = $this->client->taxpayer()->debts();
 
-        self::assertFalse($debts->hasDebts);
-        self::assertSame(0.0, $debts->totalUnpaid);
-        self::assertSame(0.0, $debts->debts);
+        Assert::false($debts->hasDebts);
+        Assert::same($debts->totalUnpaid, 0.0);
+        Assert::same($debts->debts, 0.0);
     }
 
     public function testDebtsWithOutstandingAmount(): void
@@ -38,9 +41,9 @@ final class TaxpayerTest extends ApiTestCase
 
         $debts = $this->client->taxpayer()->debts();
 
-        self::assertTrue($debts->hasDebts);
-        self::assertSame(1234.56, $debts->totalUnpaid);
-        self::assertSame(1000.0, $debts->debts);
+        Assert::true($debts->hasDebts);
+        Assert::same($debts->totalUnpaid, 1234.56);
+        Assert::same($debts->debts, 1000.0);
     }
 
     public function testBonus(): void
@@ -77,22 +80,22 @@ final class TaxpayerTest extends ApiTestCase
 
         $bonus = $this->client->taxpayer()->bonus();
 
-        self::assertSame(8500.0, $bonus->bonusAmount);
-        self::assertSame(759100.0, $bonus->totalIncomeAmount);
-        self::assertFalse($bonus->maxTotalIncomeThresholdExceeded);
-        self::assertSame(2400000.0, $bonus->annualIncomeThreshold);
-        self::assertSame('NORMAL', $bonus->annualIncomeStatus);
-        self::assertInstanceOf(\DateTimeImmutable::class, $bonus->updatedTime);
-        self::assertNull($bonus->teenBonusAmount);
-        self::assertNull($bonus->teenBonusUpdatedTime);
+        Assert::same($bonus->bonusAmount, 8500.0);
+        Assert::same($bonus->totalIncomeAmount, 759100.0);
+        Assert::false($bonus->maxTotalIncomeThresholdExceeded);
+        Assert::same($bonus->annualIncomeThreshold, 2400000.0);
+        Assert::same($bonus->annualIncomeStatus, 'NORMAL');
+        Assert::instanceOf($bonus->updatedTime, \DateTimeImmutable::class);
+        Assert::null($bonus->teenBonusAmount);
+        Assert::null($bonus->teenBonusUpdatedTime);
 
-        self::assertCount(2, $bonus->totalIncomeByYears);
-        self::assertArrayHasKey('2025', $bonus->totalIncomeByYears);
+        Assert::count($bonus->totalIncomeByYears, 2);
+        Assert::true(\array_key_exists('2025', $bonus->totalIncomeByYears));
         $year2025 = $bonus->totalIncomeByYears['2025'];
-        self::assertInstanceOf(AnnualIncome::class, $year2025);
-        self::assertSame(1090000.0, $year2025->totalIncomeAmount);
-        self::assertSame(1310000.0, $year2025->availableIncomeToExceedThreshold);
-        self::assertInstanceOf(\DateTimeImmutable::class, $year2025->updatedTime);
+        Assert::instanceOf($year2025, AnnualIncome::class);
+        Assert::same($year2025->totalIncomeAmount, 1090000.0);
+        Assert::same($year2025->availableIncomeToExceedThreshold, 1310000.0);
+        Assert::instanceOf($year2025->updatedTime, \DateTimeImmutable::class);
     }
 
     public function testBonusHandlesExponentialNumbers(): void
@@ -107,8 +110,8 @@ final class TaxpayerTest extends ApiTestCase
 
         $bonus = $this->client->taxpayer()->bonus();
 
-        self::assertSame(759100.0, $bonus->totalIncomeAmount);
-        self::assertSame(1640900.0, $bonus->availableIncomeToExceedThreshold);
-        self::assertSame([], $bonus->totalIncomeByYears);
+        Assert::same($bonus->totalIncomeAmount, 759100.0);
+        Assert::same($bonus->availableIncomeToExceedThreshold, 1640900.0);
+        Assert::same($bonus->totalIncomeByYears, []);
     }
 }

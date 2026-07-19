@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\DTO;
 use Shoman4eg\Nalog\Enum\BuyerType;
@@ -15,10 +13,16 @@ use Shoman4eg\Nalog\Enum\PaymentType;
 use Shoman4eg\Nalog\Enum\ReceiptType;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
+use Testo\Assert;
+use Testo\Codecov\CoversNothing;
+use Testo\Data\DataProvider;
+use Testo\Expect;
+use Testo\Test;
 
 /**
  * @internal
  */
+#[Test]
 #[CoversNothing]
 final class IncomeTest extends ApiTestCase
 {
@@ -34,7 +38,7 @@ final class IncomeTest extends ApiTestCase
         $this->appendSuccessJson(['approvedReceiptUuid' => $receiptId]);
         $response = $this->client->income()->create('name', 100, 1, null, $client);
 
-        self::assertSame($receiptId, $response->approvedReceiptUuid);
+        Assert::same($response->approvedReceiptUuid, $receiptId);
     }
 
     public static function clientDataProvider(): iterable
@@ -57,7 +61,7 @@ final class IncomeTest extends ApiTestCase
         $client = new DTO\IncomeClient(null, 'testClient', IncomeType::LEGAL_ENTITY, '1234567890');
         $response = $this->client->income()->create('name', 100, 1, null, $client);
 
-        self::assertSame($receiptId, $response->approvedReceiptUuid);
+        Assert::same($response->approvedReceiptUuid, $receiptId);
     }
 
     /**
@@ -73,7 +77,7 @@ final class IncomeTest extends ApiTestCase
         ?DTO\IncomeClient $client,
         string $message
     ): void {
-        $this->expectExceptionMessage($message);
+        Expect::exception(\InvalidArgumentException::class)->withMessageContaining($message);
         $this->client->income()->create($name, $amount, $quantity, null, $client);
     }
 
@@ -122,8 +126,8 @@ final class IncomeTest extends ApiTestCase
 
         $incomeInfo = $this->client->income()->cancel($receiptId, $comment);
 
-        self::assertSame($receiptId, $incomeInfo->approvedReceiptUuid);
-        self::assertSame($comment->value, $incomeInfo->cancellationInfo->comment);
+        Assert::same($incomeInfo->approvedReceiptUuid, $receiptId);
+        Assert::same($incomeInfo->cancellationInfo->comment, $comment->value);
     }
 
     public static function cancellationDataProvider(): iterable
@@ -161,7 +165,7 @@ final class IncomeTest extends ApiTestCase
         ]);
 
         $incomeInfo = $this->client->income()->cancel($receiptId, $comment);
-        self::assertSame($comment, $incomeInfo->cancellationInfo->comment);
+        Assert::same($incomeInfo->cancellationInfo->comment, $comment);
     }
 
     /**
@@ -172,7 +176,7 @@ final class IncomeTest extends ApiTestCase
     #[DataProvider('validationCancelDataProvider')]
     public function testValidationCancel(string $receiptId, string $comment, string $message): void
     {
-        $this->expectExceptionMessage($message);
+        Expect::exception(\InvalidArgumentException::class)->withMessageContaining($message);
         $this->client->income()->cancel($receiptId, $comment);
     }
 
@@ -200,9 +204,9 @@ final class IncomeTest extends ApiTestCase
         ]);
 
         $result = $this->client->income()->list();
-        self::assertSame(0, $result->currentOffset);
-        self::assertSame(10, $result->currentLimit);
-        self::assertFalse($result->hasMore);
+        Assert::same($result->currentOffset, 0);
+        Assert::same($result->currentLimit, 10);
+        Assert::false($result->hasMore);
     }
 
     /**
@@ -225,8 +229,8 @@ final class IncomeTest extends ApiTestCase
 
         $query = [];
         parse_str($this->mock->getLastRequest()->getUri()->getQuery(), $query);
-        self::assertSame(BuyerType::PERSON->value, $query['buyerType']);
-        self::assertSame(ReceiptType::REGISTERED->value, $query['receiptType']);
+        Assert::same($query['buyerType'], BuyerType::PERSON->value);
+        Assert::same($query['receiptType'], ReceiptType::REGISTERED->value);
     }
 
     /**
@@ -247,7 +251,7 @@ final class IncomeTest extends ApiTestCase
 
         $query = [];
         parse_str($this->mock->getLastRequest()->getUri()->getQuery(), $query);
-        self::assertSame((string)$expected, $query['limit']);
+        Assert::same($query['limit'], (string)$expected);
     }
 
     public static function listLimitClampDataProvider(): iterable
@@ -264,7 +268,7 @@ final class IncomeTest extends ApiTestCase
      */
     public function testCreateMultipleItemsEmptyThrows(): void
     {
-        $this->expectExceptionMessage('Items cannot be empty');
+        Expect::exception(\InvalidArgumentException::class)->withMessageContaining('Items cannot be empty');
         $this->client->income()->createMultipleItems([]);
     }
 
@@ -282,7 +286,7 @@ final class IncomeTest extends ApiTestCase
         $this->client->income()->createMultipleItems($serviceItems);
         $request = json_decode($this->mock->getLastRequest()->getBody()->getContents(), true);
 
-        self::assertEquals($request['totalAmount'], $expected);
+        Assert::equals($expected, $request['totalAmount']);
     }
 
     public static function calculationItemsDataProvider(): iterable

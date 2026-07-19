@@ -7,22 +7,19 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use Shoman4eg\Nalog\ApiClient;
 use Shoman4eg\Nalog\Service\Util\JSON;
+use Testo\Lifecycle\BeforeTest;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
- *
- * @internal
- *
- * @coversNothing
  */
-abstract class ApiTestCase extends TestCase
+abstract class ApiTestCase
 {
     protected MockHandler $mock;
     protected ApiClient $client;
 
+    #[BeforeTest]
     protected function setUp(): void
     {
         $this->mock = new MockHandler();

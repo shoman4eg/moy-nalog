@@ -2,8 +2,8 @@ name: Tests
 on: [ pull_request ]
 
 jobs:
-  phpunit:
-    name: PHPUnit
+  testo:
+    name: Testo
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 10
@@ -24,7 +24,7 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: Run tests
-        run: ./vendor/bin/phpunit
+        run: vendor/bin/testo
 
   lowest:
     name: Lowest deps
@@ -45,7 +45,7 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: Run tests
-        run: ./vendor/bin/phpunit
+        run: vendor/bin/testo
 
   audit:
     runs-on: ubuntu-latest

@@ -11,6 +11,7 @@ return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PhpCsFixer' => true,
+        'php_unit_test_class_requires_covers' => false,
         'phpdoc_param_order' => true,
         'cast_spaces' => ['space' => 'none'],
         'trailing_comma_in_multiline' => true,
