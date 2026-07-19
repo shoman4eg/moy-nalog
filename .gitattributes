@@ -7,5 +7,4 @@
 /.php-cs-fixer.dist.php export-ignore
 /tests/                 export-ignore
 /phpstan.neon.dist      export-ignore
-/phpunit.xml.dist       export-ignore
-/psalm.*xml             export-ignore
+/testo.php              export-ignore

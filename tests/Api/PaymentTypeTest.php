@@ -3,13 +3,16 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
 use Shoman4eg\Nalog\Model\PaymentType\PaymentType;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
+use Testo\Assert;
+use Testo\Codecov\CoversNothing;
+use Testo\Test;
 
 /**
  * @internal
  */
+#[Test]
 #[CoversNothing]
 final class PaymentTypeTest extends ApiTestCase
 {
@@ -32,16 +35,16 @@ final class PaymentTypeTest extends ApiTestCase
         $response = $this->client->paymentType()->table();
         /** @var PaymentType $paymentType */
         $paymentType = $response[0];
-        self::assertCount(1, $response);
-        self::assertSame($item['id'], $paymentType->id);
-        self::assertSame($item['phone'], $paymentType->phone);
-        self::assertSame($item['bankId'], $paymentType->bankId);
-        self::assertSame($item['bankName'], $paymentType->bankName);
-        self::assertSame($item['bankBik'], $paymentType->bankBik);
-        self::assertSame($item['corrAccount'], $paymentType->corrAccount);
-        self::assertSame($item['type'], $paymentType->type);
-        self::assertSame($item['currentAccount'], $paymentType->currentAccount);
-        self::assertSame($item['availableForPa'], $paymentType->availableForPa);
-        self::assertSame($item['favorite'], $paymentType->favorite);
+        Assert::count($response, 1);
+        Assert::same($paymentType->id, $item['id']);
+        Assert::same($paymentType->phone, $item['phone']);
+        Assert::same($paymentType->bankId, $item['bankId']);
+        Assert::same($paymentType->bankName, $item['bankName']);
+        Assert::same($paymentType->bankBik, $item['bankBik']);
+        Assert::same($paymentType->corrAccount, $item['corrAccount']);
+        Assert::same($paymentType->type, $item['type']);
+        Assert::same($paymentType->currentAccount, $item['currentAccount']);
+        Assert::same($paymentType->availableForPa, $item['availableForPa']);
+        Assert::same($paymentType->favorite, $item['favorite']);
     }
 }

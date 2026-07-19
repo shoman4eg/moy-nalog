@@ -4,9 +4,6 @@ declare(strict_types=1);
 namespace Shoman4eg\Nalog\Tests;
 
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception\Domain\ClientException;
 use Shoman4eg\Nalog\Exception\Domain\ForbiddenException;
@@ -17,17 +14,17 @@ use Shoman4eg\Nalog\Exception\Domain\UnauthorizedException;
 use Shoman4eg\Nalog\Exception\Domain\UnknownErrorException;
 use Shoman4eg\Nalog\Exception\Domain\ValidationException;
 use Shoman4eg\Nalog\Service\Util\JSON;
+use Testo\Data\DataProvider;
+use Testo\Expect;
+use Testo\Test;
 
-/**
- * @internal
- */
-#[CoversNothing]
-final class ErrorHandlerTest extends TestCase
+#[Test]
+final class ErrorHandlerTest
 {
     #[DataProvider('statusCodeProvider')]
-    public function testHandleResponseMapsStatusCodeToException(int $statusCode, string $expectedException): void
+    public function testHandleResponseMapsStatusCodeToException(int $statusCode, string $expectedException): never
     {
-        $this->expectException($expectedException);
+        Expect::exception($expectedException);
 
         (new ErrorHandler())->handleResponse(new Response($statusCode, [], '{}'));
     }
@@ -47,20 +44,18 @@ final class ErrorHandlerTest extends TestCase
         yield 'unknown status falls back' => [418, UnknownErrorException::class];
     }
 
-    public function testUnauthorizedExceptionExtractsApiMessage(): void
+    public function testUnauthorizedExceptionExtractsApiMessage(): never
     {
-        $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessage('Неверный логин или пароль');
+        Expect::exception(UnauthorizedException::class)->withMessage('Неверный логин или пароль');
 
         (new ErrorHandler())->handleResponse(
             new Response(401, [], JSON::encode(['message' => 'Неверный логин или пароль']))
         );
     }
 
-    public function testUnauthorizedExceptionWithoutMessageIsEmpty(): void
+    public function testUnauthorizedExceptionWithoutMessageIsEmpty(): never
     {
-        $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessage('');
+        Expect::exception(UnauthorizedException::class)->withMessage('');
 
         (new ErrorHandler())->handleResponse(new Response(401, [], 'not-json'));
     }

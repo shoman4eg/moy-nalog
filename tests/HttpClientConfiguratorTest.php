@@ -16,18 +16,15 @@ use GuzzleHttp\Psr7\Response;
 use Http\Client\Common\Plugin\HeaderAppendPlugin;
 use Http\Client\Common\Plugin\LoggerPlugin;
 use Nyholm\NSA;
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\AbstractLogger;
 use Psr\Log\NullLogger;
 use Shoman4eg\Nalog\ApiClient;
 use Shoman4eg\Nalog\Http\ClientConfigurator;
+use Testo\Assert;
+use Testo\Test;
 
-/**
- * @internal
- */
-#[CoversNothing]
-final class HttpClientConfiguratorTest extends TestCase
+#[Test]
+final class HttpClientConfiguratorTest
 {
     public function testAppendPlugin(): void
     {
@@ -36,14 +33,14 @@ final class HttpClientConfiguratorTest extends TestCase
 
         $hcc->appendPlugin($plugin0);
         $plugins = NSA::getProperty($hcc, 'appendPlugins');
-        $this->assertCount(1, $plugins);
-        $this->assertEquals($plugin0, $plugins[0]);
+        Assert::count($plugins, 1);
+        Assert::equals($plugins[0], $plugin0);
 
         $plugin1 = new HeaderAppendPlugin(['plugin1']);
         $hcc->appendPlugin($plugin1);
         $plugins = NSA::getProperty($hcc, 'appendPlugins');
-        $this->assertCount(2, $plugins);
-        $this->assertEquals($plugin1, $plugins[1]);
+        Assert::count($plugins, 2);
+        Assert::equals($plugins[1], $plugin1);
     }
 
     public function testAppendPluginMultiple(): void
@@ -54,9 +51,9 @@ final class HttpClientConfiguratorTest extends TestCase
 
         $hcc->appendPlugin($plugin0, $plugin1);
         $plugins = NSA::getProperty($hcc, 'appendPlugins');
-        $this->assertCount(2, $plugins);
-        $this->assertEquals($plugin0, $plugins[0]);
-        $this->assertEquals($plugin1, $plugins[1]);
+        Assert::count($plugins, 2);
+        Assert::equals($plugins[0], $plugin0);
+        Assert::equals($plugins[1], $plugin1);
     }
 
     public function testPrependPlugin(): void
@@ -66,14 +63,14 @@ final class HttpClientConfiguratorTest extends TestCase
 
         $hcc->prependPlugin($plugin0);
         $plugins = NSA::getProperty($hcc, 'prependPlugins');
-        $this->assertCount(1, $plugins);
-        $this->assertEquals($plugin0, $plugins[0]);
+        Assert::count($plugins, 1);
+        Assert::equals($plugins[0], $plugin0);
 
         $plugin1 = new HeaderAppendPlugin(['plugin1']);
         $hcc->prependPlugin($plugin1);
         $plugins = NSA::getProperty($hcc, 'prependPlugins');
-        $this->assertCount(2, $plugins);
-        $this->assertEquals($plugin1, $plugins[0]);
+        Assert::count($plugins, 2);
+        Assert::equals($plugins[0], $plugin1);
     }
 
     public function testPrependPluginMultiple(): void
@@ -84,9 +81,9 @@ final class HttpClientConfiguratorTest extends TestCase
 
         $hcc->prependPlugin($plugin0, $plugin1);
         $plugins = NSA::getProperty($hcc, 'prependPlugins');
-        $this->assertCount(2, $plugins);
-        $this->assertEquals($plugin0, $plugins[0]);
-        $this->assertEquals($plugin1, $plugins[1]);
+        Assert::count($plugins, 2);
+        Assert::equals($plugins[0], $plugin0);
+        Assert::equals($plugins[1], $plugin1);
     }
 
     public function testSetLoggerAppendsLoggerPlugin(): void
@@ -95,8 +92,8 @@ final class HttpClientConfiguratorTest extends TestCase
         $hcc->setLogger(new NullLogger());
 
         $plugins = NSA::getProperty($hcc, 'appendPlugins');
-        $this->assertCount(1, $plugins);
-        $this->assertInstanceOf(LoggerPlugin::class, $plugins[0]);
+        Assert::count($plugins, 1);
+        Assert::instanceOf($plugins[0], LoggerPlugin::class);
     }
 
     public function testSetLoggerIsIdempotent(): void
@@ -106,7 +103,7 @@ final class HttpClientConfiguratorTest extends TestCase
         $hcc->setLogger(new NullLogger());
 
         // Calling setLogger twice replaces the plugin instead of stacking a second one.
-        $this->assertCount(1, NSA::getProperty($hcc, 'appendPlugins'));
+        Assert::count(NSA::getProperty($hcc, 'appendPlugins'), 1);
     }
 
     public function testLoggerRecordsRequestAndResponse(): void
@@ -153,8 +150,8 @@ final class HttpClientConfiguratorTest extends TestCase
         $client->authenticate(ApiTestCase::getAccessToken());
         $client->user()->get();
 
-        $this->assertNotEmpty($logger->messages);
-        $this->assertStringContainsString('Sending request', implode("\n", $logger->messages));
-        $this->assertStringContainsString('Received response', implode("\n", $logger->messages));
+        Assert::false(empty($logger->messages));
+        Assert::string(implode("\n", $logger->messages))->contains('Sending request');
+        Assert::string(implode("\n", $logger->messages))->contains('Received response');
     }
 }

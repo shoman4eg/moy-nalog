@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
+use Testo\Assert;
+use Testo\Codecov\CoversNothing;
+use Testo\Test;
 
 /**
  * @internal
  */
+#[Test]
 #[CoversNothing]
 final class UserTest extends ApiTestCase
 {
@@ -39,29 +42,23 @@ final class UserTest extends ApiTestCase
 
         $response = $this->client->user()->get();
 
-        self::assertNull($response->lastName);
-        self::assertSame($data['id'], $response->id);
-        self::assertSame($data['displayName'], $response->displayName);
-        self::assertSame($data['email'], $response->email);
-        self::assertSame($data['phone'], $response->phone);
-        self::assertSame($data['inn'], $response->inn);
-        self::assertSame($data['snils'], $response->snils);
-        self::assertSame($data['avatarExists'], $response->avatarExists);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->initialRegistrationDate);
-        self::assertSame(
-            strtotime($data['initialRegistrationDate']),
-            $response->initialRegistrationDate->getTimestamp()
-        );
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->firstReceiptRegisterTime);
-        self::assertSame(
-            strtotime($data['firstReceiptRegisterTime']),
-            $response->firstReceiptRegisterTime->getTimestamp()
-        );
-        self::assertNull($response->firstReceiptCancelTime);
-        self::assertNull($response->registerAvailable);
-        self::assertSame($data['login'], $response->login);
-        self::assertSame($data['pfrUrl'], $response->pfrUrl);
-        self::assertSame($data['status'], $response->status);
-        self::assertSame($data['hideCancelledReceipt'], $response->hideCancelledReceipt);
+        Assert::null($response->lastName);
+        Assert::same($response->id, $data['id']);
+        Assert::same($response->displayName, $data['displayName']);
+        Assert::same($response->email, $data['email']);
+        Assert::same($response->phone, $data['phone']);
+        Assert::same($response->inn, $data['inn']);
+        Assert::same($response->snils, $data['snils']);
+        Assert::same($response->avatarExists, $data['avatarExists']);
+        Assert::instanceOf($response->initialRegistrationDate, \DateTimeImmutable::class);
+        Assert::same($response->initialRegistrationDate->getTimestamp(), strtotime($data['initialRegistrationDate']));
+        Assert::instanceOf($response->firstReceiptRegisterTime, \DateTimeImmutable::class);
+        Assert::same($response->firstReceiptRegisterTime->getTimestamp(), strtotime($data['firstReceiptRegisterTime']));
+        Assert::null($response->firstReceiptCancelTime);
+        Assert::null($response->registerAvailable);
+        Assert::same($response->login, $data['login']);
+        Assert::same($response->pfrUrl, $data['pfrUrl']);
+        Assert::same($response->status, $data['status']);
+        Assert::same($response->hideCancelledReceipt, $data['hideCancelledReceipt']);
     }
 }
