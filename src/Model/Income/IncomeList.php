@@ -7,48 +7,43 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
+ * @phpstan-import-type IncomeListContentItemData from IncomeListContentItem
+ *
+ * @phpstan-type IncomeListData array{
+ *     currentLimit: int,
+ *     currentOffset: int,
+ *     hasMore: bool,
+ *     content: list<IncomeListContentItemData>,
+ * }
  */
-final class IncomeList implements CreatableFromArray
+final readonly class IncomeList implements CreatableFromArray
 {
-    private bool $hasMore;
-    private int $currentOffset;
-    private int $currentLimit;
-    private IncomeListContent $content;
-
-    private function __construct() {}
+    public bool $hasMore;
+    public int $currentOffset;
+    public int $currentLimit;
+    public IncomeListContent $content;
 
     /**
+     * @param IncomeListData $data
+     *
+     * @throws \Exception
+     */
+    private function __construct(array $data)
+    {
+        $this->currentLimit = $data['currentLimit'];
+        $this->currentOffset = $data['currentOffset'];
+        $this->hasMore = $data['hasMore'];
+        $this->content = IncomeListContent::createFromArray($data['content']);
+    }
+
+    /**
+     * @param IncomeListData $data
+     *
      * @throws \Exception
      */
     public static function createFromArray(array $data): self
     {
-        $model = new self();
-
-        $model->currentLimit = $data['currentLimit'];
-        $model->currentOffset = $data['currentOffset'];
-        $model->hasMore = $data['hasMore'];
-        $model->content = IncomeListContent::createFromArray($data['content']);
-
-        return $model;
-    }
-
-    public function getCurrentOffset(): int
-    {
-        return $this->currentOffset;
-    }
-
-    public function getCurrentLimit(): int
-    {
-        return $this->currentLimit;
-    }
-
-    public function isHasMore(): bool
-    {
-        return $this->hasMore;
-    }
-
-    public function getContent(): IncomeListContent
-    {
-        return $this->content;
+        return new self($data);
     }
 }

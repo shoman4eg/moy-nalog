@@ -7,86 +7,55 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
+ * @phpstan-type PaymentTypeData array{
+ *     id: int,
+ *     type: string,
+ *     bankName: string,
+ *     bankBik: string,
+ *     currentAccount: string,
+ *     corrAccount: string,
+ *     phone: string|null,
+ *     bankId: string|null,
+ *     favorite: bool,
+ *     availableForPa: bool,
+ * }
  */
-final class PaymentType implements CreatableFromArray
+final readonly class PaymentType implements CreatableFromArray
 {
-    private int $id;
-    private string $type;
-    private string $bankName;
-    private string $bankBik;
-    private string $corrAccount;
-    private bool $favorite;
-    private ?string $phone;
-    private ?string $bankId;
-    private string $currentAccount;
-    private bool $availableForPa;
+    public int $id;
+    public string $type;
+    public string $bankName;
+    public string $bankBik;
+    public string $corrAccount;
+    public bool $favorite;
+    public ?string $phone;
+    public ?string $bankId;
+    public string $currentAccount;
+    public bool $availableForPa;
 
-    private function __construct() {}
+    /**
+     * @param PaymentTypeData $data
+     */
+    private function __construct(array $data)
+    {
+        $this->id = $data['id'];
+        $this->type = $data['type'];
+        $this->bankName = $data['bankName'];
+        $this->bankBik = $data['bankBik'];
+        $this->currentAccount = $data['currentAccount'];
+        $this->corrAccount = $data['corrAccount'];
+        $this->phone = $data['phone'];
+        $this->bankId = $data['bankId'];
+        $this->favorite = $data['favorite'];
+        $this->availableForPa = $data['availableForPa'];
+    }
 
+    /**
+     * @param PaymentTypeData $data
+     */
     public static function createFromArray(array $data): self
     {
-        $model = new self();
-        $model->id = $data['id'];
-        $model->type = $data['type'];
-        $model->bankName = $data['bankName'];
-        $model->bankBik = $data['bankBik'];
-        $model->currentAccount = $data['currentAccount'];
-        $model->corrAccount = $data['corrAccount'];
-        $model->phone = $data['phone'];
-        $model->bankId = $data['bankId'];
-        $model->favorite = $data['favorite'];
-        $model->availableForPa = $data['availableForPa'];
-
-        return $model;
-    }
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function getBankName(): string
-    {
-        return $this->bankName;
-    }
-
-    public function getCorrAccount(): string
-    {
-        return $this->corrAccount;
-    }
-
-    public function isFavorite(): bool
-    {
-        return $this->favorite;
-    }
-
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function getBankId(): ?string
-    {
-        return $this->bankId;
-    }
-
-    public function getCurrentAccount(): string
-    {
-        return $this->currentAccount;
-    }
-
-    public function isAvailableForPa(): bool
-    {
-        return $this->availableForPa;
-    }
-
-    public function getBankBik(): string
-    {
-        return $this->bankBik;
+        return new self($data);
     }
 }

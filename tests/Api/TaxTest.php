@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Tests\Api;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class TaxTest extends ApiTestCase
 {
     public function testHistory(): void
@@ -41,25 +41,25 @@ final class TaxTest extends ApiTestCase
 
         foreach ($response as $key => $item) {
             $record = $data['records'][$key];
-            self::assertSame($record['taxPeriodId'], $item->getTaxPeriodId());
-            self::assertSame($record['taxAmount'], $item->getTaxAmount());
-            self::assertSame($record['bonusAmount'], $item->getBonusAmount());
-            self::assertSame($record['paidAmount'], $item->getPaidAmount());
+            self::assertSame($record['taxPeriodId'], $item->taxPeriodId);
+            self::assertSame($record['taxAmount'], $item->taxAmount);
+            self::assertSame($record['bonusAmount'], $item->bonusAmount);
+            self::assertSame($record['paidAmount'], $item->paidAmount);
             self::assertEquals(
                 $record['chargeDate'] ? new \DateTimeImmutable($record['chargeDate']) : null,
-                $item->getChargeDate()
+                $item->chargeDate
             );
             self::assertEquals(
                 $record['dueDate'] ? new \DateTimeImmutable($record['dueDate']) : null,
-                $item->getDueDate()
+                $item->dueDate
             );
-            self::assertSame($record['oktmo'], $item->getOktmo());
-            self::assertSame($record['regionName'], $item->getRegionName());
-            self::assertSame($record['kbk'], $item->getKbk());
-            self::assertSame($record['taxOrganCode'], $item->getTaxOrganCode());
-            self::assertSame($record['type'], $item->getType());
-            self::assertSame($record['krsbTaxChargeId'], $item->getKrsbTaxChargeId());
-            self::assertSame($record['receiptCount'], $item->getReceiptCount());
+            self::assertSame($record['oktmo'], $item->oktmo);
+            self::assertSame($record['regionName'], $item->regionName);
+            self::assertSame($record['kbk'], $item->kbk);
+            self::assertSame($record['taxOrganCode'], $item->taxOrganCode);
+            self::assertSame($record['type'], $item->type);
+            self::assertSame($record['krsbTaxChargeId'], $item->krsbTaxChargeId);
+            self::assertSame($record['receiptCount'], $item->receiptCount);
         }
     }
 
@@ -90,19 +90,19 @@ final class TaxTest extends ApiTestCase
 
         foreach ($response as $key => $item) {
             $record = $data['records'][$key];
-            self::assertSame($record['type'], $item->getType());
-            self::assertSame($record['sourceType'], $item->getSourceType());
-            self::assertSame($record['documentIndex'], $item->getDocumentIndex());
-            self::assertSame($record['amount'], $item->getAmount());
-            self::assertEquals(new \DateTimeImmutable($record['operationDate']), $item->getOperationDate());
-            self::assertEquals(new \DateTimeImmutable($record['dueDate']), $item->getDueDate());
-            self::assertSame($record['oktmo'], $item->getOktmo());
-            self::assertSame($record['kbk'], $item->getKbk());
-            self::assertSame($record['regionName'], $item->getRegionName());
-            self::assertSame($record['status'], $item->getStatus());
-            self::assertSame($record['type'], $item->getType());
-            self::assertSame($record['taxPeriodId'], $item->getTaxPeriodId());
-            self::assertSame(strtotime($record['krsbAcceptedDate']), $item->getKrsbAcceptedDate()->getTimestamp());
+            self::assertSame($record['type'], $item->type);
+            self::assertSame($record['sourceType'], $item->sourceType);
+            self::assertSame($record['documentIndex'], $item->documentIndex);
+            self::assertSame($record['amount'], $item->amount);
+            self::assertEquals(new \DateTimeImmutable($record['operationDate']), $item->operationDate);
+            self::assertEquals(new \DateTimeImmutable($record['dueDate']), $item->dueDate);
+            self::assertSame($record['oktmo'], $item->oktmo);
+            self::assertSame($record['kbk'], $item->kbk);
+            self::assertSame($record['regionName'], $item->regionName);
+            self::assertSame($record['status'], $item->status);
+            self::assertSame($record['type'], $item->type);
+            self::assertSame($record['taxPeriodId'], $item->taxPeriodId);
+            self::assertSame(strtotime($record['krsbAcceptedDate']), $item->krsbAcceptedDate->getTimestamp());
         }
     }
 
@@ -127,20 +127,20 @@ final class TaxTest extends ApiTestCase
 
         $response = $this->client->tax()->get();
 
-        self::assertEquals($data['totalForPayment'], $response->getTotalForPayment());
-        self::assertEquals($data['total'], $response->getTotal());
-        self::assertEquals($data['tax'], $response->getTax());
-        self::assertEquals($data['debt'], $response->getDebt());
-        self::assertEquals($data['overpayment'], $response->getOverpayment());
-        self::assertEquals($data['penalty'], $response->getPenalty());
-        self::assertEquals($data['nominalTax'], $response->getNominalTax());
-        self::assertEquals($data['nominalOverpayment'], $response->getNominalOverpayment());
-        self::assertSame($data['taxPeriodId'], $response->getTaxPeriodId());
-        self::assertEquals($data['lastPaymentAmount'], $response->getLastPaymentAmount());
+        self::assertEquals($data['totalForPayment'], $response->totalForPayment);
+        self::assertEquals($data['total'], $response->total);
+        self::assertEquals($data['tax'], $response->tax);
+        self::assertEquals($data['debt'], $response->debt);
+        self::assertEquals($data['overpayment'], $response->overpayment);
+        self::assertEquals($data['penalty'], $response->penalty);
+        self::assertEquals($data['nominalTax'], $response->nominalTax);
+        self::assertEquals($data['nominalOverpayment'], $response->nominalOverpayment);
+        self::assertSame($data['taxPeriodId'], $response->taxPeriodId);
+        self::assertEquals($data['lastPaymentAmount'], $response->lastPaymentAmount);
         self::assertEquals(
             $data['lastPaymentDate'] ? new \DateTimeImmutable($data['lastPaymentDate']) : null,
-            $response->getLastPaymentDate()
+            $response->lastPaymentDate
         );
-        self::assertSame($data['regions'], $response->getRegions());
+        self::assertSame($data['regions'], $response->regions);
     }
 }

@@ -9,7 +9,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Shoman4eg\Nalog\ApiClient;
-use Shoman4eg\Nalog\Util\JSON;
+use Shoman4eg\Nalog\Service\Util\JSON;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>

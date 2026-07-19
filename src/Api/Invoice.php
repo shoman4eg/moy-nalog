@@ -12,41 +12,35 @@ use Shoman4eg\Nalog\Exception;
 use Shoman4eg\Nalog\Model\Income\IncomeType;
 use Webmozart\Assert\Assert;
 
-/**
- * @author Artem Dubinin <artem@dubinin.me>
- */
 final class Invoice extends BaseHttpApi
 {
     /**
-     * @param float|int $amount
-     * @param float|int $quantity
-     *
      * @throws \JsonException
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
     public function create(
         string $name,
-        $amount,
-        $quantity,
-        ?\DateTimeInterface $operationTime = null
+        float|int|string $amount,
+        float|int $quantity,
+        ?\DateTimeInterface $operationTime = null,
     ): IncomeType {
         Assert::notEmpty($name, 'Name cannot be empty');
         Assert::numeric($amount, 'Amount must be int or float');
         Assert::greaterThan($amount, 0, 'Amount must be greater than %2$s');
-        Assert::notEmpty($quantity, 'Quantity cannot be empty');
-        Assert::numeric($quantity, 'Quantity must be int or float');
         Assert::greaterThan($quantity, 0, 'Quantity must be greater than %2$s');
 
-        $totalAmount = BigDecimal::of($amount)->multipliedBy($quantity);
+        $amountForTotal = \is_float($amount) ? (string)$amount : $amount;
+        $quantityForTotal = \is_float($quantity) ? (string)$quantity : $quantity;
+        $totalAmount = BigDecimal::of($amountForTotal)->multipliedBy($quantityForTotal);
 
         $response = $this->httpPost('/invoice', [
-            'paymentType' => Enum\PaymentType::ACCOUNT,
+            'paymentType' => Enum\PaymentType::ACCOUNT->value,
             'ignoreMaxTotalIncomeRestriction' => false,
             'client' => new DTO\IncomeClient(),
             'services' => [new DTO\InvoiceServiceItem($name, $amount, $quantity)],
             'requestTime' => new DTO\DateTime(new \DateTimeImmutable()),
-            'operationTime' => new DTO\DateTime($operationTime ?: new \DateTimeImmutable()),
+            'operationTime' => new DTO\DateTime($operationTime ?? new \DateTimeImmutable()),
             'totalAmount' => (string)$totalAmount,
         ]);
 
@@ -57,13 +51,13 @@ final class Invoice extends BaseHttpApi
         return $this->hydrator->hydrate($response, IncomeType::class);
     }
 
-    public function cancel(int $invoiceId): void
+    public function cancel(int $invoiceId): never
     {
-        throw new \BadMethodCallException('Not impemented');
+        throw new \BadMethodCallException('Not implemented');
     }
 
-    public function updatePaymentInfo(): void
+    public function updatePaymentInfo(): never
     {
-        throw new \BadMethodCallException('Not impemented');
+        throw new \BadMethodCallException('Not implemented');
     }
 }

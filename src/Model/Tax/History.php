@@ -7,117 +7,71 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
+ * @phpstan-type HistoryData array{
+ *     taxPeriodId: int,
+ *     taxAmount: float|int,
+ *     bonusAmount: float|int,
+ *     paidAmount: float|int,
+ *     taxBaseAmount: float|int|null,
+ *     chargeDate: string|null,
+ *     dueDate: string|null,
+ *     oktmo: string,
+ *     regionName: string,
+ *     kbk: string,
+ *     taxOrganCode: string,
+ *     type: string,
+ *     krsbTaxChargeId: int,
+ *     receiptCount: int,
+ * }
  */
-final class History implements CreatableFromArray
+final readonly class History implements CreatableFromArray
 {
-    private int $taxPeriodId;
-    private float $taxAmount;
-    private float $bonusAmount;
-    private float $paidAmount;
-    private ?float $taxBaseAmount;
-    private ?\DateTimeImmutable $chargeDate;
-    private ?\DateTimeImmutable $dueDate;
-    private string $oktmo;
-    private string $regionName;
-    private string $kbk;
-    private string $taxOrganCode;
-    private string $type;
-    private int $krsbTaxChargeId;
-    private int $receiptCount;
-
-    private function __construct() {}
+    public int $taxPeriodId;
+    public float $taxAmount;
+    public float $bonusAmount;
+    public float $paidAmount;
+    public ?float $taxBaseAmount;
+    public ?\DateTimeImmutable $chargeDate;
+    public ?\DateTimeImmutable $dueDate;
+    public string $oktmo;
+    public string $regionName;
+    public string $kbk;
+    public string $taxOrganCode;
+    public string $type;
+    public int $krsbTaxChargeId;
+    public int $receiptCount;
 
     /**
+     * @param HistoryData $data
+     *
+     * @throws \Exception
+     */
+    private function __construct(array $data)
+    {
+        $this->taxPeriodId = $data['taxPeriodId'];
+        $this->taxAmount = $data['taxAmount'];
+        $this->bonusAmount = $data['bonusAmount'];
+        $this->paidAmount = $data['paidAmount'];
+        $this->taxBaseAmount = $data['taxBaseAmount'];
+        $this->chargeDate = $data['chargeDate'] ? new \DateTimeImmutable($data['chargeDate']) : null;
+        $this->dueDate = $data['dueDate'] ? new \DateTimeImmutable($data['dueDate']) : null;
+        $this->oktmo = $data['oktmo'];
+        $this->regionName = $data['regionName'];
+        $this->kbk = $data['kbk'];
+        $this->taxOrganCode = $data['taxOrganCode'];
+        $this->type = $data['type'];
+        $this->krsbTaxChargeId = $data['krsbTaxChargeId'];
+        $this->receiptCount = $data['receiptCount'];
+    }
+
+    /**
+     * @param HistoryData $data
+     *
      * @throws \Exception
      */
     public static function createFromArray(array $data): self
     {
-        $model = new self();
-        $model->taxPeriodId = $data['taxPeriodId'];
-        $model->taxAmount = $data['taxAmount'];
-        $model->bonusAmount = $data['bonusAmount'];
-        $model->paidAmount = $data['paidAmount'];
-        $model->taxBaseAmount = $data['taxBaseAmount'];
-        $model->chargeDate = $data['chargeDate'] ? new \DateTimeImmutable($data['chargeDate']) : null;
-        $model->dueDate = $data['dueDate'] ? new \DateTimeImmutable($data['dueDate']) : null;
-        $model->oktmo = $data['oktmo'];
-        $model->regionName = $data['regionName'];
-        $model->kbk = $data['kbk'];
-        $model->taxOrganCode = $data['taxOrganCode'];
-        $model->type = $data['type'];
-        $model->krsbTaxChargeId = $data['krsbTaxChargeId'];
-        $model->receiptCount = $data['receiptCount'];
-
-        return $model;
-    }
-
-    public function getPaidAmount(): float
-    {
-        return $this->paidAmount;
-    }
-
-    public function getBonusAmount(): float
-    {
-        return $this->bonusAmount;
-    }
-
-    public function getTaxAmount(): float
-    {
-        return $this->taxAmount;
-    }
-
-    public function getTaxPeriodId(): int
-    {
-        return $this->taxPeriodId;
-    }
-
-    public function getOktmo(): string
-    {
-        return $this->oktmo;
-    }
-
-    public function getRegionName(): string
-    {
-        return $this->regionName;
-    }
-
-    public function getKbk(): string
-    {
-        return $this->kbk;
-    }
-
-    public function getTaxOrganCode(): string
-    {
-        return $this->taxOrganCode;
-    }
-
-    public function getKrsbTaxChargeId(): int
-    {
-        return $this->krsbTaxChargeId;
-    }
-
-    public function getReceiptCount(): int
-    {
-        return $this->receiptCount;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function getChargeDate(): ?\DateTimeImmutable
-    {
-        return $this->chargeDate;
-    }
-
-    public function getDueDate(): ?\DateTimeImmutable
-    {
-        return $this->dueDate;
-    }
-
-    public function getTaxBaseAmount(): ?float
-    {
-        return $this->taxBaseAmount;
+        return new self($data);
     }
 }

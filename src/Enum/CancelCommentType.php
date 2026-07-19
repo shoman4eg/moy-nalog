@@ -3,19 +3,13 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Enum;
 
-/**
- * @author Artem Dubinin <artem@dubinin.me>
- */
-final class CancelCommentType
+enum CancelCommentType: string implements \JsonSerializable
 {
-    public const CANCEL = 'Чек сформирован ошибочно';
-    public const REFUND = 'Возврат средств';
+    case CANCEL = 'Чек сформирован ошибочно';
+    case REFUND = 'Возврат средств';
 
-    public static function all(): array
+    public function jsonSerialize(): string
     {
-        return [
-            self::CANCEL,
-            self::REFUND,
-        ];
+        return $this->value;
     }
 }

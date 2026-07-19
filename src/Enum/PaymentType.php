@@ -3,19 +3,13 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Enum;
 
-/**
- * @author Artem Dubinin <artem@dubinin.me>
- */
-final class PaymentType
+enum PaymentType: string implements \JsonSerializable
 {
-    public const CASH = 'CASH';
-    public const ACCOUNT = 'ACCOUNT';
+    case CASH = 'CASH';
+    case ACCOUNT = 'ACCOUNT';
 
-    public static function all(): array
+    public function jsonSerialize(): string
     {
-        return [
-            self::CASH,
-            self::ACCOUNT,
-        ];
+        return $this->value;
     }
 }

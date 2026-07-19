@@ -1,17 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Enum;
 
-class ReceiptType
+enum ReceiptType: string implements \JsonSerializable
 {
-    public const REGISTERED = 'REGISTERED';
-    public const CANCELLED = 'CANCELLED';
+    case REGISTERED = 'REGISTERED';
+    case CANCELLED = 'CANCELLED';
 
-    public static function all(): array
+    public function jsonSerialize(): string
     {
-        return [
-            self::REGISTERED,
-            self::CANCELLED,
-        ];
+        return $this->value;
     }
 }

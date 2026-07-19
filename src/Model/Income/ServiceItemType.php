@@ -4,48 +4,37 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Model\Income;
 
-final class ServiceItemType
+/**
+ * @phpstan-type ServiceItemData array{
+ *     name: string,
+ *     quantity: float|int,
+ *     serviceNumber: int,
+ *     amount: float|int,
+ * }
+ */
+final readonly class ServiceItemType
 {
-    private string $name;
+    public string $name;
+    public float|int $quantity;
+    public int $serviceNumber;
+    public float|int $amount;
 
-    /** @var float|int */
-    private $quantity;
+    /**
+     * @param ServiceItemData $data
+     */
+    public function __construct(array $data)
+    {
+        $this->name = $data['name'];
+        $this->quantity = $data['quantity'];
+        $this->serviceNumber = $data['serviceNumber'];
+        $this->amount = $data['amount'];
+    }
 
-    private int $serviceNumber;
-
-    /** @var float|int */
-    private $amount;
-
-    public function __construct() {}
-
+    /**
+     * @param ServiceItemData $data
+     */
     public static function fromArray(array $data): self
     {
-        $model = new self();
-        $model->name = $data['name'];
-        $model->quantity = $data['quantity'];
-        $model->serviceNumber = $data['serviceNumber'];
-        $model->amount = $data['amount'];
-
-        return $model;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    public function getServiceNumber(): int
-    {
-        return $this->serviceNumber;
-    }
-
-    public function getAmount()
-    {
-        return $this->amount;
+        return new self($data);
     }
 }

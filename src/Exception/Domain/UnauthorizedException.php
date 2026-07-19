@@ -10,7 +10,8 @@ final class UnauthorizedException extends ClientException
 {
     public function __construct(string $message = '')
     {
-        $decodedMessage = json_decode($message, true);
-        parent::__construct($decodedMessage['message'] ?? '');
+        $decoded = json_decode($message, true);
+        $text = \is_array($decoded) && isset($decoded['message']) && \is_string($decoded['message']) ? $decoded['message'] : '';
+        parent::__construct($text);
     }
 }

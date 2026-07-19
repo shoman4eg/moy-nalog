@@ -3,21 +3,14 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\Enum;
 
-/**
- * @author Artem Dubinin <artem@dubinin.me>
- */
-final class IncomeType
+enum IncomeType: string implements \JsonSerializable
 {
-    public const INDIVIDUAL = 'FROM_INDIVIDUAL';
-    public const LEGAL_ENTITY = 'FROM_LEGAL_ENTITY';
-    public const FOREIGN_AGENCY = 'FROM_FOREIGN_AGENCY';
+    case INDIVIDUAL = 'FROM_INDIVIDUAL';
+    case LEGAL_ENTITY = 'FROM_LEGAL_ENTITY';
+    case FOREIGN_AGENCY = 'FROM_FOREIGN_AGENCY';
 
-    public static function all(): array
+    public function jsonSerialize(): string
     {
-        return [
-            self::INDIVIDUAL,
-            self::LEGAL_ENTITY,
-            self::FOREIGN_AGENCY,
-        ];
+        return $this->value;
     }
 }

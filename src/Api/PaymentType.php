@@ -39,7 +39,7 @@ final class PaymentType extends BaseHttpApi
 
         foreach ($paymentTypes as $paymentType) {
             /** @var PaymentTypeModel $paymentType */
-            if ($paymentType->isFavorite()) {
+            if ($paymentType->favorite) {
                 return $paymentType;
             }
         }

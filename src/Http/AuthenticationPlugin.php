@@ -8,7 +8,7 @@ use Http\Promise\Promise;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Shoman4eg\Nalog\Util\JSON;
+use Shoman4eg\Nalog\Service\Util\JSON;
 
 /**
  * This will automatically refresh expired access token.
@@ -19,14 +19,16 @@ final class AuthenticationPlugin implements Plugin
 {
     public const RETRY_LIMIT = 2;
 
+    /** @var array<array-key, mixed> */
     private array $accessToken;
-    private array $retryStorage = [];
-    private Authenticator $authenticator;
 
-    public function __construct(Authenticator $authenticator, string $accessToken)
+    /** @var array<string, int> */
+    private array $retryStorage = [];
+
+    public function __construct(private readonly Authenticator $authenticator, string $accessToken)
     {
-        $this->authenticator = $authenticator;
-        $this->accessToken = JSON::decode($accessToken);
+        $decoded = JSON::decode($accessToken);
+        $this->accessToken = \is_array($decoded) ? $decoded : [];
     }
 
     /**
@@ -41,7 +43,8 @@ final class AuthenticationPlugin implements Plugin
         }
 
         $chainIdentifier = \spl_object_hash((object)$first);
-        $header = \sprintf('Bearer %s', $this->accessToken['token'] ?? '');
+        $token = $this->accessToken['token'] ?? '';
+        $header = \sprintf('Bearer %s', \is_string($token) ? $token : '');
         $request = $request->withHeader('Authorization', $header);
 
         return $next($request)->then(
@@ -56,16 +59,19 @@ final class AuthenticationPlugin implements Plugin
                     return $response;
                 }
 
-                $accessToken = $this->authenticator->refreshAccessToken($this->accessToken['refreshToken']);
+                $refreshToken = $this->accessToken['refreshToken'] ?? null;
+                $accessToken = \is_string($refreshToken) ? $this->authenticator->refreshAccessToken($refreshToken) : null;
                 if ($accessToken === null) {
                     return $response;
                 }
 
                 // Save new token
-                $this->accessToken = JSON::decode($accessToken);
+                $decoded = JSON::decode($accessToken);
+                $this->accessToken = \is_array($decoded) ? $decoded : [];
 
                 // Add new token to request
-                $header = \sprintf('Bearer %s', $this->accessToken['token']);
+                $newToken = $this->accessToken['token'] ?? '';
+                $header = \sprintf('Bearer %s', \is_string($newToken) ? $newToken : '');
                 $request = $request->withHeader('Authorization', $header);
 
                 // Retry

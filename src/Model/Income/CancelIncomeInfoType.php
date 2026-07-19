@@ -7,84 +7,62 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
+ * @phpstan-import-type CancellationInfoData from CancellationInfoType
+ *
+ * @phpstan-type CancelIncomeInfoData array{
+ *     incomeInfo: array{
+ *         approvedReceiptUuid: string,
+ *         name: string,
+ *         operationTime: string,
+ *         requestTime: string,
+ *         paymentType: string,
+ *         partnerCode: null|string,
+ *         totalAmount: float|int,
+ *         cancellationInfo: CancellationInfoData,
+ *         sourceDeviceId: string,
+ *     },
+ * }
  */
-final class CancelIncomeInfoType implements CreatableFromArray
+final readonly class CancelIncomeInfoType implements CreatableFromArray
 {
-    private string $approvedReceiptUuid;
-    private string $name;
-    private \DateTimeImmutable $operationTime;
-    private \DateTimeImmutable $requestTime;
-    private string $paymentType;
-    private ?string $partnerCode;
-    private float $totalAmount;
-    private CancellationInfoType $cancellationInfo;
-    private string $sourceDeviceId;
-
-    private function __construct() {}
+    public string $approvedReceiptUuid;
+    public string $name;
+    public \DateTimeImmutable $operationTime;
+    public \DateTimeImmutable $requestTime;
+    public string $paymentType;
+    public ?string $partnerCode;
+    public float $totalAmount;
+    public CancellationInfoType $cancellationInfo;
+    public string $sourceDeviceId;
 
     /**
+     * @param CancelIncomeInfoData $data
+     *
+     * @throws \Exception
+     */
+    private function __construct(array $data)
+    {
+        $data = $data['incomeInfo'];
+
+        $this->approvedReceiptUuid = $data['approvedReceiptUuid'];
+        $this->name = $data['name'];
+        $this->operationTime = new \DateTimeImmutable($data['operationTime']);
+        $this->requestTime = new \DateTimeImmutable($data['requestTime']);
+        $this->paymentType = $data['paymentType'];
+        $this->partnerCode = $data['partnerCode'];
+        $this->totalAmount = $data['totalAmount'];
+        $this->cancellationInfo = CancellationInfoType::createFromArray($data['cancellationInfo']);
+        $this->sourceDeviceId = $data['sourceDeviceId'];
+    }
+
+    /**
+     * @param CancelIncomeInfoData $data
+     *
      * @throws \Exception
      */
     public static function createFromArray(array $data): self
     {
-        $model = new self();
-        $data = $data['incomeInfo'];
-
-        $model->approvedReceiptUuid = $data['approvedReceiptUuid'];
-        $model->name = $data['name'];
-        $model->operationTime = new \DateTimeImmutable($data['operationTime']);
-        $model->requestTime = new \DateTimeImmutable($data['requestTime']);
-        $model->paymentType = $data['paymentType'];
-        $model->partnerCode = $data['partnerCode'];
-        $model->totalAmount = $data['totalAmount'];
-        $model->cancellationInfo = CancellationInfoType::createFromArray($data['cancellationInfo']);
-        $model->sourceDeviceId = $data['sourceDeviceId'];
-
-        return $model;
-    }
-
-    public function getApprovedReceiptUuid(): string
-    {
-        return $this->approvedReceiptUuid;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getOperationTime(): \DateTimeImmutable
-    {
-        return $this->operationTime;
-    }
-
-    public function getRequestTime(): \DateTimeImmutable
-    {
-        return $this->requestTime;
-    }
-
-    public function getPaymentType(): string
-    {
-        return $this->paymentType;
-    }
-
-    public function getPartnerCode(): ?string
-    {
-        return $this->partnerCode;
-    }
-
-    public function getTotalAmount(): float
-    {
-        return $this->totalAmount;
-    }
-
-    public function getCancellationInfo(): CancellationInfoType
-    {
-        return $this->cancellationInfo;
-    }
-
-    public function getSourceDeviceId(): string
-    {
-        return $this->sourceDeviceId;
+        return new self($data);
     }
 }

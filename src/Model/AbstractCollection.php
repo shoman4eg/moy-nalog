@@ -17,12 +17,14 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
     private array $items = [];
 
     private int $key;
+
+    /** @var int<0, max> */
     private int $count;
 
     /**
      * @return null|T
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->offsetGet($this->key);
     }
@@ -51,7 +53,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
         $this->key = 0;
     }
 
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->items[$offset]);
     }
@@ -61,7 +63,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
      *
      * @return T
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         if (!$this->offsetExists($offset)) {
             throw new \RuntimeException(sprintf('Key "%s" does not exist in collection', $offset));
@@ -70,21 +72,27 @@ abstract class AbstractCollection implements \ArrayAccess, \Countable, \Iterator
         return $this->items[$offset];
     }
 
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         throw new \RuntimeException('Cannot set value on READ ONLY collection');
     }
 
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         throw new \RuntimeException('Cannot unset value on READ ONLY collection');
     }
 
+    /**
+     * @return int<0, max>
+     */
     public function count(): int
     {
         return $this->count;
     }
 
+    /**
+     * @param array<array-key, T> $items
+     */
     protected function setItems(array $items): void
     {
         if ($this->items !== []) {

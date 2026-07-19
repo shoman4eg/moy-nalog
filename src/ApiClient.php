@@ -10,17 +10,17 @@ use Shoman4eg\Nalog\Http\Authenticator;
 use Shoman4eg\Nalog\Http\ClientConfigurator;
 use Shoman4eg\Nalog\Model\User\UserType;
 use Shoman4eg\Nalog\Service\Generator\DeviceIdGenerator;
-use Shoman4eg\Nalog\Util\JSON;
+use Shoman4eg\Nalog\Service\Util\JSON;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  */
 final class ApiClient
 {
-    private RequestBuilder $requestBuilder;
-    private ClientConfigurator $clientConfigurator;
-    private Authenticator $authenticator;
-    private ?UserType $profile;
+    private readonly RequestBuilder $requestBuilder;
+    private readonly ClientConfigurator $clientConfigurator;
+    private readonly Authenticator $authenticator;
+    private ?UserType $profile = null;
 
     /**
      * The constructor accepts already configured HTTP clients.
@@ -66,7 +66,7 @@ final class ApiClient
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
-    public function createNewAccessToken(string $username, string $password): ?string
+    public function createNewAccessToken(string $username, #[\SensitiveParameter] string $password): string
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
 
@@ -109,7 +109,7 @@ final class ApiClient
      * @throws ClientExceptionInterface
      * @throws Exception\DomainException
      */
-    public function createNewAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
+    public function createNewAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): string
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
 
@@ -131,7 +131,8 @@ final class ApiClient
     {
         $this->clientConfigurator->removePlugin(AuthenticationPlugin::class);
         $this->clientConfigurator->appendPlugin(new AuthenticationPlugin($this->authenticator, $accessToken));
-        if (($token = JSON::decode($accessToken)) && array_key_exists('profile', $token)) {
+        $token = JSON::decode($accessToken);
+        if (\is_array($token) && array_key_exists('profile', $token)) {
             $this->profile = UserType::createFromArray($token['profile']);
         }
         $this->authenticator->setAccessToken($accessToken);
@@ -149,6 +150,11 @@ final class ApiClient
     public function income(): Api\Income
     {
         return new Api\Income($this->getHttpClient(), $this->requestBuilder);
+    }
+
+    public function invoice(): Api\Invoice
+    {
+        return new Api\Invoice($this->getHttpClient(), $this->requestBuilder);
     }
 
     public function receipt(): Api\Receipt
@@ -174,6 +180,11 @@ final class ApiClient
     public function tax(): Api\Tax
     {
         return new Api\Tax($this->getHttpClient(), $this->requestBuilder);
+    }
+
+    public function taxpayer(): Api\Taxpayer
+    {
+        return new Api\Taxpayer($this->getHttpClient(), $this->requestBuilder);
     }
 
     private function getHttpClient(): ClientInterface

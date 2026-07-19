@@ -9,30 +9,25 @@ use Shoman4eg\Nalog\DTO\DeviceInfo;
 use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\RequestBuilder;
-use Shoman4eg\Nalog\Util\JSON;
+use Shoman4eg\Nalog\Service\Util\JSON;
+use Webmozart\Assert\Assert;
 
 /**
- * Helper class to get access tokens.
- *
- * @author Artem Dubinin <artem@dubinin.me>
- *
  * @internal this class should not be used outside the API Client, it is not part of the BC promise
  */
 final class Authenticator
 {
-    private RequestBuilder $requestBuilder;
-    private ClientInterface $httpClient;
-    private ?string $accessToken;
-    private string $deviceId;
-    private array $defaultHeaders = [
-        'Referrer' => 'https://lknpd.nalog.ru/auth/login',
-    ];
+    private ?string $accessToken = null;
 
-    public function __construct(RequestBuilder $requestBuilder, ClientInterface $httpClient, string $deviceId)
-    {
-        $this->requestBuilder = $requestBuilder;
-        $this->httpClient = $httpClient;
-        $this->deviceId = $deviceId;
+    /** @var array<string, string> */
+    private readonly array $defaultHeaders;
+
+    public function __construct(
+        private readonly RequestBuilder $requestBuilder,
+        private readonly ClientInterface $httpClient,
+        private readonly string $deviceId,
+    ) {
+        $this->defaultHeaders = ['Referrer' => 'https://lknpd.nalog.ru/auth/login'];
     }
 
     /**
@@ -40,7 +35,7 @@ final class Authenticator
      * @throws ClientExceptionInterface
      * @throws DomainException
      */
-    public function createAccessToken(string $username, string $password): ?string
+    public function createAccessToken(string $username, #[\SensitiveParameter] string $password): string
     {
         $request = $this->requestBuilder->create(
             'POST',
@@ -68,7 +63,7 @@ final class Authenticator
      * @throws \JsonException
      * @throws ClientExceptionInterface
      */
-    public function createAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): ?string
+    public function createAccessTokenByPhone(string $phone, string $challengeToken, string $verificationCode): string
     {
         $request = $this->requestBuilder->create(
             'POST',
@@ -118,9 +113,17 @@ final class Authenticator
             (new ErrorHandler())->handleResponse($response);
         }
 
-        $response = (string)$response->getBody();
+        $result = JSON::decode((string)$response->getBody());
+        Assert::isArray($result);
+        Assert::string($result['challengeToken']);
+        Assert::string($result['expireDate']);
+        Assert::integer($result['expireIn']);
 
-        return JSON::decode($response);
+        return [
+            'challengeToken' => $result['challengeToken'],
+            'expireDate' => $result['expireDate'],
+            'expireIn' => $result['expireIn'],
+        ];
     }
 
     /**

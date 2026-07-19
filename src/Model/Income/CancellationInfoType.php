@@ -7,47 +7,41 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
+ * @phpstan-type CancellationInfoData array{
+ *     operationTime: string,
+ *     registerTime: string,
+ *     taxPeriodId: int,
+ *     comment: string,
+ * }
  */
-final class CancellationInfoType implements CreatableFromArray
+final readonly class CancellationInfoType implements CreatableFromArray
 {
-    private \DateTimeImmutable $operationTime;
-    private \DateTimeImmutable $registerTime;
-    private int $taxPeriodId;
-    private string $comment;
-
-    private function __construct() {}
+    public \DateTimeImmutable $operationTime;
+    public \DateTimeImmutable $registerTime;
+    public int $taxPeriodId;
+    public string $comment;
 
     /**
+     * @param CancellationInfoData $data
+     *
+     * @throws \Exception
+     */
+    private function __construct(array $data)
+    {
+        $this->operationTime = new \DateTimeImmutable($data['operationTime']);
+        $this->registerTime = new \DateTimeImmutable($data['registerTime']);
+        $this->taxPeriodId = $data['taxPeriodId'];
+        $this->comment = $data['comment'];
+    }
+
+    /**
+     * @param CancellationInfoData $data
+     *
      * @throws \Exception
      */
     public static function createFromArray(array $data): self
     {
-        $model = new self();
-        $model->operationTime = new \DateTimeImmutable($data['operationTime']);
-        $model->registerTime = new \DateTimeImmutable($data['registerTime']);
-        $model->taxPeriodId = $data['taxPeriodId'];
-        $model->comment = $data['comment'];
-
-        return $model;
-    }
-
-    public function getOperationTime(): \DateTimeImmutable
-    {
-        return $this->operationTime;
-    }
-
-    public function getRegisterTime(): \DateTimeImmutable
-    {
-        return $this->registerTime;
-    }
-
-    public function getTaxPeriodId(): int
-    {
-        return $this->taxPeriodId;
-    }
-
-    public function getComment(): string
-    {
-        return $this->comment;
+        return new self($data);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Shoman4eg\Nalog\Util;
+namespace Shoman4eg\Nalog\Service\Util;
 
 /**
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
@@ -21,14 +21,13 @@ final class JSON
      *                          The behaviour of these constants is described on the JSON constants page.
      * @param null|int $depth   Set the maximum depth. Must be greater than zero.
      *
-     * @psalm-param null|int<1, 2147483647> $depth
-     *
      * @throws \JsonException
      */
     public static function encode($input, ?int $options = null, ?int $depth = null): string
     {
         $options ??= 0;
         $depth ??= 512;
+        \assert($depth >= 1);
 
         return \json_encode($input, JSON_THROW_ON_ERROR | $options, $depth);
     }
@@ -45,8 +44,6 @@ final class JSON
      * @param null|int  $options Bitmask of JSON decode options. Currently only JSON_BIGINT_AS_STRING is supported
      *                           (default is to cast large integers as floats)
      *
-     * @psalm-param null|int<1, 2147483647> $depth
-     *
      * @return mixed
      *
      * @throws \JsonException
@@ -56,6 +53,7 @@ final class JSON
         $assoc ??= true;
         $depth ??= 512;
         $options ??= 0;
+        \assert($depth >= 1);
 
         return \json_decode($json, $assoc, $depth, JSON_THROW_ON_ERROR | $options);
     }

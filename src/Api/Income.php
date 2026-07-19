@@ -14,9 +14,6 @@ use Shoman4eg\Nalog\Model\Income\IncomeList;
 use Shoman4eg\Nalog\Model\Income\IncomeType;
 use Webmozart\Assert\Assert;
 
-/**
- * @author Artem Dubinin <artem@dubinin.me>
- */
 final class Income extends BaseHttpApi
 {
     public const SORT_OPERATION_TIME_DESC = 'operation_time:desc';
@@ -33,19 +30,16 @@ final class Income extends BaseHttpApi
     ];
 
     /**
-     * @param float|int $amount
-     * @param float|int $quantity
-     *
      * @throws \JsonException
      * @throws ClientExceptionInterface
      * @throws DomainException
      */
     public function create(
         string $name,
-        $amount,
-        $quantity,
+        float|int|string $amount,
+        float|int $quantity,
         ?\DateTimeInterface $operationTime = null,
-        ?DTO\IncomeClient $client = null
+        ?DTO\IncomeClient $client = null,
     ): IncomeType {
         return $this->createMultipleItems(
             [new DTO\IncomeServiceItem($name, $amount, $quantity)],
@@ -64,18 +58,17 @@ final class Income extends BaseHttpApi
     public function createMultipleItems(
         array $serviceItems,
         ?\DateTimeInterface $operationTime = null,
-        ?DTO\IncomeClient $client = null
+        ?DTO\IncomeClient $client = null,
     ): IncomeType {
         Assert::minCount($serviceItems, 1, 'Items cannot be empty');
-        Assert::allIsInstanceOf($serviceItems, DTO\IncomeServiceItem::class);
 
         foreach ($serviceItems as $key => $serviceItem) {
-            Assert::notEmpty($serviceItem->getName(), "Name of item[{$key}] cannot be empty");
-            Assert::numeric($serviceItem->getAmount(), "Amount of item[{$key}] must be int or float");
-            Assert::greaterThan($serviceItem->getAmount(), 0, "Amount of item[{$key}] must be greater than %2\$s");
-            Assert::notEmpty($serviceItem->getQuantity(), "Quantity of item[{$key}] cannot be empty");
-            Assert::numeric($serviceItem->getQuantity(), "Quantity of item[{$key}] must be int or float");
-            Assert::greaterThan($serviceItem->getQuantity(), 0, "Quantity of item[{$key}] must be greater than %2\$s");
+            Assert::notEmpty($serviceItem->name, "Name of item[{$key}] cannot be empty");
+            Assert::numeric($serviceItem->amount, "Amount of item[{$key}] must be int or float");
+            Assert::greaterThan($serviceItem->amount, 0, "Amount of item[{$key}] must be greater than %2\$s");
+            Assert::notEmpty($serviceItem->quantity, "Quantity of item[{$key}] cannot be empty");
+            Assert::numeric($serviceItem->quantity, "Quantity of item[{$key}] must be int or float");
+            Assert::greaterThan($serviceItem->quantity, 0, "Quantity of item[{$key}] must be greater than %2\$s");
         }
 
         $totalAmount = array_reduce(
@@ -84,20 +77,20 @@ final class Income extends BaseHttpApi
             BigDecimal::of(0)
         );
 
-        if ($client !== null && $client->getIncomeType() === Enum\IncomeType::LEGAL_ENTITY) {
-            Assert::notEmpty($client->getInn(), 'Client INN cannot be empty');
-            Assert::numeric($client->getInn(), 'Client INN must contain only numbers');
-            Assert::oneOf(mb_strlen($client->getInn()), [10, 12], 'Client INN length must been 10 or 12');
-            Assert::notEmpty($client->getDisplayName(), 'Client DisplayName cannot be empty');
+        if ($client !== null && $client->incomeType === Enum\IncomeType::LEGAL_ENTITY) {
+            Assert::notEmpty($client->inn, 'Client INN cannot be empty');
+            Assert::numeric($client->inn, 'Client INN must contain only numbers');
+            Assert::oneOf(mb_strlen($client->inn), [10, 12], 'Client INN length must been 10 or 12');
+            Assert::notEmpty($client->displayName, 'Client DisplayName cannot be empty');
         }
 
         $response = $this->httpPost('/income', [
-            'operationTime' => new DTO\DateTime($operationTime ?: new \DateTimeImmutable()),
+            'operationTime' => new DTO\DateTime($operationTime ?? new \DateTimeImmutable()),
             'requestTime' => new DTO\DateTime(new \DateTimeImmutable()),
             'services' => $serviceItems,
             'totalAmount' => (string)$totalAmount,
             'client' => $client ?? new DTO\IncomeClient(),
-            'paymentType' => Enum\PaymentType::CASH,
+            'paymentType' => Enum\PaymentType::CASH->value,
             'ignoreMaxTotalIncomeRestriction' => false,
         ]);
 
@@ -118,8 +111,8 @@ final class Income extends BaseHttpApi
         ?int $offset = 0,
         ?int $limit = 100,
         ?string $sortBy = self::SORT_OPERATION_TIME_DESC,
-        ?string $buyerType = null,
-        ?string $receiptType = null
+        ?Enum\BuyerType $buyerType = null,
+        ?Enum\ReceiptType $receiptType = null,
     ): IncomeList {
         $query = [];
 
@@ -133,19 +126,18 @@ final class Income extends BaseHttpApi
 
         $query['limit'] = max(self::MIN_LIST_LIMIT, min($limit, self::MAX_LIST_LIMIT));
         $query['offset'] = $offset;
+
         if ($sortBy !== null) {
             Assert::oneOf($sortBy, self::ALLOWED_SORT_BY, 'Sort is invalid. Must be one of: %2$s');
             $query['sortBy'] = $sortBy;
         }
 
         if ($buyerType !== null) {
-            Assert::oneOf($buyerType, Enum\BuyerType::all(), 'Buyer is invalid. Must be one of: %2$s');
-            $query['buyerType'] = $buyerType;
+            $query['buyerType'] = $buyerType->value;
         }
 
         if ($receiptType !== null) {
-            Assert::oneOf($receiptType, Enum\ReceiptType::all(), 'Receipt type is invalid. Must be one of: %2$s');
-            $query['receiptType'] = $receiptType;
+            $query['receiptType'] = $receiptType->value;
         }
 
         $response = $this->httpGet('/incomes', $query);
@@ -164,18 +156,24 @@ final class Income extends BaseHttpApi
      */
     public function cancel(
         string $receiptUuid,
-        string $comment,
+        Enum\CancelCommentType|string $comment,
         ?\DateTimeImmutable $operationTime = null,
         ?\DateTimeImmutable $requestTime = null,
-        ?string $partnerCode = null
+        ?string $partnerCode = null,
     ): CancelIncomeInfoType {
         Assert::notEmpty($receiptUuid, 'ReceiptUuid cannot be empty');
-        Assert::oneOf($comment, Enum\CancelCommentType::all(), 'Comment is invalid. Must be one of: %2$s');
+
+        $commentValue = $comment instanceof Enum\CancelCommentType ? $comment->value : $comment;
+        Assert::oneOf(
+            $commentValue,
+            array_column(Enum\CancelCommentType::cases(), 'value'),
+            'Comment is invalid. Must be one of: %2$s'
+        );
 
         $response = $this->httpPost('/cancel', [
-            'operationTime' => new DTO\DateTime($operationTime ?: new \DateTimeImmutable()),
-            'requestTime' => new DTO\DateTime($requestTime ?: new \DateTimeImmutable()),
-            'comment' => $comment,
+            'operationTime' => new DTO\DateTime($operationTime ?? new \DateTimeImmutable()),
+            'requestTime' => new DTO\DateTime($requestTime ?? new \DateTimeImmutable()),
+            'comment' => $commentValue,
             'receiptUuid' => $receiptUuid,
             'partnerCode' => $partnerCode,
         ]);

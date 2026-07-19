@@ -9,31 +9,27 @@ use Psr\Http\Message\ResponseInterface;
 use Shoman4eg\Nalog\ErrorHandler;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\RequestBuilder;
-use Shoman4eg\Nalog\Util\JSON;
-use Shoman4eg\Nalog\Util\ModelHydrator;
+use Shoman4eg\Nalog\Service\Util\JSON;
+use Shoman4eg\Nalog\Service\Util\ModelHydrator;
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
 abstract class BaseHttpApi
 {
-    protected ClientInterface $httpClient;
-    protected RequestBuilder $requestBuilder;
     protected ModelHydrator $hydrator;
 
-    public function __construct(ClientInterface $httpClient, RequestBuilder $requestBuilder)
+    public function __construct(protected ClientInterface $httpClient, protected RequestBuilder $requestBuilder)
     {
-        $this->httpClient = $httpClient;
-        $this->requestBuilder = $requestBuilder;
         $this->hydrator = new ModelHydrator();
     }
 
     /**
      * Send a GET request with query parameters.
      *
-     * @param string $path           Request path
-     * @param array  $params         GET parameters
-     * @param array  $requestHeaders Request Headers
+     * @param string                             $path           Request path
+     * @param array<string, mixed>               $params         GET parameters
+     * @param array<string, list<string>|string> $requestHeaders Request Headers
      *
      * @throws ClientExceptionInterface
      */
@@ -51,9 +47,9 @@ abstract class BaseHttpApi
     /**
      * Send a POST request with JSON-encoded parameters.
      *
-     * @param string $path           Request path
-     * @param array  $params         POST parameters to be JSON encoded
-     * @param array  $requestHeaders Request headers
+     * @param string                             $path           Request path
+     * @param array<string, mixed>               $params         POST parameters to be JSON encoded
+     * @param array<string, list<string>|string> $requestHeaders Request headers
      *
      * @throws \JsonException
      * @throws ClientExceptionInterface
@@ -65,6 +61,8 @@ abstract class BaseHttpApi
 
     /**
      * Send a POST request with raw data.
+     *
+     * @param array<string, list<string>|string> $requestHeaders Request headers
      *
      * @throws ClientExceptionInterface
      */
@@ -78,9 +76,9 @@ abstract class BaseHttpApi
     /**
      * Send a PUT request with JSON-encoded parameters.
      *
-     * @param string $path           Request path
-     * @param array  $params         POST parameters to be JSON encoded
-     * @param array  $requestHeaders Request headers
+     * @param string                             $path           Request path
+     * @param array<string, mixed>               $params         POST parameters to be JSON encoded
+     * @param array<string, list<string>|string> $requestHeaders Request headers
      *
      * @throws \JsonException
      * @throws ClientExceptionInterface
@@ -95,9 +93,9 @@ abstract class BaseHttpApi
     /**
      * Send a PATCH request with JSON-encoded parameters.
      *
-     * @param string $path           Request path
-     * @param array  $params         POST parameters to be JSON encoded
-     * @param array  $requestHeaders Request headers
+     * @param string                             $path           Request path
+     * @param array<string, mixed>               $params         POST parameters to be JSON encoded
+     * @param array<string, list<string>|string> $requestHeaders Request headers
      *
      * @throws \JsonException
      * @throws ClientExceptionInterface
@@ -112,9 +110,9 @@ abstract class BaseHttpApi
     /**
      * Send a DELETE request with JSON-encoded parameters.
      *
-     * @param string $path           Request path
-     * @param array  $params         POST parameters to be JSON encoded
-     * @param array  $requestHeaders Request headers
+     * @param string                             $path           Request path
+     * @param array<string, mixed>               $params         POST parameters to be JSON encoded
+     * @param array<string, list<string>|string> $requestHeaders Request headers
      *
      * @throws \JsonException
      * @throws ClientExceptionInterface
@@ -144,7 +142,7 @@ abstract class BaseHttpApi
     /**
      * Create a JSON encoded version of an array of parameters.
      *
-     * @param array $params Request parameters
+     * @param array<string, mixed> $params Request parameters
      *
      * @throws \JsonException
      */

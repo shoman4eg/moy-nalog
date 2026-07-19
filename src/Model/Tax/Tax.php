@@ -7,104 +7,67 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
+ * @phpstan-type TaxData array{
+ *     totalForPayment: float|int,
+ *     total: float|int,
+ *     tax: float|int,
+ *     debt: float|int,
+ *     overpayment: float|int,
+ *     penalty: float|int,
+ *     nominalTax: float|int,
+ *     nominalOverpayment: float|int,
+ *     taxPeriodId: int,
+ *     lastPaymentAmount: null|float|int,
+ *     lastPaymentDate: null|string,
+ *     regions: array<int, mixed>,
+ * }
  */
-final class Tax implements CreatableFromArray
+final readonly class Tax implements CreatableFromArray
 {
-    private float $totalForPayment;
-    private float $total;
-    private float $tax;
-    private float $debt;
-    private float $overpayment;
-    private float $penalty;
-    private float $nominalTax;
-    private float $nominalOverpayment;
-    private int $taxPeriodId;
-    private ?float $lastPaymentAmount;
-    private ?\DateTimeImmutable $lastPaymentDate;
-    private array $regions;
+    public float $totalForPayment;
+    public float $total;
+    public float $tax;
+    public float $debt;
+    public float $overpayment;
+    public float $penalty;
+    public float $nominalTax;
+    public float $nominalOverpayment;
+    public int $taxPeriodId;
+    public ?float $lastPaymentAmount;
+    public ?\DateTimeImmutable $lastPaymentDate;
 
-    private function __construct() {}
+    /** @var array<int, mixed> */
+    public array $regions;
 
     /**
+     * @param TaxData $data
+     *
+     * @throws \Exception
+     */
+    private function __construct(array $data)
+    {
+        $this->totalForPayment = $data['totalForPayment'];
+        $this->total = $data['total'];
+        $this->tax = $data['tax'];
+        $this->debt = $data['debt'];
+        $this->overpayment = $data['overpayment'];
+        $this->penalty = $data['penalty'];
+        $this->nominalTax = $data['nominalTax'];
+        $this->nominalOverpayment = $data['nominalOverpayment'];
+        $this->taxPeriodId = $data['taxPeriodId'];
+        $this->lastPaymentAmount = $data['lastPaymentAmount'];
+        $this->lastPaymentDate = $data['lastPaymentDate'] ? new \DateTimeImmutable($data['lastPaymentDate']) : null;
+        $this->regions = $data['regions'];
+    }
+
+    /**
+     * @param TaxData $data
+     *
      * @throws \Exception
      */
     public static function createFromArray(array $data): self
     {
-        $model = new self();
-
-        $model->totalForPayment = $data['totalForPayment'];
-        $model->total = $data['total'];
-        $model->tax = $data['tax'];
-        $model->debt = $data['debt'];
-        $model->overpayment = $data['overpayment'];
-        $model->penalty = $data['penalty'];
-        $model->nominalTax = $data['nominalTax'];
-        $model->nominalOverpayment = $data['nominalOverpayment'];
-        $model->taxPeriodId = $data['taxPeriodId'];
-        $model->lastPaymentAmount = $data['lastPaymentAmount'];
-        $model->lastPaymentDate = $data['lastPaymentDate'] ? new \DateTimeImmutable($data['lastPaymentDate']) : null;
-        $model->regions = $data['regions'];
-
-        return $model;
-    }
-
-    public function getTotalForPayment(): float
-    {
-        return $this->totalForPayment;
-    }
-
-    public function getTotal(): float
-    {
-        return $this->total;
-    }
-
-    public function getTax(): float
-    {
-        return $this->tax;
-    }
-
-    public function getDebt(): float
-    {
-        return $this->debt;
-    }
-
-    public function getOverpayment(): float
-    {
-        return $this->overpayment;
-    }
-
-    public function getPenalty(): float
-    {
-        return $this->penalty;
-    }
-
-    public function getNominalTax(): float
-    {
-        return $this->nominalTax;
-    }
-
-    public function getNominalOverpayment(): float
-    {
-        return $this->nominalOverpayment;
-    }
-
-    public function getTaxPeriodId(): int
-    {
-        return $this->taxPeriodId;
-    }
-
-    public function getLastPaymentAmount(): ?float
-    {
-        return $this->lastPaymentAmount;
-    }
-
-    public function getLastPaymentDate(): ?\DateTimeImmutable
-    {
-        return $this->lastPaymentDate;
-    }
-
-    public function getRegions(): array
-    {
-        return $this->regions;
+        return new self($data);
     }
 }

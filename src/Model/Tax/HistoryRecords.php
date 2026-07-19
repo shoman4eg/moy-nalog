@@ -9,6 +9,8 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 /**
  * @author Artem Dubinin <artem@dubinin.me>
  *
+ * @phpstan-import-type HistoryData from History
+ *
  * @extends AbstractCollection<History>
  */
 final class HistoryRecords extends AbstractCollection implements CreatableFromArray
@@ -16,11 +18,13 @@ final class HistoryRecords extends AbstractCollection implements CreatableFromAr
     private function __construct() {}
 
     /**
+     * @param array{records: list<HistoryData>} $data
+     *
      * @throws \Exception
      */
     public static function createFromArray(array $data): self
     {
-        $items = array_map(static fn (array $record) => History::createFromArray($record), $data['records']);
+        $items = array_map(History::createFromArray(...), $data['records']);
 
         $model = new self();
         $model->setItems($items);

@@ -3,34 +3,18 @@ declare(strict_types=1);
 
 namespace Shoman4eg\Nalog\DTO;
 
-/**
- * @author Artem Dubinin <artem@dubinin.me>
- */
-final class InvoiceServiceItem implements \JsonSerializable
+final readonly class InvoiceServiceItem implements \JsonSerializable
 {
-    private string $name;
-
-    /** @var float|int|string */
-    private $amount;
-
-    /** @var float|int */
-    private $quantity;
-
-    private ?int $serviceNumber;
+    public function __construct(
+        public string $name,
+        public float|int|string $amount,
+        public float|int $quantity,
+        public ?int $serviceNumber = 0,
+    ) {}
 
     /**
-     * @param float|int|string $amount
-     * @param float|int        $quantity
-     * @param mixed            $serviceNumber
+     * @return array<string, mixed>
      */
-    public function __construct(string $name, $amount, $quantity, $serviceNumber = 0)
-    {
-        $this->name = $name;
-        $this->amount = $amount;
-        $this->quantity = $quantity;
-        $this->serviceNumber = $serviceNumber;
-    }
-
     public function jsonSerialize(): array
     {
         return array_filter([

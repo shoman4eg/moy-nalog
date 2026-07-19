@@ -74,6 +74,19 @@ $apiClient = new ApiClient(deviceIdGenerator: new DeviceIdGenerator(new class im
     }
 }));
 ```
+### Логирование запросов (опционально)
+Можно включить логирование HTTP-запросов и ответов через любой PSR-3 логгер (например, Monolog):
+```php
+use Shoman4eg\Nalog\ApiClient;
+use Shoman4eg\Nalog\Http\ClientConfigurator;
+
+$configurator = new ClientConfigurator();
+$configurator->setLogger($logger); // $logger — любой Psr\Log\LoggerInterface
+
+$apiClient = new ApiClient(clientConfigurator: $configurator);
+```
+Вызывайте `setLogger()` до `authenticate()`, чтобы логгер стоял в цепочке перед плагином аутентификации. По умолчанию используется `SimpleFormatter` (метод, URI, статус — без заголовков и тела, токен в лог не попадает). Свой формат можно передать вторым аргументом `setLogger()`.
+
 ### Аутентификация
 
 При аутентификации с помощью методов `createNewAccessToken` (по ИНН и паролю) или `createNewAccessTokenByPhone` (по номеру телефона) , вместе с токеном доступа (**accessToken**), возвращается также токен обновления (**refreshToken**) с неограниченным сроком действия. Сохраните оригинальный ответ этих методов и используйте повторно в методе `authenticate`.
@@ -160,7 +173,7 @@ $createdIncome = $apiClient->income()->create(
 );
 
 // UUID чека для операций запроса данных чека или его отмены
-$receiptUuid = $createdIncome->getApprovedReceiptUuid();
+$receiptUuid = $createdIncome->approvedReceiptUuid;
 ```
 
 ### Создать чек с несколькими позициями
@@ -189,7 +202,7 @@ $createdIncome = $apiClient->income()->createMultipleItems(
 );
 
 // UUID чека для операций запроса данных чека или его отмены
-$receiptUuid = $createdIncome->getApprovedReceiptUuid();
+$receiptUuid = $createdIncome->approvedReceiptUuid;
 ```
 
 ### Создать чек для указанного типа контрагента (физ. лицо, юр. лицо или иностранная организация)
@@ -236,8 +249,25 @@ $createdIncome = $apiClient->income()->create(
 );
 
 // UUID чека для операций запроса данных чека или его отмены
-$receiptUuid = $createdIncome->getApprovedReceiptUuid();
+$receiptUuid = $createdIncome->approvedReceiptUuid;
 ```
+
+### Создать счёт на оплату (invoice)
+Счёт на оплату выставляется для оплаты по банковским реквизитам (тип оплаты `ACCOUNT`).
+```php
+$name = 'Предоставление информационных услуг #970/2495'; // Наименование
+$amount = 1800.30; // Стоимость в рублях
+$quantity = 1; // Количество
+$operationTime = new DateTimeImmutable('2020-12-31 12:12:00'); // Дата
+
+$invoice = $apiClient->invoice()->create(
+    $name,
+    $amount,
+    $quantity,
+    $operationTime
+);
+```
+> Методы `invoice()->cancel()` и `invoice()->updatePaymentInfo()` пока не реализованы и выбрасывают `\BadMethodCallException`.
 
 ### Получить список чеков
 ```php
@@ -335,6 +365,42 @@ $userInfo = $apiClient->tax()->payments();
 $apiClient->authenticate($accessToken);
 
 $userInfo = $apiClient->tax()->history();
+```
+
+### Задолженность и налоговый бонус (taxpayer)
+```php
+$apiClient->authenticate($accessToken);
+
+// Информация о задолженности
+$debts = $apiClient->taxpayer()->debts();
+$debts->hasDebts;    // bool — есть ли задолженность
+$debts->totalUnpaid; // float — сумма неоплаченного
+$debts->debts;       // float
+
+// Налоговый бонус (вычет) и лимиты годового дохода
+$bonus = $apiClient->taxpayer()->bonus();
+$bonus->bonusAmount;                     // float — остаток бонуса
+$bonus->totalIncomeAmount;               // float — доход за текущий год
+$bonus->annualIncomeThreshold;           // float — годовой лимит (2 400 000)
+$bonus->availableIncomeToExceedThreshold;// float — сколько осталось до лимита
+$bonus->annualIncomeStatus;              // string — например, "NORMAL"
+
+// Разбивка дохода по годам: array<string, AnnualIncome>
+foreach ($bonus->totalIncomeByYears as $year => $annual) {
+    $year;                     // "2025"
+    $annual->totalIncomeAmount;// float
+}
+```
+
+### Способы оплаты (банковские карты / счета)
+```php
+$apiClient->authenticate($accessToken);
+
+// Список сохранённых способов оплаты
+$paymentTypes = $apiClient->paymentType()->table();
+
+// Избранный (по умолчанию) способ оплаты, либо null
+$favorite = $apiClient->paymentType()->favorite();
 ```
 
 ## Известные проблемы

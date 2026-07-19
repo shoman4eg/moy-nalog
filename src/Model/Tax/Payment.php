@@ -7,103 +7,65 @@ use Shoman4eg\Nalog\Model\CreatableFromArray;
 
 /**
  * @author Artem Dubinin <artem@dubinin.me>
+ *
+ * @phpstan-type PaymentData array{
+ *     sourceType: string,
+ *     type: string,
+ *     documentIndex: string,
+ *     amount: float|int,
+ *     operationDate: string,
+ *     dueDate: string,
+ *     oktmo: string,
+ *     kbk: string,
+ *     status: string,
+ *     taxPeriodId: int,
+ *     regionName: string,
+ *     krsbAcceptedDate: string|null,
+ * }
  */
-final class Payment implements CreatableFromArray
+final readonly class Payment implements CreatableFromArray
 {
-    private string $sourceType;
-    private string $type;
-    private string $documentIndex;
-    private float $amount;
-    private \DateTimeImmutable $operationDate;
-    private \DateTimeImmutable $dueDate;
-    private string $oktmo;
-    private string $kbk;
-    private string $status;
-    private int $taxPeriodId;
-    private string $regionName;
-    private ?\DateTimeImmutable $krsbAcceptedDate;
-
-    private function __construct() {}
+    public string $sourceType;
+    public string $type;
+    public string $documentIndex;
+    public float $amount;
+    public \DateTimeImmutable $operationDate;
+    public \DateTimeImmutable $dueDate;
+    public string $oktmo;
+    public string $kbk;
+    public string $status;
+    public int $taxPeriodId;
+    public string $regionName;
+    public ?\DateTimeImmutable $krsbAcceptedDate;
 
     /**
+     * @param PaymentData $data
+     *
+     * @throws \Exception
+     */
+    private function __construct(array $data)
+    {
+        $this->sourceType = $data['sourceType'];
+        $this->type = $data['type'];
+        $this->documentIndex = $data['documentIndex'];
+        $this->amount = $data['amount'];
+        $this->operationDate = new \DateTimeImmutable($data['operationDate']);
+        $this->dueDate = new \DateTimeImmutable($data['dueDate']);
+        $this->oktmo = $data['oktmo'];
+        $this->kbk = $data['kbk'];
+        $this->status = $data['status'];
+        $this->taxPeriodId = $data['taxPeriodId'];
+        $this->regionName = $data['regionName'];
+        $this->krsbAcceptedDate = $data['krsbAcceptedDate'] ? new \DateTimeImmutable($data['krsbAcceptedDate']) : null;
+    }
+
+    /**
+     * @param PaymentData $data
+     *
      * @throws \Exception
      */
     public static function createFromArray(array $data): self
     {
-        $model = new self();
-        $model->sourceType = $data['sourceType'];
-        $model->type = $data['type'];
-        $model->documentIndex = $data['documentIndex'];
-        $model->amount = $data['amount'];
-        $model->operationDate = new \DateTimeImmutable($data['operationDate']);
-        $model->dueDate = new \DateTimeImmutable($data['dueDate']);
-        $model->oktmo = $data['oktmo'];
-        $model->kbk = $data['kbk'];
-        $model->status = $data['status'];
-        $model->taxPeriodId = $data['taxPeriodId'];
-        $model->regionName = $data['regionName'];
-        $model->krsbAcceptedDate = $data['krsbAcceptedDate'] ? new \DateTimeImmutable($data['krsbAcceptedDate']) : null;
-
-        return $model;
-    }
-
-    public function getSourceType(): string
-    {
-        return $this->sourceType;
-    }
-
-    public function getKrsbAcceptedDate(): ?\DateTimeImmutable
-    {
-        return $this->krsbAcceptedDate;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function getDocumentIndex(): string
-    {
-        return $this->documentIndex;
-    }
-
-    public function getAmount(): float
-    {
-        return $this->amount;
-    }
-
-    public function getOperationDate(): \DateTimeImmutable
-    {
-        return $this->operationDate;
-    }
-
-    public function getDueDate(): \DateTimeImmutable
-    {
-        return $this->dueDate;
-    }
-
-    public function getOktmo(): string
-    {
-        return $this->oktmo;
-    }
-
-    public function getStatus(): string
-    {
-        return $this->status;
-    }
-
-    public function getKbk(): string
-    {
-        return $this->kbk;
-    }
-
-    public function getTaxPeriodId(): int
-    {
-        return $this->taxPeriodId;
-    }
-
-    public function getRegionName(): string
-    {
-        return $this->regionName;
+        return new self($data);
     }
 }
