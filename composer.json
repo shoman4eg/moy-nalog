@@ -24,7 +24,7 @@
         "php": ">=8.2",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "brick/math": "^0.18",
+        "brick/math": "^0.14",
         "php-http/client-common": "^2.7",
         "php-http/discovery": "^1.19",
         "php-http/logger-plugin": "^1.4",
