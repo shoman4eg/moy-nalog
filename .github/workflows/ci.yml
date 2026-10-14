@@ -45,6 +45,33 @@ jobs:
       - name: Run tests
         run: vendor/bin/testo
 
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          coverage: pcov
+
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Download dependencies
+        uses: ramsey/composer-install@v4
+
+      - name: Run tests with coverage
+        run: vendor/bin/testo --coverage-clover=coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v7
+        with:
+          files: ./coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   lowest:
     name: Lowest deps
     runs-on: ubuntu-latest

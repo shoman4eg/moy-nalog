@@ -6,14 +6,12 @@ namespace Shoman4eg\Nalog\Tests\Api;
 use GuzzleHttp\Psr7\Response;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 use Testo\Assert;
-use Testo\Codecov\CoversNothing;
 use Testo\Test;
 
 /**
  * @internal
  */
 #[Test]
-#[CoversNothing]
 final class ReceiptTest extends ApiTestCase
 {
     public function testPrintUrl(): void

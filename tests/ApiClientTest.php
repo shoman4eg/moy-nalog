@@ -8,7 +8,6 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Shoman4eg\Nalog\Exception\Domain\UnauthorizedException;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Testo\Assert;
-use Testo\Codecov\CoversNothing;
 use Testo\Expect;
 use Testo\Test;
 
@@ -16,7 +15,6 @@ use Testo\Test;
  * @internal
  */
 #[Test]
-#[CoversNothing]
 final class ApiClientTest extends ApiTestCase
 {
     /**
