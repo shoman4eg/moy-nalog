@@ -6,14 +6,12 @@ namespace Shoman4eg\Nalog\Tests\Api;
 use Shoman4eg\Nalog\Model\Taxpayer\AnnualIncome;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 use Testo\Assert;
-use Testo\Codecov\CoversNothing;
 use Testo\Test;
 
 /**
  * @internal
  */
 #[Test]
-#[CoversNothing]
 final class TaxpayerTest extends ApiTestCase
 {
     public function testDebts(): void

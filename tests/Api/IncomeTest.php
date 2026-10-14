@@ -14,7 +14,6 @@ use Shoman4eg\Nalog\Enum\ReceiptType;
 use Shoman4eg\Nalog\Exception\DomainException;
 use Shoman4eg\Nalog\Tests\ApiTestCase;
 use Testo\Assert;
-use Testo\Codecov\CoversNothing;
 use Testo\Data\DataProvider;
 use Testo\Expect;
 use Testo\Test;
@@ -23,7 +22,6 @@ use Testo\Test;
  * @internal
  */
 #[Test]
-#[CoversNothing]
 final class IncomeTest extends ApiTestCase
 {
     /**
