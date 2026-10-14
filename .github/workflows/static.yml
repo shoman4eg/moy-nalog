@@ -1,5 +1,23 @@
-on: [ pull_request ]
 name: Static analysis
+on:
+  pull_request:
+    paths: &paths
+      - 'src/**'
+      - 'tests/**'
+      - 'composer.json'
+      - '.php-cs-fixer.dist.php'
+      - 'phpstan.neon.dist'
+      - '.github/workflows/static.yml'
+  push:
+    branches: [ 'master' ]
+    paths: *paths
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   phpstan:
@@ -8,7 +26,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -18,7 +38,7 @@ jobs:
           tools: phpstan:2, cs2pr
 
       - name: Download dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v4
 
       - name: PHPStan
         run: phpstan analyze --no-progress --error-format=checkstyle | cs2pr
@@ -29,7 +49,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -47,7 +69,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2

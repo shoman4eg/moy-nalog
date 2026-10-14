@@ -1,5 +1,22 @@
 name: Tests
-on: [ pull_request ]
+on:
+  pull_request:
+    paths: &paths
+      - 'src/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'testo.php'
+      - '.github/workflows/ci.yml'
+  push:
+    branches: [ 'master' ]
+    paths: *paths
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   testo:
@@ -18,10 +35,12 @@ jobs:
           coverage: none
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Download dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v4
 
       - name: Run tests
         run: vendor/bin/testo
@@ -37,12 +56,14 @@ jobs:
           coverage: none
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Download dependencies
         with:
           dependency-versions: "lowest"
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v4
 
       - name: Run tests
         run: vendor/bin/testo
@@ -57,10 +78,12 @@ jobs:
           coverage: none
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Download dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v4
 
       - name: Run audit
         run: composer audit
